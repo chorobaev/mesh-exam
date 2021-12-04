@@ -1,0 +1,40 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdk androidCompileSdkVersion
+
+    defaultConfig {
+        applicationId "io.flaterlab.meshtest"
+        minSdk androidMinSdkVersion
+        targetSdk androidTargetSdkVersion
+        versionCode Integer.parseInt(PropVersionCode)
+        versionName PropVersionNumber
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation libraries.appcompat
+    implementation libraries.constraintLayout
+    implementation libraries.core
+    implementation libraries.nearbyConnections
+    implementation libraries.material
+}
