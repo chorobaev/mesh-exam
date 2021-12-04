@@ -18,7 +18,7 @@ ext {
             composeUi               : 'androidx.compose.ui:ui:' + composeVersion,
             composeUiTooling        : 'androidx.compose.ui:ui-tooling:' + composeVersion,
             composeFoundation       : 'androidx.compose.foundation:foundation:' + composeVersion,
-            composeMaterial         : 'androidx.compose.material:material' + composeVersion,
+            composeMaterial         : 'androidx.compose.material:material:' + composeVersion,
             composeMaterialIconsCore: 'androidx.compose.material:material-icons-core:' + composeVersion,
             composeMaterialIconsExt : 'androidx.compose.material:material-icons-extended:' + composeVersion,
             composeActivity         : 'androidx.activity:activity-compose:1.3.1',
@@ -31,10 +31,11 @@ ext {
             liveData                : 'androidx.lifecycle:lifecycle-livedata-ktx:' + lifecycleVersion,
             viewModel               : 'androidx.lifecycle:lifecycle-viewmodel-ktx' + lifecycleVersion,
             nearbyConnections       : 'com.google.android.gms:play-services-nearby:18.0.0',
+            material                : 'com.google.android.material:material:1.4.0',
     ]
 
     kaptLibraries = [
-            hiltCompiler: 'com.google.dagger:hilt-compiler:2.38.1' + hiltVersion
+            hiltCompiler: 'com.google.dagger:hilt-compiler:' + hiltVersion
     ]
 
     testLibraries = [
@@ -50,6 +51,7 @@ ext {
             core  : project(':mesh-test:core'),
             data  : project(':mesh-test:data'),
             domain: project(':mesh-test:domain'),
+            uiKit : project(':mesh-test:ui-kit'),
     ]
 
     feature = [

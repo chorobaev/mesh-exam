@@ -1,0 +1,12 @@
+dependencies {
+    implementation libraries.composeUi
+    implementation libraries.composeUi
+    implementation libraries.composeUiTooling
+    implementation libraries.composeFoundation
+    implementation libraries.composeMaterial
+    implementation libraries.composeMaterialIconsCore
+    implementation libraries.composeMaterialIconsExt
+    implementation libraries.composeActivity
+    implementation libraries.composeLifecycle
+    implementation libraries.composeLifedata
+}

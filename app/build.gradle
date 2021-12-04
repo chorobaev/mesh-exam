@@ -41,4 +41,6 @@ dependencies {
     implementation libraries.hilt
 
     kapt kaptLibraries.hiltCompiler
+
+    implementation feature.main
 }
