@@ -7,3 +7,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Mesh Test"
 include ':app'
+include ':mesh-test:core'
+include ':mesh-test:data'
+include ':mesh-test:domain'
+include ':mesh-test:feature:main'

@@ -1,19 +1,17 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
-}
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdk androidCompileSdkVersion
 
     defaultConfig {
-        applicationId "io.flaterlab.meshtest"
         minSdk androidMinSdkVersion
         targetSdk androidTargetSdkVersion
-        versionCode Integer.parseInt(PropVersionCode)
-        versionName PropVersionNumber
+        versionCode 1
+        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -24,21 +22,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = '1.8'
     }
-}
-
-dependencies {
-    implementation libraries.appcompat
-    implementation libraries.constraintLayout
-    implementation libraries.core
-    implementation libraries.nearbyConnections
-    implementation libraries.hilt
-
-    kapt kaptLibraries.hiltCompiler
 }

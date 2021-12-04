@@ -1,0 +1,8 @@
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Kotlin
+    implementation(libraries.kotlin) {
+        exclude group: 'org.jetbrains', module: 'annotations'
+    }
+}

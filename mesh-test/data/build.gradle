@@ -1,0 +1,6 @@
+apply from: "$project.rootDir/mesh-test/android.config.gradle"
+apply from: "$project.rootDir/mesh-test/android.dependencies.gradle"
+
+dependencies {
+    implementation localModules.core
+}
