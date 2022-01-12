@@ -1,0 +1,24 @@
+apply from: "$project.rootDir/mesh-exam/android.config.gradle"
+apply from: "$project.rootDir/mesh-exam/android.dependencies.gradle"
+
+android {
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation localModules.core
+    implementation localModules.uiKit
+    implementation libraryModules.localization
+    implementation libraryModules.androidBase
+
+    implementation libraries.appcompat
+    implementation libraries.constraintLayout
+    implementation libraries.core
+    implementation libraries.fragment
+    implementation libraries.liveData
+    implementation libraries.viewModel
+    implementation libraries.material
+    implementation libraries.nearby
+}

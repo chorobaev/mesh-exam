@@ -1,0 +1,10 @@
+apply from: "$project.rootDir/mesh-exam/android.config.gradle"
+apply from: "$project.rootDir/mesh-exam/android.dependencies.gradle"
+
+dependencies {
+    implementation localModules.core
+    implementation libraryModules.localization
+    implementation libraries.core
+    implementation libraries.appcompat
+    implementation libraries.material
+}

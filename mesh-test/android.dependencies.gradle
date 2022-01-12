@@ -1,6 +1,0 @@
-apply from: "$project.rootDir/mesh-test/general.dependencies.gradle"
-
-dependencies {
-    implementation libraries.hilt
-    kapt kaptLibraries.hiltCompiler
-}

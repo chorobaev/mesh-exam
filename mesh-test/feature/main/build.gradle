@@ -1,8 +1,0 @@
-apply from: "$project.rootDir/mesh-test/android.config.gradle"
-apply from: "$project.rootDir/mesh-test/android.dependencies.gradle"
-apply from: "$project.rootDir/mesh-test/compose.dependencies.gradle"
-
-dependencies {
-    implementation localModules.core
-    implementation localModules.uiKit
-}

@@ -7,8 +7,10 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Mesh Test"
 include ':app'
-include ':mesh-test:core'
-include ':mesh-test:data'
-include ':mesh-test:domain'
-include ':mesh-test:feature:main'
-include ':mesh-test:ui-kit'
+include ':mesh-exam:core'
+include ':mesh-exam:data'
+include ':mesh-exam:domain'
+include ':mesh-exam:feature:main'
+include ':mesh-exam:ui-kit'
+include ':mesh-exam:library:localization'
+include ':mesh-exam:android-base'

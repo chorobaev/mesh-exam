@@ -1,0 +1,6 @@
+apply from: "$project.rootDir/mesh-exam/general.dependencies.gradle"
+
+dependencies {
+    implementation libraries.hilt
+    kapt kaptLibraries.hiltCompiler
+}

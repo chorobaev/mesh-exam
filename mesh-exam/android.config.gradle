@@ -1,23 +1,20 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
-}
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdk androidCompileSdkVersion
 
     defaultConfig {
-        applicationId "io.flaterlab.meshtest"
         minSdk androidMinSdkVersion
         targetSdk androidTargetSdkVersion
-        versionCode Integer.parseInt(PropVersionCode)
-        versionName PropVersionNumber
+        versionCode 1
+        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -30,18 +27,11 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+        useIR = true
     }
-}
-
-dependencies {
-    implementation libraryModules.localization
-    implementation libraries.appcompat
-    implementation libraries.constraintLayout
-    implementation libraries.core
-    implementation libraries.nearby
-    implementation libraries.hilt
-
-    kapt kaptLibraries.hiltCompiler
-
-    implementation feature.main
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
 }

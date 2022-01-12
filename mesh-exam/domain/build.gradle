@@ -1,0 +1,11 @@
+plugins {
+    id 'java-library'
+    id 'kotlin'
+}
+
+apply from : "$project.rootDir/mesh-exam/general.dependencies.gradle"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
