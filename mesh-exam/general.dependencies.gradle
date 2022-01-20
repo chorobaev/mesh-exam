@@ -5,4 +5,5 @@ dependencies {
     implementation(libraries.kotlin) {
         exclude group: 'org.jetbrains', module: 'annotations'
     }
+    implementation libraries.coroutines
 }

@@ -7,21 +7,25 @@ ext {
     // Versions
     fragmentVersion = "1.4.0"
     hiltVersion = "2.38.1"
-    kotlinVersion = '1.5.31'
+    kotlinVersion = '1.6.0'
     lifecycleVersion = "2.2.0"
 
 
     libraries = [
-            appcompat       : 'androidx.appcompat:appcompat:1.4.0',
-            constraintLayout: 'androidx.constraintlayout:constraintlayout:2.1.2',
-            core            : 'androidx.core:core-ktx:1.7.0',
-            fragment        : 'androidx.fragment:fragment-ktx:' + fragmentVersion,
-            hilt            : 'com.google.dagger:hilt-android:' + hiltVersion,
-            kotlin          : 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion,
-            liveData        : 'androidx.lifecycle:lifecycle-livedata-ktx:' + lifecycleVersion,
-            viewModel       : 'androidx.lifecycle:lifecycle-viewmodel-ktx:' + lifecycleVersion,
-            nearby          : 'com.google.android.gms:play-services-nearby:18.0.0',
-            material        : 'com.google.android.material:material:1.4.0',
+            appcompat             : 'androidx.appcompat:appcompat:1.4.0',
+            constraintLayout      : 'androidx.constraintlayout:constraintlayout:2.1.2',
+            core                  : 'androidx.core:core-ktx:1.7.0',
+            coroutines            : 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + kotlinVersion,
+            coroutinesPlayServices: 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:' + kotlinVersion,
+            fragment              : 'androidx.fragment:fragment-ktx:' + fragmentVersion,
+            gson                  : 'com.google.code.gson:gson:2.8.9',
+            hilt                  : 'com.google.dagger:hilt-android:' + hiltVersion,
+            kotlin                : 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion,
+            liveData              : 'androidx.lifecycle:lifecycle-livedata-ktx:' + lifecycleVersion,
+            viewModel             : 'androidx.lifecycle:lifecycle-viewmodel-ktx:' + lifecycleVersion,
+            nearby                : 'com.google.android.gms:play-services-nearby:18.0.0',
+            material              : 'com.google.android.material:material:1.4.0',
+            timber                : 'com.jakewharton.timber:timber:5.0.1',
     ]
 
     kaptLibraries = [
