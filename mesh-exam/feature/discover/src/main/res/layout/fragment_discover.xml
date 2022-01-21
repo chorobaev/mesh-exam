@@ -7,10 +7,27 @@
     tools:context=".DiscoverFragment">
 
     <TextView
+        android:id="@+id/tv_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Hello World!"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/et_input_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_medium"
+        app:layout_constraintTop_toBottomOf="@id/tv_text">
+
+        <EditText
+            android:id="@+id/et_input"
+            android:hint="Placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btn_toast"
