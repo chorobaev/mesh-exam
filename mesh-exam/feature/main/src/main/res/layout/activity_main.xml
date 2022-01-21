@@ -6,7 +6,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/main_fragment_container"
-        android:name="io.flaterlab.feature.main.home.HomeFragment"
+        android:name="io.flaterlab.meshexam.feature.main.home.HomeFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

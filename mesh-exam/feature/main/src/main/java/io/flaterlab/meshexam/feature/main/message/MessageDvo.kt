@@ -1,4 +1,4 @@
-package io.flaterlab.feature.main.message
+package io.flaterlab.meshexam.feature.main.message
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

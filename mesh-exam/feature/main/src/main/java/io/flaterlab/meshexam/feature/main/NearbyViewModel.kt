@@ -1,14 +1,13 @@
-package io.flaterlab.feature.main
+package io.flaterlab.meshexam.feature.main
 
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.android_base.SingleLiveEvent
 import com.google.android.gms.nearby.Nearby
 import com.google.android.gms.nearby.connection.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import io.flaterlab.feature.main.message.MessageDvo
+import io.flaterlab.meshexam.feature.main.message.MessageDvo
 import java.util.*
 import javax.inject.Inject
 
@@ -20,7 +19,6 @@ class NearbyViewModel @Inject constructor(
     val nameEntered = MutableLiveData(false)
     val advertising = MutableLiveData(false)
     val discovering = MutableLiveData(false)
-    val message = SingleLiveEvent<String>()
     val connectedPhone = MutableLiveData<String?>(null)
     val availableList = MutableLiveData<List<HostDvo>>(emptyList())
     val messages = MutableLiveData<List<MessageDvo>>(emptyList())
@@ -166,10 +164,10 @@ class NearbyViewModel @Inject constructor(
         nearby
             .requestConnection(getLocalUserName(), host.hostId, clientConnectionLifecycleCallback)
             .addOnSuccessListener {
-                message.setValue("Connection requested!")
+//                message.setValue("Connection requested!")
             }
             .addOnFailureListener {
-                message.setValue("Connection request filed!")
+//                message.setValue("Connection request filed!")
             }
     }
 
@@ -178,7 +176,7 @@ class NearbyViewModel @Inject constructor(
             val payload = Payload.fromBytes(msg.toByteArray())
             nearby.sendPayload(endpointId, payload)
                 .addOnFailureListener {
-                    message.setValue("Message didn't send :(")
+//                    message.setValue("Message didn't send :(")
                 }
         }
     }

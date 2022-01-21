@@ -1,4 +1,4 @@
-package io.flaterlab.feature.main
+package io.flaterlab.meshexam.feature.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

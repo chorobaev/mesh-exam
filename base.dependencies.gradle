@@ -7,7 +7,7 @@ ext {
     // Versions
     fragmentVersion = "1.4.0"
     hiltVersion = "2.38.1"
-    kotlinVersion = '1.6.0'
+    kotlinVersion = '1.6.10'
     lifecycleVersion = "2.2.0"
 
 
@@ -15,8 +15,10 @@ ext {
             appcompat             : 'androidx.appcompat:appcompat:1.4.0',
             constraintLayout      : 'androidx.constraintlayout:constraintlayout:2.1.2',
             core                  : 'androidx.core:core-ktx:1.7.0',
-            coroutines            : 'org.jetbrains.kotlinx:kotlinx-coroutines-core:' + kotlinVersion,
-            coroutinesPlayServices: 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:' + kotlinVersion,
+            coroutines            : 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0',
+            coroutinesPlayServices: 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0',
+            firebaseAnalytics     : 'com.google.firebase:firebase-analytics-ktx:20.0.2',
+            firebaseCrashlytics   : 'com.google.firebase:firebase-crashlytics-ktx:18.2.7',
             fragment              : 'androidx.fragment:fragment-ktx:' + fragmentVersion,
             gson                  : 'com.google.code.gson:gson:2.8.9',
             hilt                  : 'com.google.dagger:hilt-android:' + hiltVersion,

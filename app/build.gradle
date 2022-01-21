@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
     id 'dagger.hilt.android.plugin'
 }
 
@@ -9,7 +11,7 @@ android {
     compileSdk androidCompileSdkVersion
 
     defaultConfig {
-        applicationId "io.flaterlab.meshtest"
+        applicationId "io.flaterlab.meshexam"
         minSdk androidMinSdkVersion
         targetSdk androidTargetSdkVersion
         versionCode Integer.parseInt(PropVersionCode)
@@ -41,6 +43,10 @@ dependencies {
     implementation libraries.appcompat
     implementation libraries.constraintLayout
     implementation libraries.core
+
+    implementation libraries.firebaseAnalytics
+    implementation(libraries.firebaseCrashlytics) { transitive = true }
+
     implementation libraries.nearby
 
     implementation libraries.timber

@@ -1,10 +1,10 @@
-package io.flaterlab.feature.main.message
+package io.flaterlab.meshexam.feature.main.message
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import io.flaterlab.feature.main.R
-import io.flaterlab.feature.main.databinding.ItemMessageBinding
+import io.flaterlab.meshexam.feature.main.R
+import io.flaterlab.meshexam.feature.main.databinding.ItemMessageBinding
 import javax.inject.Inject
 
 class MessageAdapter @Inject constructor(

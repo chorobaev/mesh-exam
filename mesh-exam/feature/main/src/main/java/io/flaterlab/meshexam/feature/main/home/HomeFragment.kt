@@ -1,4 +1,4 @@
-package io.flaterlab.feature.main.home
+package io.flaterlab.meshexam.feature.main.home
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -16,11 +16,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
-import io.flaterlab.feature.main.NearbyViewModel
-import io.flaterlab.feature.main.R
-import io.flaterlab.feature.main.databinding.FragmentHomeBinding
-import io.flaterlab.feature.main.databinding.ItemHostBinding
-import io.flaterlab.feature.main.message.MessageFragment
+import io.flaterlab.meshexam.feature.main.NearbyViewModel
+import io.flaterlab.meshexam.feature.main.R
+import io.flaterlab.meshexam.feature.main.databinding.FragmentHomeBinding
+import io.flaterlab.meshexam.feature.main.databinding.ItemHostBinding
+import io.flaterlab.meshexam.feature.main.message.MessageFragment
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -60,9 +60,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkPermissions()
-        viewModel.message.observe(viewLifecycleOwner) { msg ->
-            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-        }
         viewModel.advertising.observe(viewLifecycleOwner) { advertising ->
             binding.btnAdvertise.text = if (advertising) {
                 "Stop advertising"

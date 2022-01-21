@@ -1,4 +1,4 @@
-package io.flaterlab.feature.main.message
+package io.flaterlab.meshexam.feature.main.message
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import io.flaterlab.feature.main.NearbyViewModel
-import io.flaterlab.feature.main.databinding.FragmentMessageBinding
+import io.flaterlab.meshexam.feature.main.NearbyViewModel
+import io.flaterlab.meshexam.feature.main.databinding.FragmentMessageBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -41,9 +41,7 @@ class MessageFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
             adapter = messageAdapter
         }
-        viewModel.message.observe(viewLifecycleOwner) { message ->
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-        }
+
         viewModel.connectedPhone.observe(viewLifecycleOwner) {
             if (it == null) {
                 requireActivity().supportFragmentManager.popBackStack()
