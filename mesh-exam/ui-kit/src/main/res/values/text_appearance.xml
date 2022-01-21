@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Headings -->
+    <style name="TextAppearance.MeshExam.Headline1" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">24sp</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.Headline2" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.Headline3" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
+    </style>
+
+
+    <!-- Large -->
+    <style name="TextAppearance.MeshExam.Large.Regular" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.Large.Medium" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.Large.SemiBold" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.Large.Bold" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+
+    <!-- Normal -->
+    <style name="TextAppearance.MeshExam.Normal.Regular" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.Normal.Medium" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.Normal.SemiBold" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.Normal.Bold" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <!-- Small -->
+    <style name="TextAppearance.MeshExam.Small.Light" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:fontFamily">@font/poppins_light</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins_light</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.Small.Regular" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.Small.Medium" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.Small.SemiBold" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.Small.Bold" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+
+    <!-- Extra small -->
+    <style name="TextAppearance.MeshExam.ExtraSmall.Light" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:fontFamily">@font/poppins_light</item>
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/poppins_light</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.ExtraSmall.Regular" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.ExtraSmall.Medium" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/poppins_medium</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.ExtraSmall.SemiBold" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:fontFamily">@font/poppins_semibold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/poppins_semibold</item>
+    </style>
+
+    <style name="TextAppearance.MeshExam.ExtraSmall.Bold" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="fontFamily">@font/poppins_bold</item>
+    </style>
+
+</resources>
