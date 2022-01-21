@@ -9,7 +9,7 @@ ext {
     hiltVersion = "2.38.1"
     kotlinVersion = '1.6.10'
     lifecycleVersion = "2.2.0"
-
+    navigationVersion = "2.3.5"
 
     libraries = [
             appcompat             : 'androidx.appcompat:appcompat:1.4.0',
@@ -24,6 +24,8 @@ ext {
             hilt                  : 'com.google.dagger:hilt-android:' + hiltVersion,
             kotlin                : 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion,
             liveData              : 'androidx.lifecycle:lifecycle-livedata-ktx:' + lifecycleVersion,
+            navigationFragment    : 'androidx.navigation:navigation-fragment-ktx:' + navigationVersion,
+            navigationUi          : 'androidx.navigation:navigation-ui-ktx:' + navigationVersion,
             viewModel             : 'androidx.lifecycle:lifecycle-viewmodel-ktx:' + lifecycleVersion,
             nearby                : 'com.google.android.gms:play-services-nearby:18.0.0',
             material              : 'com.google.android.material:material:1.4.0',
@@ -56,6 +58,7 @@ ext {
     ]
 
     feature = [
-            main: project(':mesh-exam:feature:main'),
+            main    : project(':mesh-exam:feature:main'),
+            discover: project(':mesh-exam:feature:discover'),
     ]
 }

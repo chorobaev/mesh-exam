@@ -8,6 +8,7 @@ android {
 }
 
 dependencies {
+
     implementation localModules.core
     implementation localModules.uiKit
     implementation libraryModules.localization
@@ -20,7 +21,6 @@ dependencies {
     implementation libraries.liveData
     implementation libraries.viewModel
     implementation libraries.material
-    implementation libraries.nearby
 
     implementation libraries.navigationFragment
     implementation libraries.navigationUi

@@ -48,10 +48,13 @@ dependencies {
     implementation(libraries.firebaseCrashlytics) { transitive = true }
 
     implementation libraries.nearby
+    implementation libraries.navigationFragment
+    implementation libraries.navigationUi
 
     implementation libraries.timber
     implementation libraries.hilt
     kapt kaptLibraries.hiltCompiler
 
     implementation feature.main
+    implementation feature.discover
 }
