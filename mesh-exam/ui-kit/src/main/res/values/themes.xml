@@ -11,5 +11,31 @@
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+
+        <item name="materialButtonStyle">@style/Widget.MeshExam.Button</item>
+
+        <item name="android:textViewStyle">@style/Widget.MeshExam.TextView</item>
     </style>
+
+    <style name="Widget.MeshExam.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:paddingTop">@dimen/margin_medium</item>
+        <item name="android:paddingBottom">@dimen/margin_medium</item>
+        <item name="android:textAppearance">@style/TextAppearance.MeshExam.Normal.Medium</item>
+        <item name="cornerRadius">@dimen/radius_medium</item>
+    </style>
+
+    <style name="Widget.MeshExam.Button.Secondary" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:paddingTop">@dimen/margin_medium</item>
+        <item name="android:paddingBottom">@dimen/margin_medium</item>
+        <item name="android:textAppearance">@style/TextAppearance.MeshExam.Normal.Medium</item>
+        <item name="android:textColor">@color/gray_dark</item>
+        <item name="backgroundTint">@color/gray</item>
+        <item name="strokeColor">@color/gray_light</item>
+        <item name="cornerRadius">@dimen/radius_medium</item>
+    </style>
+
+    <style name="Widget.MeshExam.TextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">@style/TextAppearance.MeshExam.Normal.Regular</item>
+    </style>
+
 </resources>

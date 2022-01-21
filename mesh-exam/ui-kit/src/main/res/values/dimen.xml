@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Margins -->
+    <dimen name="margin_medium">16dp</dimen>
+
+
+    <!-- Radius -->
+    <dimen name="radius_medium">8dp</dimen>
+</resources>

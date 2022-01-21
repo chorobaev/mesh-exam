@@ -9,7 +9,7 @@
     <color name="purple_500">#ff8D5EF2</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="light_grey">#EEEEEE</color>
-    <color name="grey">#ff8C8C8C</color>
-    <color name="dark_grey">#ff303030</color>
+    <color name="gray_light">#EEEEEE</color>
+    <color name="gray">#F6F7FA</color>
+    <color name="gray_dark">#ff303030</color>
 </resources>
