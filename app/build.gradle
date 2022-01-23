@@ -44,6 +44,7 @@ dependencies {
     implementation localModules.core
     implementation localModules.data
     implementation localModules.domain
+    implementation localModules.domainImpl
     implementation localModules.presentation
     implementation localModules.uiKit
 

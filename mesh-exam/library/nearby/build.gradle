@@ -2,13 +2,7 @@ apply from: "$project.rootDir/mesh-exam/android.config.gradle"
 apply from: "$project.rootDir/mesh-exam/android.dependencies.gradle"
 
 dependencies {
-    implementation localModules.core
-    implementation localModules.domain
-
-    implementation libraryModules.nearby
-
-    implementation libraries.nearby
-    implementation libraries.gson
-
     implementation libraries.coroutinesPlayServices
+    implementation libraries.gson
+    implementation libraries.nearby
 }

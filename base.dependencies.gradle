@@ -22,6 +22,7 @@ ext {
             fragment              : 'androidx.fragment:fragment-ktx:' + fragmentVersion,
             gson                  : 'com.google.code.gson:gson:2.8.9',
             hilt                  : 'com.google.dagger:hilt-android:' + hiltVersion,
+            javaInject            : 'javax.inject:javax.inject:1',
             kotlin                : 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion,
             liveData              : 'androidx.lifecycle:lifecycle-livedata-ktx:' + lifecycleVersion,
             navigationFragment    : 'androidx.navigation:navigation-fragment-ktx:' + navigationVersion,
@@ -46,21 +47,23 @@ ext {
     ]
 
     localModules = [
-            core  : project(':mesh-exam:core'),
-            data  : project(':mesh-exam:data'),
-            domain: project(':mesh-exam:domain'),
-            presentation    : project(':mesh-exam:presentation'),
-            uiKit : project(':mesh-exam:ui-kit'),
+            core        : project(':mesh-exam:core'),
+            data        : project(':mesh-exam:data'),
+            domain      : project(':mesh-exam:domain:api'),
+            domainImpl  : project(':mesh-exam:domain:impl'),
+            presentation: project(':mesh-exam:presentation'),
+            uiKit       : project(':mesh-exam:ui-kit'),
     ]
 
     libraryModules = [
-            androidBase : project(":mesh-exam:android-base"),
+            androidBase : project(':mesh-exam:android-base'),
             localization: project(':mesh-exam:library:localization'),
+            nearby      : project(':mesh-exam:library:nearby'),
     ]
 
     feature = [
-            exams: project(':mesh-exam:feature:exams'),
+            exams   : project(':mesh-exam:feature:exams'),
             discover: project(':mesh-exam:feature:discover'),
-            profile: project(':mesh-exam:feature:profile'),
+            profile : project(':mesh-exam:feature:profile'),
     ]
 }
