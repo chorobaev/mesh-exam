@@ -18,7 +18,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/Theme.MeshExam">
+        android:theme="@style/Theme.MeshExam.Splash">
         <activity
             android:name=".feature.main.MainActivity"
             android:exported="true">

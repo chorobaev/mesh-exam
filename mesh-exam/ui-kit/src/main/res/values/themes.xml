@@ -32,6 +32,11 @@
         <item name="android:textViewStyle">@style/Widget.MeshExam.TextView</item>
     </style>
 
+    <style name="Theme.MeshExam.Splash">
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
+
     <style name="Widget.MeshExam.Button" parent="Widget.MaterialComponents.Button">
         <item name="android:paddingTop">@dimen/margin_medium</item>
         <item name="android:paddingBottom">@dimen/margin_medium</item>
