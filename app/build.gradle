@@ -40,6 +40,13 @@ android {
 
 dependencies {
     implementation libraryModules.localization
+
+    implementation localModules.core
+    implementation localModules.data
+    implementation localModules.domain
+    implementation localModules.presentation
+    implementation localModules.uiKit
+
     implementation libraries.appcompat
     implementation libraries.constraintLayout
     implementation libraries.core
@@ -55,6 +62,7 @@ dependencies {
     implementation libraries.hilt
     kapt kaptLibraries.hiltCompiler
 
-    implementation feature.main
+    implementation feature.exams
     implementation feature.discover
+    implementation feature.profile
 }

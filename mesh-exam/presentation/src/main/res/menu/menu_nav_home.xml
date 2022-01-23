@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/examsFragment"
+        android:icon="@drawable/selector_nav_exams"
+        android:title="@string/home_nav_exams" />
+
+    <item
+        android:id="@+id/discoverFragment"
+        android:icon="@drawable/selector_nav_discover"
+        android:title="@string/home_nav_discover" />
+
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/selector_nav_profile"
+        android:title="@string/home_nav_profile" />
+</menu>

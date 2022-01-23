@@ -49,6 +49,7 @@ ext {
             core  : project(':mesh-exam:core'),
             data  : project(':mesh-exam:data'),
             domain: project(':mesh-exam:domain'),
+            presentation    : project(':mesh-exam:presentation'),
             uiKit : project(':mesh-exam:ui-kit'),
     ]
 
@@ -58,7 +59,8 @@ ext {
     ]
 
     feature = [
-            main    : project(':mesh-exam:feature:main'),
+            exams: project(':mesh-exam:feature:exams'),
             discover: project(':mesh-exam:feature:discover'),
+            profile: project(':mesh-exam:feature:profile'),
     ]
 }
