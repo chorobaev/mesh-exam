@@ -10,6 +10,7 @@
         android:id="@+id/tv_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="More Fonts..."
         android:text="Hello World!"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,7 +22,7 @@
         android:layout_marginTop="@dimen/margin_medium"
         app:layout_constraintTop_toBottomOf="@id/tv_text">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_input"
             android:hint="Placeholder"
             android:layout_width="match_parent"

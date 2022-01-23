@@ -70,7 +70,7 @@
         <item name="editTextStyle">@style/Widget.MeshExam.EditText</item>
     </style>
 
-    <style name="Widget.MeshExam.EditText" parent="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+    <style name="Widget.MeshExam.EditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
         <item name="android:textAppearance">@style/TextAppearance.MeshExam.Normal.Regular</item>
     </style>
 
