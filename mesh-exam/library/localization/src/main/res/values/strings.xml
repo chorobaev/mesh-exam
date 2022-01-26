@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Mesh Exam</string>
-    <string name="home_nav_exams">Мои экзамены</string>
-    <string name="home_nav_discover">Подключиться</string>
-    <string name="home_nav_profile">Профиль</string>
+    <string name="home_nav_exams">My exams</string>
+    <string name="home_nav_discover">Discover</string>
+    <string name="home_nav_profile">Profile</string>
+
+    <string name="exams_my_exams">My examinations</string>
+
+    <string name="discover_available_exams">Available examinations</string>
+
 </resources>

@@ -2,4 +2,10 @@
 <resources>
     <attr format="color" name="colorOnBackgroundLight" />
     <attr format="color" name="colorSurfaceBorder" />
+
+    <declare-styleable name="MeshToolbar">
+        <attr name="toolbarTitle" format="string" />
+        <attr name="toolbarTitleColor" format="color" />
+        <attr name="toolbarBackground" format="color" />
+    </declare-styleable>
 </resources>
