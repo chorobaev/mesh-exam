@@ -1,14 +1,19 @@
 package io.flaterlab.meshexam.library.nearby.api
 
-import io.flaterlab.meshexam.library.nearby.impl.dto.AdvertiserInfo
+import io.flaterlab.meshexam.library.nearby.impl.AdvertiserInfo
+import io.flaterlab.meshexam.library.nearby.impl.ClientInfo
+import io.flaterlab.meshexam.library.nearby.impl.ConnectionResult
+import kotlinx.coroutines.flow.Flow
 
 interface NearbyFacade {
 
-    suspend fun advertise(advertiserInfo: AdvertiserInfo)
+    fun advertise(advertiserInfo: AdvertiserInfo): Flow<ConnectionResult<ClientInfo>>
 
-    fun stopAdvertising()
+    fun discover(): Flow<List<Pair<String, AdvertiserInfo>>>
 
-    suspend fun discover()
+    fun connect(endpointId: String, clientInfo: ClientInfo): Flow<ConnectionResult<AdvertiserInfo>>
 
-    fun stopDiscovery()
+    fun acceptConnection(endpointId: String): Flow<ByteArray>
+
+    suspend fun sendPayload(vararg toEndpointId: String, data: ByteArray)
 }

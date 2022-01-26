@@ -30,4 +30,4 @@ google-services.json
 *.hprof
 
 # Mac OS
-.DS_Store
+*.DS_Store

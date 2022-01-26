@@ -9,6 +9,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.flaterlab.meshexam.library.nearby.api.NearbyFacade
+import io.flaterlab.meshexam.library.nearby.impl.AdvertiserInfoJsonParser
+import io.flaterlab.meshexam.library.nearby.impl.ClientInfoJsonParser
 import io.flaterlab.meshexam.library.nearby.impl.NearbyFacadeImpl
 import kotlinx.coroutines.Dispatchers
 
@@ -19,11 +21,13 @@ internal class NearbyModule {
     @Provides
     fun provideNearbyFacade(
         @ApplicationContext context: Context,
-        gson: Gson,
+        advertiserInfoJsonParser: AdvertiserInfoJsonParser,
+        clientInfoJsonParser: ClientInfoJsonParser,
     ): NearbyFacade =
         NearbyFacadeImpl(
             serviceId = context.packageName,
             client = Nearby.getConnectionsClient(context),
-            gson = gson,
+            advertiserInfoParser = advertiserInfoJsonParser,
+            clientInfoParser = clientInfoJsonParser
         )
 }

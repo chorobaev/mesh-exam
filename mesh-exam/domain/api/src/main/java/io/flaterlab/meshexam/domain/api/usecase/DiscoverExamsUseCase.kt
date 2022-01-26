@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface DiscoverExamsUseCase {
 
-    operator fun invoke(): Flow<ExamInfoModel>
+    operator fun invoke(): Flow<List<ExamInfoModel>>
 }

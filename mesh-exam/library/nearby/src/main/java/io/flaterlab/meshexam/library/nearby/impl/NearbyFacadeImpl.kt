@@ -1,89 +1,76 @@
 package io.flaterlab.meshexam.library.nearby.impl
 
 import com.google.android.gms.nearby.connection.*
-import com.google.gson.Gson
 import io.flaterlab.meshexam.library.nearby.api.NearbyFacade
-import io.flaterlab.meshexam.library.nearby.impl.dto.AdvertiserInfo
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 internal class NearbyFacadeImpl(
     private val serviceId: String,
     private val client: ConnectionsClient,
-    private val gson: Gson,
+    private val advertiserInfoParser: JsonParser<AdvertiserInfo>,
+    private val clientInfoParser: JsonParser<ClientInfo>,
 ) : NearbyFacade {
 
     private val strategy: Strategy = Strategy.P2P_CLUSTER
-    private val advertisingOptions = AdvertisingOptions.Builder()
-        .setStrategy(strategy)
-        .setDisruptiveUpgrade(false)
-        .build()
-    private val discoveryOperations = DiscoveryOptions.Builder()
-        .setStrategy(strategy)
-        .build()
 
-    private val connectionCallback: ConnectionLifecycleCallback = ConnectionCallback()
-    private val discoveryCallback: EndpointDiscoveryCallback = DiscoveryCallback()
-
-    private var isAdvertising = false
-    private var isDiscovering = false
-
-    override suspend fun advertise(advertiserInfo: AdvertiserInfo) {
-        stopAdvertising()
-
-        val infoByteArray = gson.toJson(advertiserInfo).toByteArray()
+    override fun advertise(
+        advertiserInfo: AdvertiserInfo
+    ): Flow<ConnectionResult<ClientInfo>> = callbackFlow {
+        val infoByteArray = advertiserInfoParser.toJson(advertiserInfo).toByteArray()
+        val callback = MeshConnectionCallback(clientInfoParser::fromJson, ::trySend)
+        val advertisingOptions = AdvertisingOptions.Builder()
+            .setStrategy(strategy)
+            .setDisruptiveUpgrade(false)
+            .build()
         client.startAdvertising(
             infoByteArray,
             serviceId,
-            connectionCallback,
+            callback,
             advertisingOptions
         ).await()
-        isAdvertising = true
+        awaitClose(client::stopAdvertising)
     }
 
-    override fun stopAdvertising() {
-        if (isAdvertising) {
-            client.stopAdvertising()
-            isAdvertising = false
+    override fun discover(): Flow<List<Pair<String, AdvertiserInfo>>> = callbackFlow {
+        val callback = DiscoveryCallback(advertiserInfoParser::fromJson) { advertiserMap ->
+            trySend(advertiserMap.toList())
         }
+        val discoveryOperations = DiscoveryOptions.Builder()
+            .setStrategy(strategy)
+            .build()
+        client
+            .startDiscovery(serviceId, callback, discoveryOperations)
+            .await()
+        awaitClose(client::stopDiscovery)
     }
 
-    override suspend fun discover() {
-        if (!isDiscovering) {
-            client.startDiscovery(serviceId, discoveryCallback, discoveryOperations).await()
-            isDiscovering = true
-        }
+    override fun connect(
+        endpointId: String,
+        clientInfo: ClientInfo
+    ): Flow<ConnectionResult<AdvertiserInfo>> = callbackFlow {
+        val infoByteArray = clientInfoParser.toJson(clientInfo).toByteArray()
+        val callback = MeshConnectionCallback(advertiserInfoParser::fromJson, ::trySend)
+        client.requestConnection(infoByteArray, endpointId, callback).await()
+        awaitClose { }
     }
 
-    override fun stopDiscovery() {
-        if (isDiscovering) {
-            client.stopDiscovery()
-            isDiscovering = false
-        }
+    override fun acceptConnection(endpointId: String): Flow<ByteArray> = callbackFlow {
+        val callback = MeshPayloadCallback(::trySend)
+        client.acceptConnection(endpointId, callback).await()
+        awaitClose { client.disconnectFromEndpoint(endpointId) }
     }
 
-    private inner class ConnectionCallback : ConnectionLifecycleCallback() {
-
-        override fun onConnectionInitiated(endpointId: String, info: ConnectionInfo) {
-
-        }
-
-        override fun onConnectionResult(endpointId: String, resolution: ConnectionResolution) {
-
-        }
-
-        override fun onDisconnected(endpointId: String) {
-
-        }
+    override suspend fun sendPayload(vararg toEndpointId: String, data: ByteArray) {
+        client.sendPayload(toEndpointId.toList(), Payload.fromBytes(data)).await()
     }
 
-    private inner class DiscoveryCallback : EndpointDiscoveryCallback() {
+    interface JsonParser<T> {
 
-        override fun onEndpointFound(endpointId: String, info: DiscoveredEndpointInfo) {
+        fun fromJson(json: String): T
 
-        }
-
-        override fun onEndpointLost(endpointId: String) {
-
-        }
+        fun toJson(model: T): String
     }
 }
