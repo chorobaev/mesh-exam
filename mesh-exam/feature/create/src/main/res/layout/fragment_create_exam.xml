@@ -1,14 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".CreateExamFragment"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".ui.exam.CreateExamFragment">
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Create exam" />
+        android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <io.flaterlab.meshexam.uikit.view.MeshToolbar
+            android:id="@+id/toolbar_create_exam"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:toolbarTitle="@string/create_create_exam" />
+
+        <io.flaterlab.meshexam.uikit.view.TitledTextInput
+            android:id="@+id/tti_exam_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginTop="24dp"
+            android:hint="@string/create_create_exam_examNameHint"
+            android:inputType="textCapSentences"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_create_exam"
+            app:title="@string/create_create_exam_examNameInputTitle" />
+
+        <io.flaterlab.meshexam.uikit.view.TitledTextInput
+            android:id="@+id/tti_exam_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginTop="24dp"
+            android:hint="@string/create_create_exam_examTypeHint"
+            android:inputType="textCapSentences"
+            app:layout_constraintTop_toBottomOf="@id/tti_exam_name"
+            app:title="@string/create_create_exam_examTypeInputTitle" />
+
+        <io.flaterlab.meshexam.uikit.view.TitledTextInput
+            android:id="@+id/tti_exam_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginTop="24dp"
+            android:hint="@string/create_create_exam_examDurationHint"
+            android:inputType="number"
+            app:layout_constraintTop_toBottomOf="@id/tti_exam_type"
+            app:title="@string/create_create_exam_examDurationTitle" />
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:text="@string/common_next"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

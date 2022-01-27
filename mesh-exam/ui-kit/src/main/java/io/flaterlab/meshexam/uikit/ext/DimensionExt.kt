@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.ext
+package io.flaterlab.meshexam.androidbase.ext
 
 import android.content.Context
 

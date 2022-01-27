@@ -10,8 +10,8 @@ android {
 dependencies {
     implementation localModules.core
     implementation localModules.uiKit
+    implementation localModules.androidBase
     implementation libraryModules.localization
-    implementation libraryModules.androidBase
 
     implementation libraries.appcompat
     implementation libraries.constraintLayout

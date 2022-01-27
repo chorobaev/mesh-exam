@@ -12,4 +12,11 @@
     <declare-styleable name="ActionButton">
         <attr name="android:src" format="reference" />
     </declare-styleable>
+
+    <declare-styleable name="TitledTextInput">
+        <attr name="title" format="string" />
+        <attr name="android:hint" format="string" />
+        <attr name="android:inputType" format="enum" />
+        <attr name="android:imeOptions" format="enum" />
+    </declare-styleable>
 </resources>

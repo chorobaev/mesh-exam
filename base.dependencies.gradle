@@ -8,7 +8,7 @@ ext {
     fragmentVersion = "1.4.0"
     hiltVersion = "2.38.1"
     kotlinVersion = '1.6.10'
-    lifecycleVersion = "2.2.0"
+    lifecycleVersion = "2.4.0"
     navigationVersion = "2.3.5"
 
     libraries = [
@@ -25,9 +25,9 @@ ext {
             javaInject            : 'javax.inject:javax.inject:1',
             kotlin                : 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion,
             liveData              : 'androidx.lifecycle:lifecycle-livedata-ktx:' + lifecycleVersion,
+            viewModel             : 'androidx.lifecycle:lifecycle-viewmodel-ktx:' + lifecycleVersion,
             navigationFragment    : 'androidx.navigation:navigation-fragment-ktx:' + navigationVersion,
             navigationUi          : 'androidx.navigation:navigation-ui-ktx:' + navigationVersion,
-            viewModel             : 'androidx.lifecycle:lifecycle-viewmodel-ktx:' + lifecycleVersion,
             nearby                : 'com.google.android.gms:play-services-nearby:18.0.0',
             material              : 'com.google.android.material:material:1.4.0',
             timber                : 'com.jakewharton.timber:timber:5.0.1',
@@ -53,10 +53,10 @@ ext {
             domainImpl  : project(':mesh-exam:domain:impl'),
             presentation: project(':mesh-exam:presentation'),
             uiKit       : project(':mesh-exam:ui-kit'),
+            androidBase : project(':mesh-exam:android-base'),
     ]
 
     libraryModules = [
-            androidBase : project(':mesh-exam:android-base'),
             localization: project(':mesh-exam:library:localization'),
             nearby      : project(':mesh-exam:library:nearby'),
     ]
