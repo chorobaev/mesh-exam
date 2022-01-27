@@ -4,8 +4,10 @@
     <dimen name="margin_medium">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
 
-
     <!-- Radius -->
     <dimen name="radius_small">6dp</dimen>
     <dimen name="radius_medium">8dp</dimen>
+
+    <!-- Dimensions -->
+    <dimen name="action_button_width">44dp</dimen>
 </resources>

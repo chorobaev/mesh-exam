@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr format="color" name="colorOnBackgroundLight" />
-    <attr format="color" name="colorSurfaceBorder" />
+    <attr name="colorOnBackgroundLight" format="color" />
+    <attr name="colorSurfaceBorder" format="color" />
 
     <declare-styleable name="MeshToolbar">
         <attr name="toolbarTitle" format="string" />
         <attr name="toolbarTitleColor" format="color" />
         <attr name="toolbarBackground" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="ActionButton">
+        <attr name="android:src" format="reference" />
     </declare-styleable>
 </resources>

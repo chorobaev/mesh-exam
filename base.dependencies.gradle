@@ -65,5 +65,6 @@ ext {
             exams   : project(':mesh-exam:feature:exams'),
             discover: project(':mesh-exam:feature:discover'),
             profile : project(':mesh-exam:feature:profile'),
+            create  : project(':mesh-exam:feature:create'),
     ]
 }

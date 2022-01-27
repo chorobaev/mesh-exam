@@ -3,4 +3,5 @@ apply from: "$project.rootDir/mesh-exam/android.dependencies.gradle"
 
 dependencies {
     implementation libraries.appcompat
+    implementation libraries.navigationFragment
 }

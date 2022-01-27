@@ -62,8 +62,4 @@ dependencies {
     implementation libraries.timber
     implementation libraries.hilt
     kapt kaptLibraries.hiltCompiler
-
-    implementation feature.exams
-    implementation feature.discover
-    implementation feature.profile
 }

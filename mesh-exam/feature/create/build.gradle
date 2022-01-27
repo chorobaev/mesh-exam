@@ -8,8 +8,10 @@ android {
 }
 
 dependencies {
+
     implementation localModules.core
     implementation localModules.uiKit
+    implementation localModules.domain
     implementation libraryModules.localization
     implementation libraryModules.androidBase
 
@@ -20,13 +22,7 @@ dependencies {
     implementation libraries.liveData
     implementation libraries.viewModel
     implementation libraries.material
-    implementation libraries.nearby
 
     implementation libraries.navigationFragment
     implementation libraries.navigationUi
-
-    implementation feature.exams
-    implementation feature.discover
-    implementation feature.profile
-    implementation feature.create
 }

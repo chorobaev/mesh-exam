@@ -8,7 +8,7 @@ import io.flaterlab.meshexam.presentation.databinding.ActivityMainBinding
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MeshExam)
