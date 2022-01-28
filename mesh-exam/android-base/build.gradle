@@ -9,5 +9,6 @@ android {
 
 dependencies {
     implementation libraries.appcompat
+    implementation libraries.material
     implementation libraries.navigationFragment
 }

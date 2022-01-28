@@ -5,12 +5,17 @@
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_between">24dp</dimen>
 
+    <!-- Paddings -->
+    <dimen name="bottom_sheet_dialog_handler_padding">14dp</dimen>
+
     <!-- Radius -->
     <dimen name="radius_small">6dp</dimen>
     <dimen name="radius_medium">8dp</dimen>
+    <dimen name="radius_large">16dp</dimen>
 
     <!-- Dimensions -->
     <dimen name="action_button_width">44dp</dimen>
     <dimen name="divider_height">1.5dp</dimen>
     <dimen name="tab_side">40dp</dimen>
+    <dimen name="bottom_sheet_dialog_handler_height">32dp</dimen>
 </resources>
