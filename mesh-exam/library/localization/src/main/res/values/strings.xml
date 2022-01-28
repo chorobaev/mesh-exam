@@ -6,6 +6,8 @@
     <string name="home_nav_profile">Profile</string>
 
     <string name="common_next">Next</string>
+    <string name="common_save">Save</string>
+    <string name="common_plus_sign">+</string>
 
     <string name="exams_my_exams">My examinations</string>
 
@@ -20,4 +22,5 @@
     <string name="create_create_exam_examDurationHint">60 min</string>
     <string name="create_create_exam_fillExamName">Exam name is not entered!</string>
     <string name="create_create_exam_fillDuration">Duration is not entered!</string>
+    <string name="create_create_question_questionHint">Question</string>
 </resources>

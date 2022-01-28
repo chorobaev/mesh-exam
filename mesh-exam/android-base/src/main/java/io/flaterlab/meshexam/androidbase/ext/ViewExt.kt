@@ -2,6 +2,7 @@ package io.flaterlab.meshexam.androidbase.ext
 
 import android.os.SystemClock
 import android.view.View
+import android.view.ViewGroup
 
 private const val DEFAULT_CLICK_DEBOUNCE_TIME = 500L
 
@@ -34,4 +35,8 @@ fun View.OnClickListener.setClickListenerWithDebounce(
         }
     }
     views.forEach { view -> view.setOnClickListener(clickListener) }
+}
+
+inline fun <reified T : ViewGroup.LayoutParams> View.applyLayoutParams(block: T.() -> Unit) {
+    layoutParams = (layoutParams as T).apply { block() }
 }

@@ -13,5 +13,6 @@
     <color name="gray_1">#FF303030</color>
     <color name="gray_2">#FF8C8C8C</color>
     <color name="gray_5">#FFEEEEEE</color>
-    <color name="gray_6">#FFF6F7FA</color>
+    <color name="gray_6">#FFF0EBF5</color>
+    <color name="gray_7">#FFF6F7FA</color>
 </resources>

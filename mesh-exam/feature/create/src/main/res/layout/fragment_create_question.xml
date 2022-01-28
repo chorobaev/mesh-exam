@@ -1,9 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.question.CreateQuestionFragment"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".ui.question.CreateQuestionFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <io.flaterlab.meshexam.uikit.view.MeshToolbar
+            android:id="@+id/toolbar_create_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <HorizontalScrollView
+            android:id="@+id/question_numbers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_create_question">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tab_layout_number"
+                    style="@style/Widget.MeshExam.TabLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/tab_side"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:tabGravity="start"
+                    app:tabMode="scrollable"
+                    app:tabPaddingEnd="0dp"
+                    app:tabPaddingStart="0dp" />
+
+                <TextView
+                    android:id="@+id/tv_add_question"
+                    android:layout_width="@dimen/tab_side"
+                    android:layout_height="@dimen/tab_side"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginHorizontal="@dimen/margin_medium"
+                    android:background="@drawable/selector_tab_background"
+                    android:gravity="center"
+                    android:text="@string/common_plus_sign"
+                    android:textAppearance="@style/TextAppearance.MeshExam.Normal.Medium"
+                    android:textColor="?attr/colorOnBackgroundLight" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
+
+        <io.flaterlab.meshexam.uikit.view.Divider
+            android:id="@+id/divider_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"
+            app:layout_constraintTop_toBottomOf="@id/question_numbers" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager_questions"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider_question" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
