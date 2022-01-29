@@ -10,6 +10,8 @@ ext {
     kotlinVersion = '1.6.10'
     lifecycleVersion = "2.4.0"
     navigationVersion = "2.3.5"
+    roomVersion = "2.4.1"
+    workVersion = "2.7.1"
 
     libraries = [
             appcompat             : 'androidx.appcompat:appcompat:1.4.0',
@@ -22,6 +24,7 @@ ext {
             fragment              : 'androidx.fragment:fragment-ktx:' + fragmentVersion,
             gson                  : 'com.google.code.gson:gson:2.8.9',
             hilt                  : 'com.google.dagger:hilt-android:' + hiltVersion,
+            hiltWork              : 'androidx.hilt:hilt-work:1.0.0',
             javaInject            : 'javax.inject:javax.inject:1',
             kotlin                : 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion,
             liveData              : 'androidx.lifecycle:lifecycle-livedata-ktx:' + lifecycleVersion,
@@ -30,11 +33,15 @@ ext {
             navigationUi          : 'androidx.navigation:navigation-ui-ktx:' + navigationVersion,
             nearby                : 'com.google.android.gms:play-services-nearby:18.0.0',
             material              : 'com.google.android.material:material:1.4.0',
+            room                  : 'androidx.room:room-runtime:' + roomVersion,
+            roomKtx               : 'androidx.room:room-ktx:' + roomVersion,
             timber                : 'com.jakewharton.timber:timber:5.0.1',
+            work                  : 'androidx.work:work-runtime-ktx:' + workVersion,
     ]
 
     kaptLibraries = [
-            hiltCompiler: 'com.google.dagger:hilt-compiler:' + hiltVersion
+            hiltCompiler: 'com.google.dagger:hilt-compiler:' + hiltVersion,
+            roomCompiler: 'androidx.room:room-compiler:' + roomVersion,
     ]
 
     testLibraries = [

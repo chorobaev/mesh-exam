@@ -8,7 +8,13 @@ dependencies {
     implementation libraryModules.nearby
 
     implementation libraries.nearby
+    implementation libraries.work
+    implementation libraries.hiltWork
     implementation libraries.gson
 
     implementation libraries.coroutinesPlayServices
+
+    implementation libraries.room
+    implementation libraries.roomKtx
+    kapt kaptLibraries.roomCompiler
 }

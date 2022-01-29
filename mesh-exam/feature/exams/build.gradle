@@ -10,6 +10,7 @@ android {
 dependencies {
 
     implementation localModules.core
+    implementation localModules.domain
     implementation localModules.uiKit
     implementation localModules.androidBase
     implementation libraryModules.localization

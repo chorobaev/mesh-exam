@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_create_exam"
-    app:startDestination="@id/createQuestionFragment">
+    app:startDestination="@id/createExamFragment">
 
     <fragment
         android:id="@+id/createExamFragment"
@@ -16,7 +16,9 @@
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right" />
+            app:popExitAnim="@anim/exit_to_right"
+            app:popUpTo="@id/createExamFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/createQuestionFragment"

@@ -11,12 +11,14 @@ import io.flaterlab.meshexam.androidbase.BaseFragment
 import io.flaterlab.meshexam.androidbase.TextWatcherManager
 import io.flaterlab.meshexam.androidbase.bindTextWatcher
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
+import io.flaterlab.meshexam.androidbase.toBundleArgs
 import io.flaterlab.meshexam.create.R
 import io.flaterlab.meshexam.create.databinding.FragmentCreateExamBinding
+import io.flaterlab.meshexam.create.ui.question.CreateQuestionLauncher
 import io.flaterlab.meshexam.uikit.view.setError
 
 @AndroidEntryPoint
-class CreateExamFragment : BaseFragment() {
+internal class CreateExamFragment : BaseFragment() {
 
     private val viewModel: CreateExamViewModel by viewModels()
     private var _binding: FragmentCreateExamBinding? = null
@@ -39,7 +41,7 @@ class CreateExamFragment : BaseFragment() {
         viewModel.typeError.observe(viewLifecycleOwner, binding.ttiExamType::setError)
         viewModel.durationError.observe(viewLifecycleOwner, binding.ttiExamDuration::setError)
         viewModel.nextEnabled.observe(viewLifecycleOwner, binding.btnNext::setEnabled)
-        viewModel.openNextCommand.observe(viewLifecycleOwner) { openEditScreen() }
+        viewModel.openQuestionScreenCommand.observe(viewLifecycleOwner, ::openEditScreen)
 
         binding.ttiExamName.editText.bindTextWatcher(watcherManager) {
             viewModel.onNameChanged(it?.toString())
@@ -56,8 +58,11 @@ class CreateExamFragment : BaseFragment() {
         binding.btnNext.clickWithDebounce(action = viewModel::onNextClicked)
     }
 
-    private fun openEditScreen() {
-        findNavController().navigate(R.id.action_createExamFragment_to_createQuestionFragment)
+    private fun openEditScreen(examId: String) {
+        findNavController().navigate(
+            R.id.action_createExamFragment_to_createQuestionFragment,
+            CreateQuestionLauncher(examId).toBundleArgs()
+        )
     }
 
     override fun onDestroyView() {

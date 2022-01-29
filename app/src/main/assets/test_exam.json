@@ -1,0 +1,39 @@
+[
+  {
+    "testId": "86500f25-b978-467b-a9cf-271c9a6bb7de",
+    "name": "History of Kyrgyzstan",
+    "type": "State exam",
+    "duration": 30,
+    "questions": [
+      {
+        "questionId": "9b062c41-cda8-4bd3-9df5-6b28abc96e60",
+        "question": "When is the Independence day?",
+        "type": "MULTIPLE_CHOICE",
+        "score": 1.5,
+        "answer": [
+          {
+            "answerId": "8cec80c4-d4f2-4d01-9d84-a68d16ce51b0",
+            "answer": "31st of August",
+            "correct": true,
+            "createdAt": 0,
+            "updatedAt": 0
+          },
+          {
+            "answerId": "43923d68-d617-470e-8bc2-d2005c7499e9",
+            "answer": "1st of January",
+            "correct": false,
+            "createdAt": 0,
+            "updatedAt": 0
+          },
+          {
+            "answerId": "d65ac515-ec71-4c6a-8390-e372d84a5965",
+            "answer": "20th of Jun",
+            "correct": false,
+            "createdAt": 0,
+            "updatedAt": 0
+          }
+        ]
+      }
+    ]
+  }
+]

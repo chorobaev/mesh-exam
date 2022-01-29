@@ -1,23 +1,27 @@
 package io.flaterlab.meshexam.create.ui.exam
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.create.R
+import io.flaterlab.meshexam.domain.api.model.CreateExamModel
+import io.flaterlab.meshexam.domain.api.usecase.CreateExamUseCase
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 internal class CreateExamViewModel @Inject constructor(
-
+    private val createExamUseCase: CreateExamUseCase
 ) : BaseViewModel() {
 
     val nameError = MutableLiveData(Text.empty())
     val typeError = MutableLiveData(Text.empty())
     val durationError = MutableLiveData(Text.empty())
     val nextEnabled = MutableLiveData(false)
-    val openNextCommand = SingleLiveEvent<Unit>()
+    val openQuestionScreenCommand = SingleLiveEvent<String>()
 
     private var name: String? = null
     private var type: String? = null
@@ -65,7 +69,11 @@ internal class CreateExamViewModel @Inject constructor(
     }
 
     fun onNextClicked() {
-        // TODO: add use case call
-        openNextCommand.call()
+        viewModelScope.launch {
+            val examId: String = createExamUseCase(
+                CreateExamModel(name!!, type, duration!!.toLong())
+            )
+            openQuestionScreenCommand.value = examId
+        }
     }
 }
