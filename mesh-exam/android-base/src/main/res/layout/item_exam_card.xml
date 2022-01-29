@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/margin_medium"
+    android:layout_marginTop="@dimen/margin_medium"
+    app:cardBackgroundColor="?android:attr/colorBackground"
+    app:cardCornerRadius="@dimen/radius_medium">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_exam_icon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_margin="@dimen/margin_small"
+            android:src="@drawable/ic_play_button"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_exam_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_medium"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAppearance="@style/TextAppearance.MeshExam.Normal.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_exam_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="History of Kyrgyzstan" />
+
+        <TextView
+            android:id="@+id/tv_exam_duration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:textAppearance="@style/TextAppearance.MeshExam.Small.Regular"
+            android:textColor="?attr/colorOnBackgroundLight"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_exam_name"
+            app:layout_constraintStart_toStartOf="@id/tv_exam_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_exam_name"
+            app:layout_constraintVertical_bias="0"
+            tools:text="30 min" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

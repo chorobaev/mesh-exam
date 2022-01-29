@@ -9,7 +9,6 @@ android {
 
 dependencies {
     implementation localModules.core
-    implementation localModules.androidBase
     implementation libraryModules.localization
     implementation libraries.core
     implementation libraries.appcompat

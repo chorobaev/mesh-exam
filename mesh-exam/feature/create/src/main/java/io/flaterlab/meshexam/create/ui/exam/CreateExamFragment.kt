@@ -11,11 +11,11 @@ import io.flaterlab.meshexam.androidbase.BaseFragment
 import io.flaterlab.meshexam.androidbase.TextWatcherManager
 import io.flaterlab.meshexam.androidbase.bindTextWatcher
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
+import io.flaterlab.meshexam.androidbase.text.setError
 import io.flaterlab.meshexam.androidbase.toBundleArgs
 import io.flaterlab.meshexam.create.R
 import io.flaterlab.meshexam.create.databinding.FragmentCreateExamBinding
 import io.flaterlab.meshexam.create.ui.question.CreateQuestionLauncher
-import io.flaterlab.meshexam.uikit.view.setError
 
 @AndroidEntryPoint
 internal class CreateExamFragment : BaseFragment() {

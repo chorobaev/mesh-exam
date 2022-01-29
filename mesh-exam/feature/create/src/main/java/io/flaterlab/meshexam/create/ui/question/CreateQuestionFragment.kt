@@ -21,7 +21,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 internal class CreateQuestionFragment : ViewBindingFragment<FragmentCreateQuestionBinding>() {
 
-    private val viewModel: CreateQuestionViewModel by viewModels()
+    private val viewModel: CreateQuestionViewModel by vm()
 
     @Inject
     lateinit var pagerAdapter: QuestionPagerAdapter

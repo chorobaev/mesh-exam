@@ -8,8 +8,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.inputmethod.EditorInfo
 import android.widget.FrameLayout
-import io.flaterlab.meshexam.androidbase.text.Text
-import io.flaterlab.meshexam.androidbase.text.resolve
 import io.flaterlab.meshexam.uikit.R
 import io.flaterlab.meshexam.uikit.databinding.ViewTitledTextInputBinding
 import io.flaterlab.meshexam.uikit.ext.obtainStyledAttributes
@@ -75,9 +73,4 @@ class TitledTextInput : FrameLayout {
         const val SUPER_STATE_KEY = "super_state"
         const val INPUT_KEY = "is_rated"
     }
-}
-
-fun TitledTextInput.setError(text: Text) {
-    textInputLayout.isErrorEnabled = !text.isEmpty
-    textInputLayout.error = text.resolve(context)
 }

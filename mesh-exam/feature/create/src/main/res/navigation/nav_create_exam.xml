@@ -24,14 +24,5 @@
         android:id="@+id/createQuestionFragment"
         android:name="io.flaterlab.meshexam.create.ui.question.CreateQuestionFragment"
         android:label="fragment_create_question"
-        tools:layout="@layout/fragment_create_question" >
-        <action
-            android:id="@+id/action_createQuestionFragment_to_changeTextDialogFragment"
-            app:destination="@id/changeTextDialogFragment" />
-    </fragment>
-    <dialog
-        android:id="@+id/changeTextDialogFragment"
-        android:name="io.flaterlab.meshexam.create.ui.change.ChangeTextDialogFragment"
-        android:label="dialog_change_text"
-        tools:layout="@layout/dialog_change_text" />
+        tools:layout="@layout/fragment_create_question" />
 </navigation>

@@ -8,6 +8,9 @@ android {
 }
 
 dependencies {
+    implementation localModules.uiKit
+    implementation libraryModules.localization
+
     implementation libraries.appcompat
     implementation libraries.material
     implementation libraries.navigationFragment

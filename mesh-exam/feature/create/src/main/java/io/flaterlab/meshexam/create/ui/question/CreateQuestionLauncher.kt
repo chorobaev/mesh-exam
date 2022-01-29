@@ -4,6 +4,6 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-internal data class CreateQuestionLauncher(
+data class CreateQuestionLauncher(
     val examId: String
-): Parcelable
+) : Parcelable
