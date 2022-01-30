@@ -1,61 +1,74 @@
 package io.flaterlab.meshexam.create.ui.details
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.androidbase.getLauncher
+import io.flaterlab.meshexam.androidbase.text.Text
+import io.flaterlab.meshexam.create.R
 import io.flaterlab.meshexam.create.dvo.AnswerDvo
-import java.util.*
+import io.flaterlab.meshexam.create.dvo.QuestionDvo
+import io.flaterlab.meshexam.domain.create.model.CreateAnswerModel
+import io.flaterlab.meshexam.domain.create.usecase.*
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class QuestionDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    getQuestionUseCase: GetQuestionUseCase,
+    getAnswersUseCase: GetAnswersUseCase,
+    private val updateQuestionContentUseCase: UpdateQuestionContentUseCase,
+    private val updateAnswerContentUseCase: UpdateAnswerContentUseCase,
+    private val createAnswerUseCase: CreateAnswerUseCase,
+    private val deleteAnswerUseCase: DeleteAnswerUseCase,
+    private val updateAnswerCorrectnessUseCase: UpdateAnswerCorrectnessUseCase,
 ) : BaseViewModel() {
 
     val launcher: QuestionDetailsLauncher = savedStateHandle.getLauncher()
 
-    private val _question = MutableLiveData("")
-    val question: LiveData<String> = _question
+    val question = getQuestionUseCase(launcher.questionId)
+        .map { QuestionDvo(it.id, it.content, it.type.toString(), it.score) }
+        .onEach(::_question::set)
+        .onEach { Timber.d(it.toString()) }
+        .catch { it.localizedMessage?.let(Text::from)?.also(message::setValue) }
 
-    private val _answers = MutableLiveData<List<AnswerDvo>>()
-    val answers: LiveData<List<AnswerDvo>> = _answers
+    val answers = getAnswersUseCase(launcher.questionId)
+        .map { list ->
+            list.map { model ->
+                AnswerDvo(model.id, model.content, model.isCorrect)
+            }
+        }
+        .onEach(::_answers::set)
+        .onEach { Timber.d(it.toString()) }
+        .catch { it.localizedMessage?.let(Text::from)?.also(message::setValue) }
 
-    val deleteAnswerCommand = SingleLiveEvent<AnswerDvo>()
-    val changeQuestionCommand = SingleLiveEvent<String>()
+    val changeQuestionCommand = SingleLiveEvent<QuestionDvo>()
     val changeAnswerCommand = SingleLiveEvent<AnswerDvo>()
 
-    init {
-        _answers.value = (1..5).map {
-            AnswerDvo(
-                UUID.randomUUID().toString(),
-                "Answer #$it",
-                false
-            )
+    private var _question: QuestionDvo? = null
+    private var _answers: List<AnswerDvo> = emptyList()
+
+    fun onQuestionChanged(question: String) {
+        viewModelScope.launch {
+            updateQuestionContentUseCase(launcher.questionId, question)
         }
     }
 
-    fun onQuestionChanged(question: String) {
-        _question.value = question
-    }
-
     fun onAnswerChanged(answerId: String, answerContent: String) {
-        _answers.value = answers.value?.toMutableList()?.let { list ->
-            val answer = list.find { it.id == answerId }?.copy(content = answerContent)
-                ?: return@let emptyList()
-            mutableListOf<AnswerDvo>().apply {
-                list.forEach { dvo ->
-                    add(if (dvo.id == answerId) answer else dvo)
-                }
-            }
+        viewModelScope.launch {
+            updateAnswerContentUseCase(answerId, answerContent)
         }
     }
 
     fun onChangeQuestionClicked() {
-        changeQuestionCommand.value = question.value
+        _question?.let(changeQuestionCommand::setValue)
     }
 
     fun onChangeAnswerTextClicked(dvo: AnswerDvo) {
@@ -63,10 +76,25 @@ class QuestionDetailsViewModel @Inject constructor(
     }
 
     fun onChangeAnswerCorrectnessClicked(dvo: AnswerDvo, isCorrect: Boolean) {
-
+        viewModelScope.launch {
+            updateAnswerCorrectnessUseCase(dvo.id, isCorrect)
+        }
     }
 
     fun onAnswerLongClicked(dvo: AnswerDvo) {
-        deleteAnswerCommand.value = dvo
+        val position = _answers.indexOf(dvo)
+        val variant = ('a' + position).toString()
+        viewModelScope.launch {
+            deleteAnswerUseCase(dvo.id)
+            message.value = Text.from(R.string.create_create_question_answerStringDeleted, variant)
+        }
+    }
+
+    fun onAddAnswerClicked() {
+        viewModelScope.launch {
+            createAnswerUseCase(
+                CreateAnswerModel(launcher.questionId, _answers.size)
+            )
+        }
     }
 }

@@ -3,6 +3,9 @@ package io.flaterlab.meshexam.create.ui.details.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.flaterlab.meshexam.androidbase.ext.applyLayoutParams
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
@@ -14,25 +17,34 @@ import javax.inject.Inject
 
 class AnswerListAdapter @Inject constructor(
 
-) : RecyclerView.Adapter<AnswerListAdapter.ViewHolder>() {
+) : ListAdapter<AnswerDvo, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     var onChangeTextListener: (AnswerDvo) -> Unit = {}
     var onCorrectnessChangeListener: (AnswerDvo, Boolean) -> Unit = { _, _ -> }
     var onLongClickListener: (AnswerDvo) -> Unit = {}
+    var onAddAnswerClickListener: () -> Unit = {}
 
-    private val answers = ArrayList<AnswerDvo>()
-
-    fun submitList(list: List<AnswerDvo>?) {
-        val safeList = list ?: emptyList()
-        val prevItemCount = answers.size
-        answers.clear()
-        answers.addAll(safeList)
-        notifyItemRangeRemoved(0, prevItemCount)
-        notifyItemRangeInserted(0, safeList.size)
+    override fun getItemViewType(position: Int): Int {
+        return if (position == itemCount - 1) {
+            ADD_VIEW_TYPE
+        } else {
+            super.getItemViewType(position)
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(parent = parent).apply {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            ADD_VIEW_TYPE -> createAddViewHolder(parent)
+            else -> createItemViewHolder(parent)
+        }
+    }
+
+    private fun createAddViewHolder(parent: ViewGroup) = AddViewHolder(parent).apply {
+        itemView.clickWithDebounce(action = onAddAnswerClickListener)
+    }
+
+    private fun createItemViewHolder(parent: ViewGroup) = ViewHolder(parent = parent)
+        .apply {
             val longClickListener = View.OnLongClickListener {
                 getCurrentItem(adapterPosition)
                     ?.let(onLongClickListener)
@@ -45,24 +57,25 @@ class AnswerListAdapter @Inject constructor(
             binding.tvAnswerContent.clickWithDebounce {
                 getCurrentItem(adapterPosition)?.let(onChangeTextListener)
             }
-            binding.checkboxCorrectness.clickWithDebounce {
+            binding.checkboxCorrectness.setOnClickListener {
                 getCurrentItem(adapterPosition)?.let {
                     onCorrectnessChangeListener(it, binding.checkboxCorrectness.isChecked)
                 }
             }
         }
-    }
 
     private fun getCurrentItem(position: Int): AnswerDvo? {
-        return runCatching { answers[position] }.getOrNull()
+        return runCatching { getItem(position) }.getOrNull()
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = answers[position]
-        holder.bind(item)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is ViewHolder -> holder.bind(getItem(position))
+            is AddViewHolder -> holder.bind()
+        }
         holder.itemView.applyLayoutParams<RecyclerView.LayoutParams> {
             bottomMargin =
-                if (position == answers.lastIndex) {
+                if (position == itemCount - 1) {
                     holder.itemView.resources.getDimension(R.dimen.margin_medium).toInt()
                 } else {
                     0
@@ -71,12 +84,10 @@ class AnswerListAdapter @Inject constructor(
     }
 
     override fun getItemCount(): Int {
-        return answers.size
+        return super.getItemCount() + 1
     }
 
-    class ViewHolder(
-        parent: ViewGroup,
-    ) : RecyclerView.ViewHolder(
+    class ViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context).inflate(R.layout.item_answer, parent, false)
     ) {
 
@@ -87,6 +98,36 @@ class AnswerListAdapter @Inject constructor(
             tvAnswerVariant.text = variant
             tvAnswerContent.text = item.content
             checkboxCorrectness.isChecked = item.isCorrect
+        }
+    }
+
+    class AddViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
+        LayoutInflater.from(parent.context).inflate(R.layout.item_answer, parent, false)
+    ) {
+
+        val binding = ItemAnswerBinding.bind(itemView).apply {
+            tvAnswerContent.setHint(R.string.create_create_question_addAnswer)
+            checkboxCorrectness.isVisible = false
+        }
+
+        fun bind() = with(binding) {
+            val variant = "${'a' + adapterPosition}."
+            tvAnswerVariant.text = variant
+        }
+    }
+
+    companion object {
+        private const val ADD_VIEW_TYPE = 1
+
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<AnswerDvo>() {
+
+            override fun areContentsTheSame(oldItem: AnswerDvo, newItem: AnswerDvo): Boolean {
+                return false
+            }
+
+            override fun areItemsTheSame(oldItem: AnswerDvo, newItem: AnswerDvo): Boolean {
+                return oldItem.id == newItem.id
+            }
         }
     }
 }

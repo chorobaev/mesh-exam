@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.androidbase.text.Text
-import io.flaterlab.meshexam.domain.usecase.GetMyExamsUseCase
+import io.flaterlab.meshexam.domain.create.usecase.GetMyExamsUseCase
 import io.flaterlab.meshexam.presentation.exams.dvo.ExamDvo
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn

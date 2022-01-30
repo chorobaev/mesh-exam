@@ -28,4 +28,7 @@
     <string name="create_create_question_editQuestion">Edit question</string>
     <string name="create_create_question_editAnswer">Edit answer</string>
     <string name="create_create_question_questionAtIntDeleted">Question at %d is deleted!</string>
+    <string name="create_create_question_addAnswer">Add an answer</string>
+    <string name="create_create_question_answerHint">Answer</string>
+    <string name="create_create_question_answerStringDeleted">Answer variant \'%s\' is deleted!</string>
 </resources>

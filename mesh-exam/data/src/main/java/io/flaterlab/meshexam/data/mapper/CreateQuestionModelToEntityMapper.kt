@@ -2,8 +2,7 @@ package io.flaterlab.meshexam.data.mapper
 
 import io.flaterlab.meshexam.core.Mapper
 import io.flaterlab.meshexam.data.database.entity.QuestionEntity
-import io.flaterlab.meshexam.domain.model.CreateQuestionModel
-import io.flaterlab.meshexam.domain.model.QuestionType
+import io.flaterlab.meshexam.domain.create.model.CreateQuestionModel
 import java.util.*
 import javax.inject.Inject
 

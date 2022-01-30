@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.domain.model
+package io.flaterlab.meshexam.domain.create.model
 
 data class CreateQuestionModel(
     val examId: String,

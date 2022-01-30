@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.domain.usecase
+package io.flaterlab.meshexam.domain.create.usecase
 
 import io.flaterlab.meshexam.domain.datasource.ExamDataSource
 import io.flaterlab.meshexam.domain.api.model.CreateExamModel

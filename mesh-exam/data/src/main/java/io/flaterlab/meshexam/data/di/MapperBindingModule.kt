@@ -12,7 +12,7 @@ import io.flaterlab.meshexam.data.mapper.CreateQuestionModelToEntityMapper
 import io.flaterlab.meshexam.data.mapper.ExamEntityToModelMapper
 import io.flaterlab.meshexam.domain.api.model.CreateExamModel
 import io.flaterlab.meshexam.domain.api.model.ExamModel
-import io.flaterlab.meshexam.domain.model.CreateQuestionModel
+import io.flaterlab.meshexam.domain.create.model.CreateQuestionModel
 
 @Module
 @InstallIn(SingletonComponent::class)

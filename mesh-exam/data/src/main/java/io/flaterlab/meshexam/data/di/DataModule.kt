@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -16,4 +17,7 @@ internal class DataModule {
         GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
             .create()
+
+    @Provides
+    fun provideIdGeneratorStrategy(): IdGeneratorStrategy = IdGeneratorStrategy()
 }

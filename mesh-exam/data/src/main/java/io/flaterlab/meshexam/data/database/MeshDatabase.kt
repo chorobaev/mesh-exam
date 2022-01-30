@@ -2,7 +2,9 @@ package io.flaterlab.meshexam.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import io.flaterlab.meshexam.data.database.dao.AnswerDao
 import io.flaterlab.meshexam.data.database.dao.ExamDao
+import io.flaterlab.meshexam.data.database.dao.QuestionDao
 import io.flaterlab.meshexam.data.database.entity.AnswerEntity
 import io.flaterlab.meshexam.data.database.entity.ExamEntity
 import io.flaterlab.meshexam.data.database.entity.QuestionEntity
@@ -18,5 +20,9 @@ import io.flaterlab.meshexam.data.database.entity.QuestionEntity
 )
 internal abstract class MeshDatabase : RoomDatabase() {
 
-    abstract fun getExamsDao(): ExamDao
+    abstract fun examDao(): ExamDao
+
+    abstract fun questionsDao(): QuestionDao
+
+    abstract fun answerDao(): AnswerDao
 }

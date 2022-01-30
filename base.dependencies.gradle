@@ -29,6 +29,7 @@ ext {
             kotlin                : 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion,
             liveData              : 'androidx.lifecycle:lifecycle-livedata-ktx:' + lifecycleVersion,
             viewModel             : 'androidx.lifecycle:lifecycle-viewmodel-ktx:' + lifecycleVersion,
+            lifecycleRuntime      : 'androidx.lifecycle:lifecycle-runtime-ktx:' + lifecycleVersion,
             navigationFragment    : 'androidx.navigation:navigation-fragment-ktx:' + navigationVersion,
             navigationUi          : 'androidx.navigation:navigation-ui-ktx:' + navigationVersion,
             nearby                : 'com.google.android.gms:play-services-nearby:18.0.0',

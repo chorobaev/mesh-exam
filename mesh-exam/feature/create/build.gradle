@@ -21,6 +21,7 @@ dependencies {
     implementation libraries.fragment
     implementation libraries.liveData
     implementation libraries.viewModel
+    implementation libraries.lifecycleRuntime
     implementation libraries.material
 
     implementation libraries.navigationFragment

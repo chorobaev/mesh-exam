@@ -11,12 +11,11 @@ import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.create.R
 import io.flaterlab.meshexam.create.dvo.QuestionMetaDvo
-import io.flaterlab.meshexam.domain.model.CreateQuestionModel
-import io.flaterlab.meshexam.domain.usecase.CreateQuestionUseCase
-import io.flaterlab.meshexam.domain.usecase.DeleteQuestionUseCase
-import io.flaterlab.meshexam.domain.usecase.GetExamUseCase
+import io.flaterlab.meshexam.domain.create.model.CreateQuestionModel
+import io.flaterlab.meshexam.domain.create.usecase.CreateQuestionUseCase
+import io.flaterlab.meshexam.domain.create.usecase.DeleteQuestionUseCase
+import io.flaterlab.meshexam.domain.create.usecase.GetExamUseCase
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,7 +43,6 @@ class CreateQuestionViewModel @Inject constructor(
     fun loadExam() {
         viewModelScope.launch {
             getExamUseCase(launcher.examId).apply {
-                Timber.d(toString())
                 _questionMetaInfo.value = QuestionMetaDvo(exam.name, exam.type, exam.durationInMin)
                 _questionIds.value = questionIds
             }

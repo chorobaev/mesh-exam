@@ -2,9 +2,11 @@ package io.flaterlab.meshexam.create.ui.details
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.SimpleItemAnimator
 import dagger.hilt.android.AndroidEntryPoint
 import io.flaterlab.meshexam.androidbase.ViewBindingFragment
 import io.flaterlab.meshexam.androidbase.ViewBindingProvider
@@ -14,6 +16,8 @@ import io.flaterlab.meshexam.create.databinding.FragmentQuestionDetailsBinding
 import io.flaterlab.meshexam.create.ui.change.ChangeTextDialogFragment
 import io.flaterlab.meshexam.create.ui.change.ChangeTextLauncher
 import io.flaterlab.meshexam.create.ui.details.adapter.AnswerListAdapter
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -28,7 +32,7 @@ internal class QuestionDetailsFragment : ViewBindingFragment<FragmentQuestionDet
         )
     }
 
-    private val viewModel: QuestionDetailsViewModel by viewModels()
+    private val viewModel: QuestionDetailsViewModel by vm()
 
     @Inject
     lateinit var answerAdapter: AnswerListAdapter
@@ -36,28 +40,30 @@ internal class QuestionDetailsFragment : ViewBindingFragment<FragmentQuestionDet
     override val viewBinder: ViewBindingProvider<FragmentQuestionDetailsBinding>
         get() = FragmentQuestionDetailsBinding::inflate
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
         registerChangeTextResultListeners()
 
-        viewModel.question.observe(viewLifecycleOwner, binding.tvQuestion::setText)
-        viewModel.answers.observe(viewLifecycleOwner, answerAdapter::submitList)
-        viewModel.deleteAnswerCommand.observe(viewLifecycleOwner) { dvo ->
-            Toast.makeText(requireContext(), dvo.content, Toast.LENGTH_SHORT).show()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                launch {
+                    viewModel.question.collectLatest { dvo ->
+                        binding.tvQuestion.text = dvo.content
+                    }
+                }
+                launch {
+                    viewModel.answers.collectLatest(answerAdapter::submitList)
+                }
+            }
         }
         viewModel.changeQuestionCommand.observe(viewLifecycleOwner) { question ->
             startChangeDialog(
                 ChangeTextLauncher(
                     requestKey = CHANGE_QUESTION_REQUEST_KEY,
                     titleResId = R.string.create_create_question_editQuestion,
-                    text = question,
+                    text = question.content,
                 )
             )
         }
@@ -76,9 +82,11 @@ internal class QuestionDetailsFragment : ViewBindingFragment<FragmentQuestionDet
     }
 
     private fun initRecyclerView() = with(binding.recyclerViewQuestions) {
+        (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         answerAdapter.onChangeTextListener = viewModel::onChangeAnswerTextClicked
         answerAdapter.onCorrectnessChangeListener = viewModel::onChangeAnswerCorrectnessClicked
         answerAdapter.onLongClickListener = viewModel::onAnswerLongClicked
+        answerAdapter.onAddAnswerClickListener = viewModel::onAddAnswerClicked
         adapter = answerAdapter
     }
 
