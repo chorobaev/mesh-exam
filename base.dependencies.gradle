@@ -56,8 +56,7 @@ ext {
     localModules = [
             core        : project(':mesh-exam:core'),
             data        : project(':mesh-exam:data'),
-            domain      : project(':mesh-exam:domain:api'),
-            domainImpl  : project(':mesh-exam:domain:impl'),
+            domain      : project(':mesh-exam:domain'),
             presentation: project(':mesh-exam:presentation'),
             uiKit       : project(':mesh-exam:ui-kit'),
             androidBase : project(':mesh-exam:android-base'),

@@ -24,6 +24,12 @@ internal interface ExamDao {
     @Query("SELECT * FROM exams")
     fun getExams(): Flow<List<ExamEntity>>
 
+    @Query("SELECT * FROM exams WHERE examId = :examId")
+    suspend fun getExamById(examId: String): ExamEntity
+
+    @Query("SELECT questionId FROM questions WHERE hostExamId = :examId")
+    suspend fun getQuestionIdsByExamId(examId: String): List<String>
+
     @Query("SELECT * FROM questions WHERE hostExamId = :examId")
     suspend fun getQuestionsByExamId(examId: String): List<QuestionEntity>
 

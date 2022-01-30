@@ -1,15 +1,14 @@
-package io.flaterlab.meshexam.domain.impl
+package io.flaterlab.meshexam.domain.usecase
 
 import io.flaterlab.meshexam.domain.api.datasource.AdvertisingDataSource
-import io.flaterlab.meshexam.domain.api.usecase.AdvertiseExamUseCase
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class AdvertiseExamUseCaseImpl @Inject constructor(
+class AdvertiseExamUseCase @Inject constructor(
     private val advertiseDataSource: AdvertisingDataSource,
-) : AdvertiseExamUseCase {
+) {
 
-    override fun invoke(examId: String): Flow<Unit> {
+    operator fun invoke(examId: String): Flow<Unit> {
         return advertiseDataSource.startExam(examId)
     }
 }

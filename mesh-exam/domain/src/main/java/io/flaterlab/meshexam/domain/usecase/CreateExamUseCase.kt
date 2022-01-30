@@ -1,15 +1,14 @@
-package io.flaterlab.meshexam.domain.impl
+package io.flaterlab.meshexam.domain.usecase
 
 import io.flaterlab.meshexam.domain.api.datasource.ExamDataSource
 import io.flaterlab.meshexam.domain.api.model.CreateExamModel
-import io.flaterlab.meshexam.domain.api.usecase.CreateExamUseCase
 import javax.inject.Inject
 
-class CreateExamUseCaseImpl @Inject constructor(
+class CreateExamUseCase @Inject constructor(
     private val examDataSource: ExamDataSource,
-) : CreateExamUseCase {
+) {
 
-    override suspend fun invoke(modelCreate: CreateExamModel): String {
+    suspend operator fun invoke(modelCreate: CreateExamModel): String {
         return examDataSource.createTest(modelCreate)
     }
 }

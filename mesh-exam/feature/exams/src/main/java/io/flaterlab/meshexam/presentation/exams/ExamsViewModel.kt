@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.androidbase.text.Text
-import io.flaterlab.meshexam.domain.api.usecase.GetMyExamUseCase
+import io.flaterlab.meshexam.domain.usecase.GetMyExamsUseCase
 import io.flaterlab.meshexam.presentation.exams.dvo.ExamDvo
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class ExamsViewModel @Inject constructor(
-    private val getMyExamsUseCase: GetMyExamUseCase,
+    private val getMyExamsUseCase: GetMyExamsUseCase,
 ) : BaseViewModel() {
 
     val exams = MutableLiveData<List<ExamDvo>>(emptyList())
