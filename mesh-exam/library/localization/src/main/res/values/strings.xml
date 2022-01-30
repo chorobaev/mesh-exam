@@ -27,4 +27,5 @@
     <string name="create_create_question_questionHint">Question</string>
     <string name="create_create_question_editQuestion">Edit question</string>
     <string name="create_create_question_editAnswer">Edit answer</string>
+    <string name="create_create_question_questionAtIntDeleted">Question at %d is deleted!</string>
 </resources>

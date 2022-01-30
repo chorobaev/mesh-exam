@@ -21,7 +21,7 @@ abstract class BaseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModels.forEach { provider ->
-            provider.value.error.observe(viewLifecycleOwner) { errorText ->
+            provider.value.message.observe(viewLifecycleOwner) { errorText ->
                 val message = errorText.resolve(requireContext()) ?: return@observe
                 Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
             }

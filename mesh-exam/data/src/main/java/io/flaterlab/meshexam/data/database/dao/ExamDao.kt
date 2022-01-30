@@ -1,9 +1,6 @@
 package io.flaterlab.meshexam.data.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import io.flaterlab.meshexam.data.database.entity.AnswerEntity
 import io.flaterlab.meshexam.data.database.entity.ExamEntity
 import io.flaterlab.meshexam.data.database.entity.QuestionEntity
@@ -35,4 +32,8 @@ internal interface ExamDao {
 
     @Query("SELECT * FROM answers WHERE hostQuestionId = :questionId")
     suspend fun getAnswersByQuestionId(questionId: String): List<AnswerEntity>
+
+    @Query("DELETE FROM questions WHERE questionId IN (:questionIds)")
+    suspend fun deleteQuestions(vararg questionIds: String)
+
 }

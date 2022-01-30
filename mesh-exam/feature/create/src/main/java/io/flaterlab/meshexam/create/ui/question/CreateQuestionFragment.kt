@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.children
-import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,10 +43,8 @@ internal class CreateQuestionFragment : ViewBindingFragment<FragmentCreateQuesti
         }
         viewModel.questionIds.observe(viewLifecycleOwner) { ids ->
             pagerAdapter.submitList(ids)
-            viewModel.questionIds.removeObservers(viewLifecycleOwner)
         }
-        viewModel.questionIdAdded.observe(viewLifecycleOwner) { id ->
-            pagerAdapter.addQuestion(id)
+        viewModel.questionIdAdded.observe(viewLifecycleOwner) {
             binding.viewPagerQuestions.setCurrentItem(pagerAdapter.itemCount - 1, false)
             binding.questionNumbers.post {
                 binding.questionNumbers.fullScroll(View.FOCUS_RIGHT)
@@ -62,6 +59,10 @@ internal class CreateQuestionFragment : ViewBindingFragment<FragmentCreateQuesti
 
         TabLayoutMediator(binding.tabLayoutNumber, binding.viewPagerQuestions) { tab, position ->
             tab.text = position.plus(1).toString()
+            tab.view.setOnLongClickListener {
+                viewModel.onDeleteQuestionAt(position)
+                true
+            }
         }.attach()
 
         binding.tabLayoutNumber.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

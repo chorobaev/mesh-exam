@@ -34,7 +34,7 @@ internal class ExamsViewModel @Inject constructor(
                 list.map { ExamDvo(it.id, it.name, it.durationInMin) }
             }
             .onEach(exams::setValue)
-            .catch { it.localizedMessage?.let(Text::from)?.let(error::setValue) }
+            .catch { it.localizedMessage?.let(Text::from)?.let(message::setValue) }
             .launchIn(viewModelScope)
     }
 

@@ -1,6 +1,6 @@
 package io.flaterlab.meshexam.domain.usecase
 
-import io.flaterlab.meshexam.domain.api.datasource.ExamDataSource
+import io.flaterlab.meshexam.domain.datasource.ExamDataSource
 import io.flaterlab.meshexam.domain.api.model.ExamModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

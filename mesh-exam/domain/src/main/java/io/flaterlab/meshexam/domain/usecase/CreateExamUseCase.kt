@@ -1,6 +1,6 @@
 package io.flaterlab.meshexam.domain.usecase
 
-import io.flaterlab.meshexam.domain.api.datasource.ExamDataSource
+import io.flaterlab.meshexam.domain.datasource.ExamDataSource
 import io.flaterlab.meshexam.domain.api.model.CreateExamModel
 import javax.inject.Inject
 
@@ -9,6 +9,6 @@ class CreateExamUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(modelCreate: CreateExamModel): String {
-        return examDataSource.createTest(modelCreate)
+        return examDataSource.createExam(modelCreate)
     }
 }

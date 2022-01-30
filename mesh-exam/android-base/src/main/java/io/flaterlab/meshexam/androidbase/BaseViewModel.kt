@@ -6,7 +6,7 @@ import io.flaterlab.meshexam.androidbase.text.Text
 
 abstract class BaseViewModel : ViewModel() {
 
-    val error = SingleLiveEvent<Text>()
+    val message = SingleLiveEvent<Text>()
 }
 
 fun <T> SavedStateHandle.getLauncher(): T {
