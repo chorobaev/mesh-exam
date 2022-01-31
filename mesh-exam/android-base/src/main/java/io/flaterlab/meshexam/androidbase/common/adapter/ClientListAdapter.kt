@@ -1,5 +1,6 @@
 package io.flaterlab.meshexam.androidbase.common.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
@@ -31,7 +32,7 @@ class ClientListAdapter @Inject constructor(
         holder.bind(item)
         holder.itemView.applyLayoutParams<RecyclerView.LayoutParams> {
             bottomMargin = if (position == itemCount - 1) {
-                holder.itemView.resources.getDimension(R.dimen.action_button_width).toInt()
+                holder.itemView.resources.getDimension(R.dimen.margin_bottom_with_button).toInt()
             } else {
                 0
             }
@@ -45,12 +46,12 @@ class ClientListAdapter @Inject constructor(
         val binding = ItemClientBinding.bind(itemView)
 
         fun bind(item: ClientItem) = with(binding) {
-            val order = "${adapterPosition + 1}.)"
+            val order = "${adapterPosition + 1}."
             tvClientOrderNumber.text = order
             tvClientName.text = item.fullName
             tvClientInfo.text = item.info
             tvClientStatus.text = item.status
-            tvClientStatus.setTextColor(item.statusTextColor)
+            tvClientStatus.setTextColor(item.provideStatusTextColor(tvClientStatus.context))
         }
     }
 
@@ -60,8 +61,8 @@ class ClientListAdapter @Inject constructor(
         val info: String
         val status: String
 
-        @get:ColorInt
-        val statusTextColor: Int
+        @ColorInt
+        fun provideStatusTextColor(context: Context): Int
     }
 
     companion object {
@@ -75,8 +76,7 @@ class ClientListAdapter @Inject constructor(
                 return oldItem.id == newItem.id &&
                         oldItem.fullName == newItem.fullName &&
                         oldItem.info == newItem.info &&
-                        oldItem.status == newItem.status &&
-                        oldItem.statusTextColor == newItem.statusTextColor
+                        oldItem.status == newItem.status
             }
         }
     }

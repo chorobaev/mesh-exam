@@ -17,6 +17,7 @@
         android:id="@+id/tv_mesh_student_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_between"
         android:paddingHorizontal="@dimen/margin_medium"
         android:textAppearance="@style/TextAppearance.MeshExam.Large.Medium"
         android:textColor="?attr/colorOnBackgroundLight"
@@ -40,6 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_medium"
         android:src="@drawable/ic_pencil"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_mesh_exam_name" />
 
