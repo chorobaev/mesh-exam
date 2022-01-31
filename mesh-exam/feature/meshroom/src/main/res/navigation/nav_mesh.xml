@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_mesh"
+    app:startDestination="@id/meshRoomFragment">
+
+    <fragment
+        android:id="@+id/meshRoomFragment"
+        android:name="io.flaterlab.meshexam.feature.meshroom.MeshRoomFragment"
+        android:label="fragment_mesh_room"
+        tools:layout="@layout/fragment_mesh_room" />
+</navigation>

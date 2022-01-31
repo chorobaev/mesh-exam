@@ -4,6 +4,7 @@
     <dimen name="margin_medium">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="margin_between">24dp</dimen>
+    <dimen name="margin_bottom_with_button">100dp</dimen>
 
     <!-- Paddings -->
     <dimen name="bottom_sheet_dialog_handler_padding">14dp</dimen>

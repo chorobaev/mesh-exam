@@ -76,7 +76,8 @@ class AnswerListAdapter @Inject constructor(
         holder.itemView.applyLayoutParams<RecyclerView.LayoutParams> {
             bottomMargin =
                 if (position == itemCount - 1) {
-                    holder.itemView.resources.getDimension(R.dimen.margin_medium).toInt()
+                    holder.itemView
+                        .resources.getDimension(R.dimen.margin_bottom_with_button).toInt()
                 } else {
                     0
                 }

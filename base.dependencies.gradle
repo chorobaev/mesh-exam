@@ -73,5 +73,6 @@ ext {
             discover: project(':mesh-exam:feature:discover'),
             profile : project(':mesh-exam:feature:profile'),
             create  : project(':mesh-exam:feature:create'),
+            meshroom: project(':mesh-exam:feature:meshroom'),
     ]
 }

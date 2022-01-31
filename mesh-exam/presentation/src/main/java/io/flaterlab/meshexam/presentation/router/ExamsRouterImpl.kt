@@ -18,7 +18,10 @@ internal class ExamsRouterImpl @Inject constructor(
     override fun openEditExam(examId: String) {
         navControllerProvider.get().navigate(
             R.id.action_homeFragment_to_createQuestionFragment,
-            CreateQuestionLauncher(examId).toBundleArgs()
+            CreateQuestionLauncher(
+                examId = examId,
+                actionBehavior = CreateQuestionBehavior(examId)
+            ).toBundleArgs()
         )
     }
 }

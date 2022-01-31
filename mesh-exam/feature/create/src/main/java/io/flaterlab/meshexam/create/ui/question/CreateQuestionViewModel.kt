@@ -1,5 +1,6 @@
 package io.flaterlab.meshexam.create.ui.question
 
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -19,12 +20,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateQuestionViewModel @Inject constructor(
+internal class CreateQuestionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getExamUseCase: GetExamUseCase,
     private val createQuestionUseCase: CreateQuestionUseCase,
     private val deleteQuestionUseCase: DeleteQuestionUseCase,
 ) : BaseViewModel() {
+
+    private val launcher: CreateQuestionLauncher = savedStateHandle.getLauncher()
 
     private val _questionMetaInfo = MutableLiveData<QuestionMetaDvo>()
     val questionMetaInfo: LiveData<QuestionMetaDvo> = _questionMetaInfo
@@ -32,9 +35,11 @@ class CreateQuestionViewModel @Inject constructor(
     private val _questionIds = MutableLiveData<List<String>>(emptyList())
     val questionIds: LiveData<List<String>> = _questionIds
 
-    val questionIdAdded = SingleLiveEvent<String>()
+    val actionEnabled = MutableLiveData(launcher.actionBehavior != null)
+    val actionTitleResId = MutableLiveData(launcher.actionBehavior?.actionTitleResId)
 
-    private val launcher: CreateQuestionLauncher = savedStateHandle.getLauncher()
+    val questionIdAddedCommand = SingleLiveEvent<String>()
+    val applyNavActionCommand = SingleLiveEvent<(Fragment) -> Unit>()
 
     init {
         loadExam()
@@ -60,7 +65,7 @@ class CreateQuestionViewModel @Inject constructor(
                 )
             )
             _questionIds.value = ids + newQuestionId
-            questionIdAdded.value = newQuestionId
+            questionIdAddedCommand.value = newQuestionId
         }
     }
 
@@ -74,5 +79,10 @@ class CreateQuestionViewModel @Inject constructor(
             message.value =
                 Text.from(R.string.create_create_question_questionAtIntDeleted, position + 1)
         }
+    }
+
+    fun onActionClicked() {
+        val behavior = launcher.actionBehavior ?: return
+        applyNavActionCommand.value = behavior::onActionClicked
     }
 }

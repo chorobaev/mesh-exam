@@ -13,7 +13,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="io.flaterlab.meshexam.presentation.HomeFragment"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_nav_create_exam"
             app:destination="@id/nav_create_exam"
@@ -33,5 +33,13 @@
         android:id="@+id/createQuestionFragment"
         android:name="io.flaterlab.meshexam.create.ui.question.CreateQuestionFragment"
         android:label="CreateQuestionFragment" />
+    <include app:graph="@navigation/nav_mesh" />
+    <action
+        android:id="@+id/action_global_nav_mesh"
+        app:destination="@id/nav_mesh"
+        app:enterAnim="@anim/enter_from_right"
+        app:exitAnim="@anim/exit_to_left"
+        app:popEnterAnim="@anim/enter_from_left"
+        app:popExitAnim="@anim/exit_to_right" />
 
 </navigation>

@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.children
+import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,6 +18,7 @@ import io.flaterlab.meshexam.create.R
 import io.flaterlab.meshexam.create.databinding.FragmentCreateQuestionBinding
 import io.flaterlab.meshexam.create.ui.question.adapter.QuestionPagerAdapter
 import javax.inject.Inject
+import javax.inject.Provider
 
 @AndroidEntryPoint
 internal class CreateQuestionFragment : ViewBindingFragment<FragmentCreateQuestionBinding>() {
@@ -23,7 +26,8 @@ internal class CreateQuestionFragment : ViewBindingFragment<FragmentCreateQuesti
     private val viewModel: CreateQuestionViewModel by vm()
 
     @Inject
-    lateinit var pagerAdapter: QuestionPagerAdapter
+    lateinit var pagerAdapterProvider: Provider<QuestionPagerAdapter>
+    private val pagerAdapter get() = binding.viewPagerQuestions.adapter as QuestionPagerAdapter
 
     override val viewBinder: ViewBindingProvider<FragmentCreateQuestionBinding>
         get() = FragmentCreateQuestionBinding::inflate
@@ -44,18 +48,26 @@ internal class CreateQuestionFragment : ViewBindingFragment<FragmentCreateQuesti
         viewModel.questionIds.observe(viewLifecycleOwner) { ids ->
             pagerAdapter.submitList(ids)
         }
-        viewModel.questionIdAdded.observe(viewLifecycleOwner) {
+        viewModel.actionEnabled.observe(viewLifecycleOwner, binding.btnExamAction::isVisible::set)
+        viewModel.actionTitleResId.observe(viewLifecycleOwner) { titleResId ->
+            titleResId?.let(binding.btnExamAction::setText)
+        }
+        viewModel.questionIdAddedCommand.observe(viewLifecycleOwner) {
             binding.viewPagerQuestions.setCurrentItem(pagerAdapter.itemCount - 1, false)
             binding.questionNumbers.post {
                 binding.questionNumbers.fullScroll(View.FOCUS_RIGHT)
             }
         }
+        viewModel.applyNavActionCommand.observe(viewLifecycleOwner) { action ->
+            action(this)
+        }
 
         binding.tvAddQuestion.clickWithDebounce(action = viewModel::onAddQuestionClicked)
+        binding.btnExamAction.clickWithDebounce(action = viewModel::onActionClicked)
     }
 
     private fun initViewPager() {
-        binding.viewPagerQuestions.adapter = pagerAdapter
+        binding.viewPagerQuestions.adapter = pagerAdapterProvider.get()
 
         TabLayoutMediator(binding.tabLayoutNumber, binding.viewPagerQuestions) { tab, position ->
             tab.text = position.plus(1).toString()

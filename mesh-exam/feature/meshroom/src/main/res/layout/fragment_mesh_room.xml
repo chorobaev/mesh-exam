@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MeshRoomFragment">
+
+    <io.flaterlab.meshexam.uikit.view.MeshToolbar
+        android:id="@+id/toolbar_mesh_room"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:toolbarTitle="@string/mesh_create_mesh" />
+
+    <TextView
+        android:id="@+id/tv_mesh_student_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/margin_medium"
+        android:textAppearance="@style/TextAppearance.MeshExam.Large.Medium"
+        android:textColor="?attr/colorOnBackgroundLight"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_mesh_room"
+        tools:text="@string/mesh_students_amount_title" />
+
+    <TextView
+        android:id="@+id/tv_mesh_exam_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:paddingHorizontal="@dimen/margin_medium"
+        android:textAppearance="@style/TextAppearance.MeshExam.Large.Medium"
+        android:textColor="?attr/colorOnBackgroundLight"
+        app:layout_constraintTop_toBottomOf="@id/tv_mesh_student_amount"
+        tools:text="@string/mesh_exam_name_title" />
+
+    <io.flaterlab.meshexam.uikit.view.ActionButton
+        android:id="@+id/btn_change_exam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:src="@drawable/ic_pencil"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_mesh_exam_name" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_mesh_info_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="tv_mesh_exam_name,btn_change_exam" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/et_frame_mesh_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_between"
+        app:layout_constraintTop_toBottomOf="@id/barrier_mesh_info_bottom">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_mesh_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/mesh_search_hint" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_mesh_clients"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_small"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_frame_mesh_search"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_client" />
+
+    <Button
+        android:id="@+id/btn_start_exam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginBottom="@dimen/margin_medium"
+        android:text="@string/mesh_start_exam"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

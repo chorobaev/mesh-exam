@@ -31,4 +31,10 @@
     <string name="create_create_question_addAnswer">Add an answer</string>
     <string name="create_create_question_answerHint">Answer</string>
     <string name="create_create_question_answerStringDeleted">Answer variant \'%s\' is deleted!</string>
+
+    <string name="mesh_create_mesh">Create mesh</string>
+    <string name="mesh_students_amount_title">Students in the mesh: %d</string>
+    <string name="mesh_exam_name_title">Exam: %s</string>
+    <string name="mesh_search_hint">Search here</string>
+    <string name="mesh_start_exam">Start exam</string>
 </resources>

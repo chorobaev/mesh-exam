@@ -1,6 +1,8 @@
 package io.flaterlab.meshexam.androidbase.ext
 
+import android.content.res.Resources
 import android.os.SystemClock
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 
@@ -40,3 +42,10 @@ fun View.OnClickListener.setClickListenerWithDebounce(
 inline fun <reified T : ViewGroup.LayoutParams> View.applyLayoutParams(block: T.() -> Unit) {
     layoutParams = (layoutParams as T).apply { block() }
 }
+
+val Int.dp: Int
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        toFloat(),
+        Resources.getSystem().displayMetrics
+    ).toInt()

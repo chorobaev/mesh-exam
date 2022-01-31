@@ -5,5 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class CreateQuestionLauncher(
-    val examId: String
+    val examId: String,
+    val actionBehavior: CreateQuestionActionBehavior? = null,
 ) : Parcelable
