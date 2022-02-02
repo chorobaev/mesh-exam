@@ -4,21 +4,21 @@ sealed class ConnectionResult<M> {
     data class Request<M>(
         val endpointId: String,
         val info: M,
-    ): ConnectionResult<M>()
+    ) : ConnectionResult<M>()
 
     data class Connected<M>(
         val endpointId: String,
-    ): ConnectionResult<M>()
+    ) : ConnectionResult<M>()
 
     data class Rejected<M>(
         val endpointId: String
-    ): ConnectionResult<M>()
+    ) : ConnectionResult<M>()
 
     data class Error<M>(
         val cause: Throwable? = null,
-    ): ConnectionResult<M>()
+    ) : ConnectionResult<M>()
 
     data class Disconnected<M>(
         val endpointId: String,
-    ): ConnectionResult<M>()
+    ) : ConnectionResult<M>()
 }

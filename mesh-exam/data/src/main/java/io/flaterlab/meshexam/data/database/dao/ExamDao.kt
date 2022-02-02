@@ -20,4 +20,7 @@ internal interface ExamDao {
 
     @Query("SELECT * FROM exams WHERE examId = :examId")
     suspend fun getExamById(examId: String): ExamEntity
+
+    @Query("SELECT name FROM exams WHERE examId = :examId")
+    suspend fun getExamNameById(examId: String): String
 }

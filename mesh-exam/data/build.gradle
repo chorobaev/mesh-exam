@@ -1,13 +1,18 @@
 apply from: "$project.rootDir/mesh-exam/android.config.gradle"
 apply from: "$project.rootDir/mesh-exam/android.dependencies.gradle"
 
+android {
+    kotlinOptions {
+        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+    }
+}
+
 dependencies {
     implementation localModules.core
     implementation localModules.domain
 
-    implementation libraryModules.nearby
+    implementation libraryModules.mesh
 
-    implementation libraries.nearby
     implementation libraries.work
     implementation libraries.hiltWork
     implementation libraries.gson
