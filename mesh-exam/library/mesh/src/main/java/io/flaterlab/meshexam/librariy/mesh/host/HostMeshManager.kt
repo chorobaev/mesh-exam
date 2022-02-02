@@ -7,9 +7,8 @@ import com.google.android.gms.nearby.connection.ConnectionsClient
 import com.google.android.gms.nearby.connection.Strategy
 import com.google.gson.GsonBuilder
 import io.flaterlab.meshexam.librariy.mesh.common.ConnectionsLifecycleAdapterCallback
-import io.flaterlab.meshexam.librariy.mesh.common.MeshData
-import io.flaterlab.meshexam.librariy.mesh.common.MeshResult
 import io.flaterlab.meshexam.librariy.mesh.common.PayloadAdapterCallback
+import io.flaterlab.meshexam.librariy.mesh.common.dto.*
 import io.flaterlab.meshexam.librariy.mesh.common.parser.AdvertiserInfoJsonParser
 import io.flaterlab.meshexam.librariy.mesh.common.parser.ClientInfoJsonParser
 import io.flaterlab.meshexam.librariy.mesh.common.parser.JsonParser
@@ -20,12 +19,12 @@ import java.util.concurrent.ConcurrentHashMap
 
 class HostMeshManager internal constructor(
     private val serviceId: String,
-    private val client: ConnectionsClient,
+    private val nearby: ConnectionsClient,
     private val connectionCallback: ConnectionsLifecycleAdapterCallback<ClientInfo>,
     private val payloadCallback: PayloadAdapterCallback,
     private val advertiserJsonParser: JsonParser<AdvertiserInfo>,
 ) : ConnectionsLifecycleAdapterCallback.AdapterCallback<ClientInfo>,
-    PayloadAdapterCallback.Callback {
+    PayloadAdapterCallback.AdapterCallback {
 
     private var advertiserInfo: AdvertiserInfo? = null
     private val left = MeshList()
@@ -46,7 +45,7 @@ class HostMeshManager internal constructor(
 
     fun stop() {
         stopAdvertising()
-        client.stopAllEndpoints()
+        nearby.stopAllEndpoints()
         advertiserInfo = null
         left.clear()
         right.clear()
@@ -61,30 +60,26 @@ class HostMeshManager internal constructor(
             .setStrategy(Strategy.P2P_CLUSTER)
             .setDisruptiveUpgrade(false)
             .build()
-        client.startAdvertising(infoBytes, serviceId, connectionCallback, options)
+        nearby.startAdvertising(infoBytes, serviceId, connectionCallback, options)
             .addOnFailureListener { e ->
                 clientFlow.tryEmit(MeshResult.Error(e))
             }
     }
 
     private fun stopAdvertising() {
-        client.stopAdvertising()
+        nearby.stopAdvertising()
     }
 
     override fun onRequested(endpointId: String, info: ClientInfo) {
         if (left.isEmpty() || right.isEmpty()) {
-            client.acceptConnection(endpointId, payloadCallback)
-                .addOnSuccessListener {
-                }
+            clientInfoCache[endpointId] = info
+            nearby.acceptConnection(endpointId, payloadCallback)
                 .addOnFailureListener { e ->
                     clientFlow.tryEmit(MeshResult.Error(e))
                 }
-                .addOnCompleteListener {
-                    Timber.d("Request: $clientInfoCache")
-                }
-            clientInfoCache[endpointId] = info
         } else {
-            client.rejectConnection(endpointId)
+            nearby.rejectConnection(endpointId)
+            stopAdvertising()
         }
     }
 
@@ -92,7 +87,7 @@ class HostMeshManager internal constructor(
         Timber.d("Connected: $endpointId")
         val clientInfo = clientInfoCache[endpointId]
         if (clientInfo == null) {
-            client.disconnectFromEndpoint(endpointId)
+            nearby.disconnectFromEndpoint(endpointId)
         } else {
             clientConnected(clientInfo)
         }
@@ -120,6 +115,10 @@ class HostMeshManager internal constructor(
         if (left.isEmpty() xor right.isEmpty()) {
             advertise()
         }
+    }
+
+    override fun rejectConnection(endpointId: String) {
+        nearby.rejectConnection(endpointId)
     }
 
     private fun clientConnected(clientInfo: ClientInfo, parentId: String? = null) {
@@ -164,7 +163,7 @@ class HostMeshManager internal constructor(
                     .let { gson ->
                         HostMeshManager(
                             serviceId = context.packageName,
-                            client = Nearby.getConnectionsClient(context),
+                            nearby = Nearby.getConnectionsClient(context),
                             connectionCallback = ConnectionsLifecycleAdapterCallback(
                                 ClientInfoJsonParser(gson)
                             ),
@@ -172,7 +171,7 @@ class HostMeshManager internal constructor(
                             advertiserJsonParser = AdvertiserInfoJsonParser(gson),
                         )
                     }
-                    .apply(::instance::set)
+                    .also(::instance::set)
             }
     }
 }

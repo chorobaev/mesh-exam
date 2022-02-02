@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.gms.nearby.Nearby
 import com.google.android.gms.nearby.connection.*
 import com.google.gson.Gson
-import io.flaterlab.meshexam.librariy.mesh.host.ClientInfo
+import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
 import io.flaterlab.meshexam.test.R
 import kotlinx.android.synthetic.main.fragment_connect.*
 import timber.log.Timber

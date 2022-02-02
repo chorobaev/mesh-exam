@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.librariy.mesh.common
+package io.flaterlab.meshexam.librariy.mesh.common.dto
 
 sealed class MeshResult<T> {
 

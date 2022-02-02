@@ -1,7 +1,7 @@
 package io.flaterlab.meshexam.librariy.mesh.common.parser
 
 import com.google.gson.Gson
-import io.flaterlab.meshexam.librariy.mesh.common.MeshPayload
+import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshPayload
 
 internal class MeshPayloadParser(
     private val gson: Gson,

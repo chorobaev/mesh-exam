@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.librariy.mesh.host
+package io.flaterlab.meshexam.librariy.mesh.common.dto
 
 import com.google.gson.annotations.Expose
 
@@ -11,11 +11,4 @@ data class ClientInfo(
     @Expose val name: String,
     @Expose val info: String,
     @Expose val status: String,
-)
-
-data class AdvertiserInfo(
-    @Expose val hostName: String,
-    @Expose val examId: String,
-    @Expose val examName: String,
-    @Expose val examDuration: Long,
 )

@@ -1,5 +1,6 @@
 package io.flaterlab.meshexam.librariy.mesh.host
 
+import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
 import java.util.*
 
 internal class MeshList(

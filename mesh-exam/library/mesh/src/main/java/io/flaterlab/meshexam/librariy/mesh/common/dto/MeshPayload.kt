@@ -1,7 +1,6 @@
-package io.flaterlab.meshexam.librariy.mesh.common
+package io.flaterlab.meshexam.librariy.mesh.common.dto
 
 import com.google.gson.annotations.Expose
-import io.flaterlab.meshexam.librariy.mesh.host.ClientInfo
 import kotlin.reflect.KClass
 
 sealed class MeshData {

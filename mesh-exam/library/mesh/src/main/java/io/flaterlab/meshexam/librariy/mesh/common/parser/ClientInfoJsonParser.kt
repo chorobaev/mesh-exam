@@ -1,7 +1,7 @@
 package io.flaterlab.meshexam.librariy.mesh.common.parser
 
 import com.google.gson.Gson
-import io.flaterlab.meshexam.librariy.mesh.host.ClientInfo
+import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
 
 internal class ClientInfoJsonParser(
     private val gson: Gson,

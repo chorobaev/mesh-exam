@@ -10,8 +10,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import io.flaterlab.meshexam.librariy.mesh.common.MeshResult
-import io.flaterlab.meshexam.librariy.mesh.host.AdvertiserInfo
+import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshResult
+import io.flaterlab.meshexam.librariy.mesh.common.dto.AdvertiserInfo
 import io.flaterlab.meshexam.librariy.mesh.host.HostMeshManager
 import io.flaterlab.meshexam.test.R
 import kotlinx.android.synthetic.main.fragment_connect.*

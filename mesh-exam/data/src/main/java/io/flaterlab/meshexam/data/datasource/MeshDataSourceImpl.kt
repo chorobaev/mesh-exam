@@ -4,8 +4,8 @@ import io.flaterlab.meshexam.data.database.MeshDatabase
 import io.flaterlab.meshexam.domain.datasource.MeshDataSource
 import io.flaterlab.meshexam.domain.mesh.model.ClientModel
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
-import io.flaterlab.meshexam.librariy.mesh.common.MeshResult
-import io.flaterlab.meshexam.librariy.mesh.host.AdvertiserInfo
+import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshResult
+import io.flaterlab.meshexam.librariy.mesh.common.dto.AdvertiserInfo
 import io.flaterlab.meshexam.librariy.mesh.host.HostMeshManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

@@ -5,13 +5,15 @@ import com.google.android.gms.nearby.connection.PayloadCallback
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshData
+import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshPayload
 import timber.log.Timber
 
 internal class PayloadAdapterCallback(
     private val gson: Gson
 ) : PayloadCallback() {
 
-    var adapterCallback: Callback? = null
+    var adapterCallback: AdapterCallback? = null
 
     override fun onPayloadReceived(endpointId: String, payload: Payload) {
         if (payload.type == Payload.Type.BYTES) {
@@ -42,8 +44,8 @@ internal class PayloadAdapterCallback(
         }
     }
 
-    interface Callback {
+    interface AdapterCallback {
 
-        fun onClientConnected(data: MeshData.ClientConnected)
+        fun onClientConnected(data: MeshData.ClientConnected) = Unit
     }
 }

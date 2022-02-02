@@ -7,6 +7,10 @@ import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import io.flaterlab.meshexam.test.adapter.PagerAdapter
+import io.flaterlab.meshexam.test.fragment.ClientMeshFragment
+import io.flaterlab.meshexam.test.fragment.HostMeshFragment
+import kotlinx.android.synthetic.main.activity_test.*
 
 class TestActivity : AppCompatActivity() {
 
@@ -26,6 +30,13 @@ class TestActivity : AppCompatActivity() {
         ) {
             request.launch(permissions)
         }
+        test_container.adapter = PagerAdapter(
+            listOf(
+                ClientMeshFragment(),
+                HostMeshFragment()
+            ),
+            this
+        )
     }
 
     companion object {

@@ -4,7 +4,9 @@ import com.google.android.gms.nearby.connection.ConnectionInfo
 import com.google.android.gms.nearby.connection.ConnectionLifecycleCallback
 import com.google.android.gms.nearby.connection.ConnectionResolution
 import com.google.android.gms.nearby.connection.ConnectionsStatusCodes
+import com.google.gson.JsonSyntaxException
 import io.flaterlab.meshexam.librariy.mesh.common.parser.JsonParser
+import timber.log.Timber
 
 internal class ConnectionsLifecycleAdapterCallback<T>(
     private val jsonParser: JsonParser<T>,
@@ -13,9 +15,14 @@ internal class ConnectionsLifecycleAdapterCallback<T>(
     var adapterCallback: AdapterCallback<T>? = null
 
     override fun onConnectionInitiated(endpointId: String, info: ConnectionInfo) {
-        val json = String(info.endpointInfo)
-        val clientInfo = jsonParser.fromJson(json)
-        adapterCallback?.onRequested(endpointId, clientInfo)
+        try {
+            val json = String(info.endpointInfo)
+            val clientInfo = jsonParser.fromJson(json)
+            adapterCallback?.onRequested(endpointId, clientInfo)
+        } catch (e: JsonSyntaxException) {
+            Timber.e(e)
+            adapterCallback?.rejectConnection(endpointId)
+        }
     }
 
     override fun onConnectionResult(
@@ -43,5 +50,6 @@ internal class ConnectionsLifecycleAdapterCallback<T>(
         fun onRejected(endpointId: String)
         fun onError(endpointId: String)
         fun onDisconnected(endpointId: String)
+        fun rejectConnection(endpointId: String)
     }
 }
