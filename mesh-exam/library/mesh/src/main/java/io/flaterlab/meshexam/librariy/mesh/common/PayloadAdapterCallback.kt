@@ -25,6 +25,7 @@ internal class PayloadAdapterCallback(
 
     private fun onByteArrayReceived(bytes: ByteArray) {
         val json = String(bytes)
+        Timber.d("On payload received: $json")
         try {
             val payload = gson.fromJson(json, MeshPayload::class.java)
             MeshPayload.ContentType.values()

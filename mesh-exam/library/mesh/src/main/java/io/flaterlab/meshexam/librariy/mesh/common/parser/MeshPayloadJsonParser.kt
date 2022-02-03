@@ -2,8 +2,9 @@ package io.flaterlab.meshexam.librariy.mesh.common.parser
 
 import com.google.gson.Gson
 import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshPayload
+import javax.inject.Inject
 
-internal class MeshPayloadParser(
+internal class MeshPayloadJsonParser @Inject constructor(
     private val gson: Gson,
 ) : JsonParser<MeshPayload> {
 

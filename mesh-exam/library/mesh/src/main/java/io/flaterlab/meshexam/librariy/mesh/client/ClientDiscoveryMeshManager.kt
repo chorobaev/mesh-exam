@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.android.gms.nearby.Nearby
 import com.google.android.gms.nearby.connection.ConnectionsClient
 import com.google.android.gms.nearby.connection.DiscoveryOptions
+import com.google.android.gms.nearby.connection.Payload
 import com.google.android.gms.nearby.connection.Strategy
 import com.google.gson.GsonBuilder
 import io.flaterlab.meshexam.librariy.mesh.client.exception.MeshConnectionException
@@ -12,11 +13,13 @@ import io.flaterlab.meshexam.librariy.mesh.common.EndpointDiscoveryAdapterCallba
 import io.flaterlab.meshexam.librariy.mesh.common.PayloadAdapterCallback
 import io.flaterlab.meshexam.librariy.mesh.common.dto.*
 import io.flaterlab.meshexam.librariy.mesh.common.parser.AdvertiserInfoJsonParser
-import io.flaterlab.meshexam.librariy.mesh.common.parser.ClientInfoJsonParser
+import io.flaterlab.meshexam.librariy.mesh.common.parser.JsonParserHelper
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 
 class ClientDiscoveryMeshManager internal constructor(
     private val serviceId: String,
@@ -24,7 +27,7 @@ class ClientDiscoveryMeshManager internal constructor(
     private val discoveryCallback: EndpointDiscoveryAdapterCallback,
     private val connectionsCallback: ConnectionsLifecycleAdapterCallback<AdvertiserInfo>,
     private val payloadCallback: PayloadAdapterCallback,
-    private val clientInfoJsonParser: ClientInfoJsonParser,
+    private val jsonParserHelper: JsonParserHelper,
 ) : EndpointDiscoveryAdapterCallback.AdapterCallback,
     ConnectionsLifecycleAdapterCallback.AdapterCallback<AdvertiserInfo>,
     PayloadAdapterCallback.AdapterCallback {
@@ -53,6 +56,7 @@ class ClientDiscoveryMeshManager internal constructor(
             .build()
         nearby.startDiscovery(serviceId, discoveryCallback, options)
             .addOnFailureListener { e ->
+                Timber.d("Discovery failed: $e")
                 advertisersFlow.tryEmit(MeshResult.Error(e))
             }
     }
@@ -67,6 +71,7 @@ class ClientDiscoveryMeshManager internal constructor(
     }
 
     private fun emmitAdvertisers() {
+        Timber.d("Advertisers: $advertiserInfoCache")
         advertisersFlow.tryEmit(
             MeshResult.Success(
                 ClientMesh(advertiserInfoCache.getUniqueListByExamId())
@@ -96,7 +101,10 @@ class ClientDiscoveryMeshManager internal constructor(
         }
 
     private fun join(endpointId: String) {
-        val info = clientInfoJsonParser.toJson(clientInfo!!).toByteArray()
+        val info = jsonParserHelper
+            .clientInfoJsonParser
+            .toJson(clientInfo!!)
+            .toByteArray()
         nearby.requestConnection(info, endpointId, connectionsCallback)
             .addOnFailureListener(::throwJoiningException)
     }
@@ -135,6 +143,23 @@ class ClientDiscoveryMeshManager internal constructor(
         joinResult?.completeExceptionally(MeshConnectionException(cause))
     }
 
+    suspend fun notifyClientJoined(info: ClientInfo) {
+        Timber.d("Notifying client joined: $info")
+        val parent = parentInfo!!
+        val dataJson = jsonParserHelper
+            .clientConnectedJsonParser
+            .toJson(MeshData.ClientConnected(info, clientInfo!!.id))
+        val meshPayload = MeshPayload(
+            type = MeshPayload.ContentType.CLIENT_CONNECTED,
+            data = dataJson,
+        )
+        val bytes = jsonParserHelper
+            .meshPayloadJsonParser
+            .toJson(meshPayload)
+            .toByteArray()
+        nearby.sendPayload(parent.first, Payload.fromBytes(bytes)).await()
+    }
+
     companion object {
         @Volatile
         private var instance: ClientDiscoveryMeshManager? = null
@@ -153,7 +178,7 @@ class ClientDiscoveryMeshManager internal constructor(
                                 AdvertiserInfoJsonParser(gson)
                             ),
                             payloadCallback = PayloadAdapterCallback(gson),
-                            clientInfoJsonParser = ClientInfoJsonParser(gson),
+                            jsonParserHelper = JsonParserHelper.getInstance(gson)
                         )
                     }
                     .also(::instance::set)

@@ -15,7 +15,6 @@ import io.flaterlab.meshexam.librariy.mesh.common.parser.JsonParser
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import timber.log.Timber
-import java.util.concurrent.ConcurrentHashMap
 
 class HostMeshManager internal constructor(
     private val serviceId: String,
@@ -29,7 +28,7 @@ class HostMeshManager internal constructor(
     private var advertiserInfo: AdvertiserInfo? = null
     private val left = MeshList()
     private val right = MeshList()
-    private val clientInfoCache: MutableMap<String, ClientInfo> = ConcurrentHashMap()
+    private val clientInfoCache: MutableMap<String, ClientInfo> = HashMap()
     private val clientFlow = MutableSharedFlow<MeshResult<HostMesh>>(1)
 
     init {
@@ -123,8 +122,8 @@ class HostMeshManager internal constructor(
 
     private fun clientConnected(clientInfo: ClientInfo, parentId: String? = null) {
         when {
-            left.any { it.id == parentId } -> left.add(clientInfo)
-            right.any { it.id == parentId } -> right.add(clientInfo)
+            left.any { it.id == parentId } -> left.add(clientInfo, parentId)
+            right.any { it.id == parentId } -> right.add(clientInfo, parentId)
             left.isEmpty() -> left.add(clientInfo)
             right.isEmpty() -> right.add(clientInfo)
         }
@@ -133,6 +132,7 @@ class HostMeshManager internal constructor(
         }
         Timber.d("Connected left: $left")
         Timber.d("Connected right: $right")
+        Timber.d("Connected cache: $clientInfoCache")
         emmitClients()
     }
 
@@ -147,6 +147,7 @@ class HostMeshManager internal constructor(
     }
 
     override fun onClientConnected(data: MeshData.ClientConnected) {
+        Timber.d("Client connected: $data")
         clientConnected(data.clientInfo, data.parentId)
     }
 

@@ -8,7 +8,7 @@ internal class MeshList(
 ) : List<ClientInfo> by inner {
 
     fun add(client: ClientInfo, parentId: String? = null) {
-        while (inner.isNotEmpty() && inner.last.id != parentId) {
+        while (parentId != null && inner.isNotEmpty() && inner.last.id != parentId) {
             inner.removeLast()
         }
         inner.add(client)

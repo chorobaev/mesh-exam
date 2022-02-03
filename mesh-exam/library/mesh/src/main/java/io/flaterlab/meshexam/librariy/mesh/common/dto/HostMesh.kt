@@ -12,3 +12,5 @@ data class ClientInfo(
     @Expose val info: String,
     @Expose val status: String,
 )
+
+internal typealias ChildInfo = Pair<String, ClientInfo>
