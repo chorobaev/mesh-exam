@@ -42,11 +42,14 @@ internal class PayloadAdapterCallback(
     private fun onDataReceived(data: MeshData) {
         when (data) {
             is MeshData.ClientConnected -> adapterCallback?.onClientConnected(data)
+            is MeshData.ClientDisconnected -> adapterCallback?.onClientDisconnected(data)
         }
     }
 
     interface AdapterCallback {
 
         fun onClientConnected(data: MeshData.ClientConnected) = Unit
+
+        fun onClientDisconnected(data: MeshData.ClientDisconnected) = Unit
     }
 }

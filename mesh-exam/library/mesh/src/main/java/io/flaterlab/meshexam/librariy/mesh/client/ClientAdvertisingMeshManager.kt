@@ -16,7 +16,7 @@ import io.flaterlab.meshexam.librariy.mesh.common.parser.ClientInfoJsonParser
 import io.flaterlab.meshexam.librariy.mesh.common.parser.JsonParser
 import timber.log.Timber
 
-class ClientAdvertisingMeshManager internal constructor(
+internal class ClientAdvertisingMeshManager(
     private val serviceId: String,
     private val nearby: ConnectionsClient,
     private val connectionsCallback: ConnectionsLifecycleAdapterCallback2<ClientInfo>,
@@ -99,26 +99,20 @@ class ClientAdvertisingMeshManager internal constructor(
     }
 
     companion object {
-        @Volatile
-        private var instance: ClientAdvertisingMeshManager? = null
-
         fun getInstance(context: Context): ClientAdvertisingMeshManager =
-            instance ?: synchronized(this) {
-                instance ?: GsonBuilder()
-                    .excludeFieldsWithoutExposeAnnotation()
-                    .create()
-                    .let { gson ->
-                        ClientAdvertisingMeshManager(
-                            serviceId = context.packageName,
-                            nearby = Nearby.getConnectionsClient(context),
-                            connectionsCallback = ConnectionsLifecycleAdapterCallback2(
-                                ClientInfoJsonParser(gson)
-                            ),
-                            payloadCallback = PayloadAdapterCallback(gson),
-                            advertiserInfoJsonParser = AdvertiserInfoJsonParser(gson)
-                        )
-                    }
-                    .also(::instance::set)
-            }
+            GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .create()
+                .let { gson ->
+                    ClientAdvertisingMeshManager(
+                        serviceId = context.packageName,
+                        nearby = Nearby.getConnectionsClient(context),
+                        connectionsCallback = ConnectionsLifecycleAdapterCallback2(
+                            ClientInfoJsonParser(gson)
+                        ),
+                        payloadCallback = PayloadAdapterCallback(gson),
+                        advertiserInfoJsonParser = AdvertiserInfoJsonParser(gson)
+                    )
+                }
     }
 }

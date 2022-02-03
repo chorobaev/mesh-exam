@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
-class ClientDiscoveryMeshManager internal constructor(
+internal class ClientDiscoveryMeshManager(
     private val serviceId: String,
     private val nearby: ConnectionsClient,
     private val discoveryCallback: EndpointDiscoveryAdapterCallback,
@@ -32,7 +32,9 @@ class ClientDiscoveryMeshManager internal constructor(
     ConnectionsLifecycleAdapterCallback.AdapterCallback<AdvertiserInfo>,
     PayloadAdapterCallback.AdapterCallback {
 
-    private var clientInfo: ClientInfo? = null
+    var onDisconnectedListener: (AdvertiserInfo, ClientInfo) -> Unit = { _, _ -> }
+
+    private var selfInfo: ClientInfo? = null
     private var joinResult: CompletableDeferred<ParentInfo>? = null
     private var parentInfo: ParentInfo? = null
 
@@ -79,20 +81,23 @@ class ClientDiscoveryMeshManager internal constructor(
         )
     }
 
+    fun stopDiscovery() {
+        nearby.stopDiscovery()
+        advertiserInfoCache.clear()
+        emmitAdvertisers()
+    }
+
     suspend fun joinExam(examId: String, clientInfo: ClientInfo): AdvertiserInfo =
         coroutineScope {
-            this@ClientDiscoveryMeshManager.clientInfo = clientInfo
+            selfInfo = clientInfo
             val endpointId = advertiserInfoCache.getEndpointByExamId(examId)
-            if (endpointId == null) {
-                throwJoiningException()
-            } else {
-                join(endpointId)
-            }
+                ?: throw provideConnectionException()
+            join(endpointId)
             try {
                 CompletableDeferred<ParentInfo>()
-                    .also(::joinResult::set)
+                    .also { joinResult = it }
                     .await()
-                    .also(::parentInfo::set)
+                    .also { parentInfo = it }
                     .second
             } finally {
                 joinResult = null
@@ -103,27 +108,21 @@ class ClientDiscoveryMeshManager internal constructor(
     private fun join(endpointId: String) {
         val info = jsonParserHelper
             .clientInfoJsonParser
-            .toJson(clientInfo!!)
+            .toJson(selfInfo!!)
             .toByteArray()
         nearby.requestConnection(info, endpointId, connectionsCallback)
-            .addOnFailureListener(::throwJoiningException)
-    }
-
-    private fun stopDiscovery() {
-        nearby.stopDiscovery()
-        advertiserInfoCache.clear()
-        emmitAdvertisers()
+            .addOnFailureListener(::throwConnectionException)
     }
 
     override fun onRequested(endpointId: String, info: AdvertiserInfo) {
         nearby.acceptConnection(endpointId, payloadCallback)
-            .addOnFailureListener(::throwJoiningException)
+            .addOnFailureListener(::throwConnectionException)
     }
 
     override fun onConnected(endpointId: String) {
         val advertiserInfo = advertiserInfoCache[endpointId]
         if (advertiserInfo == null) {
-            throwJoiningException()
+            throwConnectionException()
         } else {
             joinResult?.complete(endpointId to advertiserInfo)
         }
@@ -131,24 +130,37 @@ class ClientDiscoveryMeshManager internal constructor(
 
     override fun onRejected(endpointId: String) = join(endpointId)
 
-    override fun onError(endpointId: String) = throwJoiningException()
+    override fun onError(endpointId: String) = throwConnectionException()
 
-    override fun onDisconnected(endpointId: String) = join(endpointId)
+    override fun onDisconnected(endpointId: String) {
+        onDisconnectedListener(
+            parentInfo?.second
+                ?: throw IllegalStateException(
+                    "Parent info mustn't be null. Cache $advertiserInfoCache"
+                ),
+            selfInfo
+                ?: throw IllegalStateException(
+                    "Self info mustn't be null. Cache $advertiserInfoCache"
+                )
+        )
+    }
 
     override fun rejectConnection(endpointId: String) {
         nearby.rejectConnection(endpointId)
     }
 
-    private fun throwJoiningException(cause: Exception? = null) {
-        joinResult?.completeExceptionally(MeshConnectionException(cause))
+    private fun throwConnectionException(cause: Exception? = null) {
+        joinResult?.completeExceptionally(provideConnectionException(cause))
     }
 
-    suspend fun notifyClientJoined(info: ClientInfo) {
-        Timber.d("Notifying client joined: $info")
-        val parent = parentInfo!!
+    private fun provideConnectionException(cause: Exception? = null) =
+        MeshConnectionException(cause)
+
+    suspend fun notifyClientConnected(info: ClientInfo) {
+        Timber.d("Notifying client connected: $info")
         val dataJson = jsonParserHelper
             .clientConnectedJsonParser
-            .toJson(MeshData.ClientConnected(info, clientInfo!!.id))
+            .toJson(MeshData.ClientConnected(info, selfInfo!!.id))
         val meshPayload = MeshPayload(
             type = MeshPayload.ContentType.CLIENT_CONNECTED,
             data = dataJson,
@@ -157,31 +169,41 @@ class ClientDiscoveryMeshManager internal constructor(
             .meshPayloadJsonParser
             .toJson(meshPayload)
             .toByteArray()
-        nearby.sendPayload(parent.first, Payload.fromBytes(bytes)).await()
+        nearby.sendPayload(parentInfo!!.first, Payload.fromBytes(bytes)).await()
+    }
+
+    suspend fun notifyClientDisconnected(info: ClientInfo) {
+        Timber.d("Notifying client disconnected: $info")
+        val dataJson = jsonParserHelper
+            .clientDisconnectedJsonParser
+            .toJson(MeshData.ClientDisconnected(info))
+        val meshPayload = MeshPayload(
+            type = MeshPayload.ContentType.CLIENT_DISCONNECTED,
+            data = dataJson,
+        )
+        val bytes = jsonParserHelper
+            .meshPayloadJsonParser
+            .toJson(meshPayload)
+            .toByteArray()
+        nearby.sendPayload(parentInfo!!.first, Payload.fromBytes(bytes)).await()
     }
 
     companion object {
-        @Volatile
-        private var instance: ClientDiscoveryMeshManager? = null
-
         fun getInstance(context: Context): ClientDiscoveryMeshManager =
-            instance ?: synchronized(this) {
-                instance ?: GsonBuilder()
-                    .excludeFieldsWithoutExposeAnnotation()
-                    .create()
-                    .let { gson ->
-                        ClientDiscoveryMeshManager(
-                            serviceId = context.packageName,
-                            nearby = Nearby.getConnectionsClient(context),
-                            discoveryCallback = EndpointDiscoveryAdapterCallback(gson),
-                            connectionsCallback = ConnectionsLifecycleAdapterCallback(
-                                AdvertiserInfoJsonParser(gson)
-                            ),
-                            payloadCallback = PayloadAdapterCallback(gson),
-                            jsonParserHelper = JsonParserHelper.getInstance(gson)
-                        )
-                    }
-                    .also(::instance::set)
-            }
+            GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .create()
+                .let { gson ->
+                    ClientDiscoveryMeshManager(
+                        serviceId = context.packageName,
+                        nearby = Nearby.getConnectionsClient(context),
+                        discoveryCallback = EndpointDiscoveryAdapterCallback(gson),
+                        connectionsCallback = ConnectionsLifecycleAdapterCallback(
+                            AdvertiserInfoJsonParser(gson)
+                        ),
+                        payloadCallback = PayloadAdapterCallback(gson),
+                        jsonParserHelper = JsonParserHelper.getInstance(gson)
+                    )
+                }
     }
 }

@@ -8,8 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import io.flaterlab.meshexam.librariy.mesh.client.ClientAdvertisingMeshManager
-import io.flaterlab.meshexam.librariy.mesh.client.ClientDiscoveryMeshManager
+import io.flaterlab.meshexam.librariy.mesh.client.ClientMeshManager
 import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
 import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshResult
 import io.flaterlab.meshexam.test.R
@@ -22,10 +21,8 @@ import java.util.*
 
 class ClientMeshFragment : Fragment() {
 
-    private val clientDiscoveryMesh
-        get() = ClientDiscoveryMeshManager.getInstance(requireContext())
-    private val clientAdvertisingMesh
-        get() = ClientAdvertisingMeshManager.getInstance(requireContext())
+    private val clientMesh
+        get() = ClientMeshManager.getInstance(requireContext())
     private val clientInfo = ClientInfo(UUID.randomUUID().toString(), "Nurbol", "COM-18", "")
 
     private var isDiscovering = false
@@ -50,13 +47,9 @@ class ClientMeshFragment : Fragment() {
         adapter.textClickListener = {
             viewLifecycleOwner.lifecycleScope.launch {
                 try {
-                    val info = clientDiscoveryMesh.joinExam(it, clientInfo)
+                    val info = clientMesh.joinExam(it, clientInfo)
                     Toast.makeText(requireContext(), "Connected to $info", Toast.LENGTH_SHORT)
                         .show()
-                    clientAdvertisingMesh.run {
-                        onClientConnectedListener = ::clientJoined
-                        advertise(info)
-                    }
                 } catch (e: Exception) {
                     Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
                 }
@@ -72,7 +65,7 @@ class ClientMeshFragment : Fragment() {
             } else {
                 isDiscovering = true
                 discoveryJob = viewLifecycleOwner.lifecycleScope.launch {
-                    clientDiscoveryMesh.discoverExams()
+                    clientMesh.discoverExams()
                         .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                         .collectLatest { result ->
                             when (result) {
@@ -88,12 +81,6 @@ class ClientMeshFragment : Fragment() {
                         }
                 }
             }
-        }
-    }
-
-    private fun clientJoined(clientInfo: ClientInfo) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            clientDiscoveryMesh.notifyClientJoined(clientInfo)
         }
     }
 }

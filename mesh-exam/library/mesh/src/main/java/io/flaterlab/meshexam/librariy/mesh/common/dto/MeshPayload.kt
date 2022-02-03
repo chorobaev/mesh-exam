@@ -9,6 +9,10 @@ sealed class MeshData {
         @Expose val clientInfo: ClientInfo,
         @Expose val parentId: String,
     ) : MeshData()
+
+    data class ClientDisconnected(
+        @Expose val clientInfo: ClientInfo
+    ) : MeshData()
 }
 
 data class MeshPayload(
@@ -19,6 +23,7 @@ data class MeshPayload(
     enum class ContentType(
         val classType: KClass<out MeshData>,
     ) {
-        CLIENT_CONNECTED(MeshData.ClientConnected::class);
+        CLIENT_CONNECTED(MeshData.ClientConnected::class),
+        CLIENT_DISCONNECTED(MeshData.ClientDisconnected::class)
     }
 }

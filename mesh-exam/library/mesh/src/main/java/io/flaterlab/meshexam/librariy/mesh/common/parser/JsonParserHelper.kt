@@ -10,7 +10,8 @@ internal class JsonParserHelper(
     val advertiserInfoJsonParser: JsonParser<AdvertiserInfo>,
     val clientInfoJsonParser: JsonParser<ClientInfo>,
     val meshPayloadJsonParser: JsonParser<MeshPayload>,
-    val clientConnectedJsonParser: JsonParser<MeshData.ClientConnected>
+    val clientConnectedJsonParser: JsonParser<MeshData.ClientConnected>,
+    val clientDisconnectedJsonParser: JsonParser<MeshData.ClientDisconnected>,
 ) {
 
     companion object {
@@ -19,6 +20,7 @@ internal class JsonParserHelper(
             ClientInfoJsonParser(gson),
             MeshPayloadJsonParser(gson),
             ClientConnectedJsonParser(gson),
+            ClientDisconnectedJsonParser(gson)
         )
     }
 }

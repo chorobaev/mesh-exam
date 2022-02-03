@@ -6,7 +6,7 @@ import com.google.android.gms.nearby.connection.AdvertisingOptions
 import com.google.android.gms.nearby.connection.ConnectionsClient
 import com.google.android.gms.nearby.connection.Strategy
 import com.google.gson.GsonBuilder
-import io.flaterlab.meshexam.librariy.mesh.common.ConnectionsLifecycleAdapterCallback
+import io.flaterlab.meshexam.librariy.mesh.common.ConnectionsLifecycleAdapterCallback2
 import io.flaterlab.meshexam.librariy.mesh.common.PayloadAdapterCallback
 import io.flaterlab.meshexam.librariy.mesh.common.dto.*
 import io.flaterlab.meshexam.librariy.mesh.common.parser.AdvertiserInfoJsonParser
@@ -19,20 +19,19 @@ import timber.log.Timber
 class HostMeshManager internal constructor(
     private val serviceId: String,
     private val nearby: ConnectionsClient,
-    private val connectionCallback: ConnectionsLifecycleAdapterCallback<ClientInfo>,
+    private val connectionsCallback: ConnectionsLifecycleAdapterCallback2<ClientInfo>,
     private val payloadCallback: PayloadAdapterCallback,
     private val advertiserJsonParser: JsonParser<AdvertiserInfo>,
-) : ConnectionsLifecycleAdapterCallback.AdapterCallback<ClientInfo>,
+) : ConnectionsLifecycleAdapterCallback2.AdapterCallback<ClientInfo>,
     PayloadAdapterCallback.AdapterCallback {
 
     private var advertiserInfo: AdvertiserInfo? = null
     private val left = MeshList()
     private val right = MeshList()
-    private val clientInfoCache: MutableMap<String, ClientInfo> = HashMap()
     private val clientFlow = MutableSharedFlow<MeshResult<HostMesh>>(1)
 
     init {
-        connectionCallback.adapterCallback = this
+        connectionsCallback.adapterCallback = this
         payloadCallback.adapterCallback = this
     }
 
@@ -48,7 +47,7 @@ class HostMeshManager internal constructor(
         advertiserInfo = null
         left.clear()
         right.clear()
-        clientInfoCache.clear()
+        connectionsCallback.clearCache()
         emmitClients()
     }
 
@@ -59,7 +58,7 @@ class HostMeshManager internal constructor(
             .setStrategy(Strategy.P2P_CLUSTER)
             .setDisruptiveUpgrade(false)
             .build()
-        nearby.startAdvertising(infoBytes, serviceId, connectionCallback, options)
+        nearby.startAdvertising(infoBytes, serviceId, connectionsCallback, options)
             .addOnFailureListener { e ->
                 clientFlow.tryEmit(MeshResult.Error(e))
             }
@@ -71,7 +70,6 @@ class HostMeshManager internal constructor(
 
     override fun onRequested(endpointId: String, info: ClientInfo) {
         if (left.isEmpty() || right.isEmpty()) {
-            clientInfoCache[endpointId] = info
             nearby.acceptConnection(endpointId, payloadCallback)
                 .addOnFailureListener { e ->
                     clientFlow.tryEmit(MeshResult.Error(e))
@@ -82,38 +80,22 @@ class HostMeshManager internal constructor(
         }
     }
 
-    override fun onConnected(endpointId: String) {
+    override fun onConnected(endpointId: String, info: ClientInfo) {
         Timber.d("Connected: $endpointId")
-        val clientInfo = clientInfoCache[endpointId]
-        if (clientInfo == null) {
-            nearby.disconnectFromEndpoint(endpointId)
-        } else {
-            clientConnected(clientInfo)
-        }
-        Timber.d("Connected: $clientInfoCache")
+        clientConnected(info)
     }
 
-    override fun onRejected(endpointId: String) {
-        Timber.d("Rejected: $endpointId")
-        clientInfoCache.remove(endpointId)
+    override fun onRejected(endpointId: String, info: ClientInfo) {
+        Timber.d("Rejected: $endpointId -> $info")
     }
 
-    override fun onError(endpointId: String) {
-        Timber.d("Error: $endpointId")
-        clientInfoCache.remove(endpointId)
+    override fun onError(endpointId: String, info: ClientInfo) {
+        Timber.d("Error: $endpointId -> $info")
     }
 
-    override fun onDisconnected(endpointId: String) {
-        Timber.d("Disconnected: $clientInfoCache")
-        val clientInfo = clientInfoCache.remove(endpointId)
-        if (clientInfo != null) {
-            left.remove(clientInfo)
-            right.remove(clientInfo)
-        }
-        emmitClients()
-        if (left.isEmpty() xor right.isEmpty()) {
-            advertise()
-        }
+    override fun onDisconnected(endpointId: String, info: ClientInfo) {
+        Timber.d("Disconnected: $endpointId -> $info")
+        clientDisconnected(info)
     }
 
     override fun rejectConnection(endpointId: String) {
@@ -132,8 +114,14 @@ class HostMeshManager internal constructor(
         }
         Timber.d("Connected left: $left")
         Timber.d("Connected right: $right")
-        Timber.d("Connected cache: $clientInfoCache")
         emmitClients()
+    }
+
+    private fun clientDisconnected(clientInfo: ClientInfo) {
+        left.remove(clientInfo)
+        right.remove(clientInfo)
+        emmitClients()
+        if (left.isEmpty() xor right.isEmpty()) advertise()
     }
 
     private fun emmitClients() {
@@ -151,6 +139,11 @@ class HostMeshManager internal constructor(
         clientConnected(data.clientInfo, data.parentId)
     }
 
+    override fun onClientDisconnected(data: MeshData.ClientDisconnected) {
+        Timber.d("Client disconnected: $data")
+        clientDisconnected(data.clientInfo)
+    }
+
     companion object {
 
         @Volatile
@@ -165,7 +158,7 @@ class HostMeshManager internal constructor(
                         HostMeshManager(
                             serviceId = context.packageName,
                             nearby = Nearby.getConnectionsClient(context),
-                            connectionCallback = ConnectionsLifecycleAdapterCallback(
+                            connectionsCallback = ConnectionsLifecycleAdapterCallback2(
                                 ClientInfoJsonParser(gson)
                             ),
                             payloadCallback = PayloadAdapterCallback(gson),

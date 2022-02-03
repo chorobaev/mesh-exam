@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk androidCompileSdkVersion
 
     defaultConfig {
-        applicationId "io.flaterlab.meshexam.test"
-        minSdk 23
-        targetSdk 32
+        applicationId "io.flaterlab.meshexam"
+        minSdk androidMinSdkVersion
+        targetSdk androidTargetSdkVersion
         versionCode 1
         versionName "1.0"
 

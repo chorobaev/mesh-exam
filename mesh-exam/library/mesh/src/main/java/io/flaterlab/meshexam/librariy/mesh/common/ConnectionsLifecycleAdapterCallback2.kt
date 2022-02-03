@@ -19,9 +19,9 @@ internal class ConnectionsLifecycleAdapterCallback2<T>(
     override fun onConnectionInitiated(endpointId: String, info: ConnectionInfo) {
         try {
             val json = String(info.endpointInfo)
-            val clientInfo = jsonParser.fromJson(json)
-            cache[endpointId] = clientInfo
-            adapterCallback?.onRequested(endpointId, clientInfo)
+            val model = jsonParser.fromJson(json)
+            cache[endpointId] = model
+            adapterCallback?.onRequested(endpointId, model)
         } catch (e: JsonSyntaxException) {
             Timber.e(e)
             adapterCallback?.rejectConnection(endpointId)
@@ -44,6 +44,10 @@ internal class ConnectionsLifecycleAdapterCallback2<T>(
 
     override fun onDisconnected(endpointId: String) {
         adapterCallback?.onDisconnected(endpointId, cache.remove(endpointId)!!)
+    }
+
+    fun clearCache() {
+        cache.clear()
     }
 
     interface AdapterCallback<T> {
