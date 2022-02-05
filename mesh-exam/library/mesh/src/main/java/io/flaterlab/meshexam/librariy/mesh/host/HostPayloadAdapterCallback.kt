@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.librariy.mesh.common
+package io.flaterlab.meshexam.librariy.mesh.host
 
 import com.google.android.gms.nearby.connection.Payload
 import com.google.android.gms.nearby.connection.PayloadCallback
@@ -9,7 +9,7 @@ import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshData
 import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshPayload
 import timber.log.Timber
 
-internal class PayloadAdapterCallback(
+internal class HostPayloadAdapterCallback(
     private val gson: Gson
 ) : PayloadCallback() {
 

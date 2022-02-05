@@ -7,7 +7,6 @@ import com.google.android.gms.nearby.connection.ConnectionsClient
 import com.google.android.gms.nearby.connection.Strategy
 import com.google.gson.GsonBuilder
 import io.flaterlab.meshexam.librariy.mesh.common.ConnectionsLifecycleAdapterCallback2
-import io.flaterlab.meshexam.librariy.mesh.common.PayloadAdapterCallback
 import io.flaterlab.meshexam.librariy.mesh.common.dto.AdvertiserInfo
 import io.flaterlab.meshexam.librariy.mesh.common.dto.ChildInfo
 import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
@@ -20,10 +19,9 @@ internal class ClientAdvertisingMeshManager(
     private val serviceId: String,
     private val nearby: ConnectionsClient,
     private val connectionsCallback: ConnectionsLifecycleAdapterCallback2<ClientInfo>,
-    private val payloadCallback: PayloadAdapterCallback,
+    private val payloadCallback: BytesForwardingPayloadAdapter,
     private val advertiserInfoJsonParser: JsonParser<AdvertiserInfo>,
-) : ConnectionsLifecycleAdapterCallback2.AdapterCallback<ClientInfo>,
-    PayloadAdapterCallback.AdapterCallback {
+) : ConnectionsLifecycleAdapterCallback2.AdapterCallback<ClientInfo> {
 
     var onClientConnectedListener: (ClientInfo) -> Unit = {}
     var onClientDisconnectedListener: (ClientInfo) -> Unit = {}
@@ -34,7 +32,6 @@ internal class ClientAdvertisingMeshManager(
 
     init {
         connectionsCallback.adapterCallback = this
-        payloadCallback.adapterCallback = this
     }
 
     fun advertise(info: AdvertiserInfo) {
@@ -59,6 +56,10 @@ internal class ClientAdvertisingMeshManager(
         child?.first?.let(nearby::disconnectFromEndpoint)
         advertiserInfo = null
         child = null
+    }
+
+    fun setOnBytesReceivedListener(listener: ((ByteArray) -> Unit)?) {
+        payloadCallback.onBytesReceivedListener = listener ?: {}
     }
 
     override fun onRequested(endpointId: String, info: ClientInfo) {
@@ -110,7 +111,7 @@ internal class ClientAdvertisingMeshManager(
                         connectionsCallback = ConnectionsLifecycleAdapterCallback2(
                             ClientInfoJsonParser(gson)
                         ),
-                        payloadCallback = PayloadAdapterCallback(gson),
+                        payloadCallback = BytesForwardingPayloadAdapter(),
                         advertiserInfoJsonParser = AdvertiserInfoJsonParser(gson)
                     )
                 }

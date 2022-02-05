@@ -10,7 +10,6 @@ import com.google.gson.GsonBuilder
 import io.flaterlab.meshexam.librariy.mesh.client.exception.MeshConnectionException
 import io.flaterlab.meshexam.librariy.mesh.common.ConnectionsLifecycleAdapterCallback
 import io.flaterlab.meshexam.librariy.mesh.common.EndpointDiscoveryAdapterCallback
-import io.flaterlab.meshexam.librariy.mesh.common.PayloadAdapterCallback
 import io.flaterlab.meshexam.librariy.mesh.common.dto.*
 import io.flaterlab.meshexam.librariy.mesh.common.parser.AdvertiserInfoJsonParser
 import io.flaterlab.meshexam.librariy.mesh.common.parser.JsonParserHelper
@@ -26,11 +25,10 @@ internal class ClientDiscoveryMeshManager(
     private val nearby: ConnectionsClient,
     private val discoveryCallback: EndpointDiscoveryAdapterCallback,
     private val connectionsCallback: ConnectionsLifecycleAdapterCallback<AdvertiserInfo>,
-    private val payloadCallback: PayloadAdapterCallback,
+    private val payloadCallback: ClientPayloadAdapterCallback,
     private val jsonParserHelper: JsonParserHelper,
 ) : EndpointDiscoveryAdapterCallback.AdapterCallback,
-    ConnectionsLifecycleAdapterCallback.AdapterCallback<AdvertiserInfo>,
-    PayloadAdapterCallback.AdapterCallback {
+    ConnectionsLifecycleAdapterCallback.AdapterCallback<AdvertiserInfo> {
 
     var onDisconnectedListener: (AdvertiserInfo, ClientInfo) -> Unit = { _, _ -> }
 
@@ -44,7 +42,6 @@ internal class ClientDiscoveryMeshManager(
     init {
         discoveryCallback.adapterCallback = this
         connectionsCallback.adapterCallback = this
-        payloadCallback.adapterCallback = this
     }
 
     fun discoverExams(): Flow<MeshResult<ClientMesh>> {
@@ -188,6 +185,10 @@ internal class ClientDiscoveryMeshManager(
         nearby.sendPayload(parentInfo!!.first, Payload.fromBytes(bytes)).await()
     }
 
+    suspend fun forwardBytes(bytes: ByteArray) {
+        nearby.sendPayload(parentInfo!!.first, Payload.fromBytes(bytes)).await()
+    }
+
     companion object {
         fun getInstance(context: Context): ClientDiscoveryMeshManager =
             GsonBuilder()
@@ -201,7 +202,7 @@ internal class ClientDiscoveryMeshManager(
                         connectionsCallback = ConnectionsLifecycleAdapterCallback(
                             AdvertiserInfoJsonParser(gson)
                         ),
-                        payloadCallback = PayloadAdapterCallback(gson),
+                        payloadCallback = ClientPayloadAdapterCallback(gson),
                         jsonParserHelper = JsonParserHelper.getInstance(gson)
                     )
                 }

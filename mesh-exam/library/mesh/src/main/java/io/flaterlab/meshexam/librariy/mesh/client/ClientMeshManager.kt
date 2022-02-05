@@ -32,6 +32,11 @@ class ClientMeshManager internal constructor(
         advertisingMesh.onErrorListener = { e ->
             Timber.d(e)
         }
+        advertisingMesh.setOnBytesReceivedListener { bytes ->
+            coroutineScope.launch {
+                discoveryMesh.forwardBytes(bytes)
+            }
+        }
         discoveryMesh.onDisconnectedListener = { advertiserInfo, clientInfo ->
             coroutineScope.launch {
                 joinExam(advertiserInfo.examId, clientInfo)

@@ -7,7 +7,6 @@ import com.google.android.gms.nearby.connection.ConnectionsClient
 import com.google.android.gms.nearby.connection.Strategy
 import com.google.gson.GsonBuilder
 import io.flaterlab.meshexam.librariy.mesh.common.ConnectionsLifecycleAdapterCallback2
-import io.flaterlab.meshexam.librariy.mesh.common.PayloadAdapterCallback
 import io.flaterlab.meshexam.librariy.mesh.common.dto.*
 import io.flaterlab.meshexam.librariy.mesh.common.parser.AdvertiserInfoJsonParser
 import io.flaterlab.meshexam.librariy.mesh.common.parser.ClientInfoJsonParser
@@ -20,10 +19,10 @@ class HostMeshManager internal constructor(
     private val serviceId: String,
     private val nearby: ConnectionsClient,
     private val connectionsCallback: ConnectionsLifecycleAdapterCallback2<ClientInfo>,
-    private val payloadCallback: PayloadAdapterCallback,
+    private val payloadCallback: HostPayloadAdapterCallback,
     private val advertiserJsonParser: JsonParser<AdvertiserInfo>,
 ) : ConnectionsLifecycleAdapterCallback2.AdapterCallback<ClientInfo>,
-    PayloadAdapterCallback.AdapterCallback {
+    HostPayloadAdapterCallback.AdapterCallback {
 
     private var advertiserInfo: AdvertiserInfo? = null
     private val left = MeshList()
@@ -161,7 +160,7 @@ class HostMeshManager internal constructor(
                             connectionsCallback = ConnectionsLifecycleAdapterCallback2(
                                 ClientInfoJsonParser(gson)
                             ),
-                            payloadCallback = PayloadAdapterCallback(gson),
+                            payloadCallback = HostPayloadAdapterCallback(gson),
                             advertiserJsonParser = AdvertiserInfoJsonParser(gson),
                         )
                     }
