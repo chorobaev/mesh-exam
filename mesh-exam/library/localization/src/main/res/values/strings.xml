@@ -10,6 +10,7 @@
     <string name="common_plus_sign">+</string>
     <string name="common_text">Text</string>
     <string name="common_string_min">%s min</string>
+    <string name="common_empty">Empty</string>
 
     <string name="exams_my_exams">My examinations</string>
 
