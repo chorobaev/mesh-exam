@@ -19,6 +19,7 @@ dependencies {
     implementation libraries.constraintLayout
     implementation libraries.core
     implementation libraries.fragment
+    implementation libraries.lifecycleRuntime
     implementation libraries.liveData
     implementation libraries.viewModel
     implementation libraries.material

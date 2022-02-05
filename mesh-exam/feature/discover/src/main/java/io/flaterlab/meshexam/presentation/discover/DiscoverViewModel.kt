@@ -1,29 +1,30 @@
 package io.flaterlab.meshexam.presentation.discover
 
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
+import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.domain.create.usecase.DiscoverExamsUseCase
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
+import io.flaterlab.meshexam.presentation.discover.dvo.AvailableExamDvo
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
-    private val discoverExamsUseCase: DiscoverExamsUseCase,
+    discoverExamsUseCase: DiscoverExamsUseCase,
 ) : BaseViewModel() {
 
-    init {
-        discoverExamsUseCase()
-            .onEach {
-                Timber.d(it.toString())
+    val exams = discoverExamsUseCase()
+        .map { list ->
+            list.map { exam ->
+                AvailableExamDvo(exam.id, exam.name, exam.host, exam.duration)
             }
-            .launchIn(viewModelScope)
+        }
+        .catch { e ->
+            e.localizedMessage?.let(Text::from)?.let(message::setValue)
+        }
 
-    }
-
-    fun onRefreshClicked() {
+    fun onExamClicked(dvo: AvailableExamDvo) {
 
     }
 }

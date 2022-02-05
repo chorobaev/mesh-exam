@@ -1,9 +1,10 @@
-package io.flaterlab.meshexam.presentation.exams.dvo
+package io.flaterlab.meshexam.presentation.discover.dvo
 
 import io.flaterlab.meshexam.androidbase.common.adapter.ExamListAdapter
 
-internal data class ExamDvo(
+data class AvailableExamDvo(
     override val id: String,
     override val name: String,
-    override val durationInMin: Long
+    val hostName: String,
+    override val durationInMin: Long,
 ) : ExamListAdapter.ExamItem

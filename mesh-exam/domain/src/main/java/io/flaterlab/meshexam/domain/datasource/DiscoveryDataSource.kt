@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.domain.api.datasource
+package io.flaterlab.meshexam.domain.datasource
 
 import io.flaterlab.meshexam.domain.api.model.ExamInfoModel
 import kotlinx.coroutines.flow.Flow

@@ -35,6 +35,7 @@ class HostMeshManager internal constructor(
     }
 
     fun create(info: AdvertiserInfo): Flow<MeshResult<HostMesh>> {
+        Timber.d("Creating a mesh: advertiser = $info")
         advertiserInfo = info
         advertise()
         return clientFlow
@@ -51,7 +52,9 @@ class HostMeshManager internal constructor(
 
     private fun advertise() {
         val info = advertiserInfo!!
-        val infoBytes = advertiserJsonParser.toJson(info).toByteArray()
+        val infoBytes = advertiserJsonParser.toJson(info)
+            .also { Timber.d("Name json: $it") }
+            .toByteArray()
         val options = AdvertisingOptions.Builder()
             .setStrategy(Strategy.P2P_CLUSTER)
             .setDisruptiveUpgrade(false)

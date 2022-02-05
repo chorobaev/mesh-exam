@@ -16,6 +16,7 @@ internal class EndpointDiscoveryAdapterCallback(
     override fun onEndpointFound(endpointId: String, info: DiscoveredEndpointInfo) {
         try {
             val json = String(info.endpointInfo)
+            Timber.d("Endpoint found: endpointId = $endpointId, json = $json")
             val advertiserInfo = gson.fromJson(json, AdvertiserInfo::class.java)
             adapterCallback?.onAdvertiserFound(endpointId, advertiserInfo)
         } catch (ignored: JsonSyntaxException) {

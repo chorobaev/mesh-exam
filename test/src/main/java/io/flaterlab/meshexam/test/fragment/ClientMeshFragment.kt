@@ -61,6 +61,7 @@ class ClientMeshFragment : Fragment() {
         btn_action.setOnClickListener {
             if (isDiscovering) {
                 discoveryJob?.cancel()
+                clientMesh.stopDiscovery()
                 isDiscovering = false
             } else {
                 isDiscovering = true

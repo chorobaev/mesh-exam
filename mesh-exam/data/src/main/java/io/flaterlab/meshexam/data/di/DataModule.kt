@@ -9,6 +9,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
+import io.flaterlab.meshexam.librariy.mesh.client.ClientMeshManager
 import io.flaterlab.meshexam.librariy.mesh.host.HostMeshManager
 
 @Module
@@ -28,5 +29,11 @@ internal class DataModule {
     fun provideHostMeshManager(
         @ApplicationContext context: Context,
     ): HostMeshManager = HostMeshManager
+        .getInstance(context)
+
+    @Provides
+    fun provideClientMeshManager(
+        @ApplicationContext context: Context,
+    ): ClientMeshManager = ClientMeshManager
         .getInstance(context)
 }
