@@ -46,10 +46,6 @@ internal class ConnectionsLifecycleAdapterCallback2<T>(
         adapterCallback?.onDisconnected(endpointId, cache.remove(endpointId)!!)
     }
 
-    fun clearCache() {
-        cache.clear()
-    }
-
     interface AdapterCallback<T> {
 
         fun onRequested(endpointId: String, info: T)

@@ -8,7 +8,7 @@ android {
     compileSdk androidCompileSdkVersion
 
     defaultConfig {
-        applicationId "io.flaterlab.meshexam"
+        applicationId "io.flaterlab.meshexam.test"
         minSdk androidMinSdkVersion
         targetSdk androidTargetSdkVersion
         versionCode 1

@@ -46,7 +46,6 @@ class HostMeshManager internal constructor(
         advertiserInfo = null
         left.clear()
         right.clear()
-        connectionsCallback.clearCache()
         emmitClients()
     }
 

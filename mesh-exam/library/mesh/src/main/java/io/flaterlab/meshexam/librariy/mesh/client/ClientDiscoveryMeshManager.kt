@@ -118,11 +118,11 @@ internal class ClientDiscoveryMeshManager(
 
     override fun onConnected(endpointId: String) {
         val advertiserInfo = advertiserInfoCache[endpointId]
-        if (advertiserInfo == null) {
-            throwConnectionException()
-        } else {
-            joinResult?.complete(endpointId to advertiserInfo)
-        }
+            ?: throw IllegalStateException(
+                "Advertiser mustn't be null when connected. Endpoint: $endpointId," +
+                        " Cache: $advertiserInfoCache"
+            )
+        joinResult?.complete(endpointId to advertiserInfo)
     }
 
     override fun onRejected(endpointId: String) = join(endpointId)

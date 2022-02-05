@@ -51,6 +51,10 @@ internal class ClientAdvertisingMeshManager(
             .addOnFailureListener(::onError)
     }
 
+    fun disconnect() {
+        child?.first?.let(nearby::disconnectFromEndpoint)
+    }
+
     fun close() {
         nearby.stopAdvertising()
         child?.first?.let(nearby::disconnectFromEndpoint)
