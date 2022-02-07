@@ -10,7 +10,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import io.flaterlab.meshexam.librariy.mesh.client.ClientMeshManager
 import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
-import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshResult
 import io.flaterlab.meshexam.test.R
 import io.flaterlab.meshexam.test.adapter.TextAdapter
 import kotlinx.android.synthetic.main.fragment_list_sith_button.*
@@ -61,7 +60,6 @@ class ClientMeshFragment : Fragment() {
         btn_action.setOnClickListener {
             if (isDiscovering) {
                 discoveryJob?.cancel()
-                clientMesh.stopDiscovery()
                 isDiscovering = false
             } else {
                 isDiscovering = true
@@ -69,16 +67,9 @@ class ClientMeshFragment : Fragment() {
                     clientMesh.discoverExams()
                         .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                         .collectLatest { result ->
-                            when (result) {
-                                is MeshResult.Success -> {
-                                    adapter.submitList(
-                                        result.data.advertiserList.map { it.examId }
-                                    )
-                                }
-                                is MeshResult.Error -> {
-
-                                }
-                            }
+                            adapter.submitList(
+                                result.advertiserList.map { it.examId }
+                            )
                         }
                 }
             }

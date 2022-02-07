@@ -5,7 +5,6 @@ import io.flaterlab.meshexam.librariy.mesh.client.exception.MeshConnectionExcept
 import io.flaterlab.meshexam.librariy.mesh.common.dto.AdvertiserInfo
 import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
 import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientMesh
-import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshResult
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
@@ -42,10 +41,8 @@ class ClientMeshManager internal constructor(
         }
     }
 
-    fun discoverExams(): Flow<MeshResult<ClientMesh>> =
+    fun discoverExams(): Flow<ClientMesh> =
         discoveryMesh.discoverExams()
-
-    fun stopDiscovery() = discoveryMesh.stopDiscovery()
 
     suspend fun joinExam(examId: String, clientInfo: ClientInfo): AdvertiserInfo {
         Timber.d("Trying to join: #${reconnectTryCount.get()}")

@@ -11,8 +11,10 @@ import io.flaterlab.meshexam.librariy.mesh.common.dto.*
 import io.flaterlab.meshexam.librariy.mesh.common.parser.AdvertiserInfoJsonParser
 import io.flaterlab.meshexam.librariy.mesh.common.parser.ClientInfoJsonParser
 import io.flaterlab.meshexam.librariy.mesh.common.parser.JsonParser
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.isActive
 import timber.log.Timber
 
 class HostMeshManager internal constructor(
@@ -24,30 +26,43 @@ class HostMeshManager internal constructor(
 ) : ConnectionsLifecycleAdapterCallback2.AdapterCallback<ClientInfo>,
     HostPayloadAdapterCallback.AdapterCallback {
 
+    private val lock = Object()
+
     private var advertiserInfo: AdvertiserInfo? = null
+    private var onClientSetChangeListener: ((MeshResult<HostMesh>) -> Unit)? = null
     private val left = MeshList()
     private val right = MeshList()
-    private val clientFlow = MutableSharedFlow<MeshResult<HostMesh>>(1)
 
     init {
         connectionsCallback.adapterCallback = this
         payloadCallback.adapterCallback = this
     }
 
-    fun create(info: AdvertiserInfo): Flow<MeshResult<HostMesh>> {
+    fun create(info: AdvertiserInfo): Flow<HostMesh> = callbackFlow {
         Timber.d("Creating a mesh: advertiser = $info")
         advertiserInfo = info
+        onClientSetChangeListener = { result ->
+            if (isActive) {
+                when (result) {
+                    is MeshResult.Success -> trySend(result.data)
+                    is MeshResult.Error -> throw result.cause
+                }
+            }
+        }
         advertise()
-        return clientFlow
+        awaitClose {
+            onClientSetChangeListener = null
+            stopAdvertising()
+        }
     }
 
     fun stop() {
+        Timber.d("Stopping advertising...")
         stopAdvertising()
         nearby.stopAllEndpoints()
         advertiserInfo = null
         left.clear()
         right.clear()
-        emmitClients()
     }
 
     private fun advertise() {
@@ -60,8 +75,11 @@ class HostMeshManager internal constructor(
             .setDisruptiveUpgrade(false)
             .build()
         nearby.startAdvertising(infoBytes, serviceId, connectionsCallback, options)
+            .addOnSuccessListener {
+                Timber.d("Advertising has stared successfully...")
+            }
             .addOnFailureListener { e ->
-                clientFlow.tryEmit(MeshResult.Error(e))
+                onClientSetChangeListener!!(MeshResult.Error(e))
             }
     }
 
@@ -73,7 +91,7 @@ class HostMeshManager internal constructor(
         if (left.isEmpty() || right.isEmpty()) {
             nearby.acceptConnection(endpointId, payloadCallback)
                 .addOnFailureListener { e ->
-                    clientFlow.tryEmit(MeshResult.Error(e))
+                    onClientSetChangeListener!!(MeshResult.Error(e))
                 }
         } else {
             nearby.rejectConnection(endpointId)
@@ -122,11 +140,13 @@ class HostMeshManager internal constructor(
         left.remove(clientInfo)
         right.remove(clientInfo)
         emmitClients()
-        if (left.isEmpty() xor right.isEmpty()) advertise()
+
+        // TODO: add reconnection logic
+        // if (left.isEmpty() xor right.isEmpty()) advertise()
     }
 
     private fun emmitClients() {
-        clientFlow.tryEmit(
+        onClientSetChangeListener!!(
             MeshResult.Success(
                 HostMesh(
                     left.mergeByClosest(right).also { Timber.d("Emitting: $it") }

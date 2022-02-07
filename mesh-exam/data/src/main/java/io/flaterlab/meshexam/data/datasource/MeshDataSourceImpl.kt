@@ -5,7 +5,6 @@ import io.flaterlab.meshexam.domain.datasource.MeshDataSource
 import io.flaterlab.meshexam.domain.mesh.model.ClientModel
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
 import io.flaterlab.meshexam.librariy.mesh.common.dto.AdvertiserInfo
-import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshResult
 import io.flaterlab.meshexam.librariy.mesh.host.HostMeshManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -35,14 +34,11 @@ internal class MeshDataSourceImpl @Inject constructor(
             }
             .flatMapLatest(hostMeshManager::create)
             .map { result ->
-                when (result) {
-                    is MeshResult.Success -> MeshModel(
-                        result.data.clientList.map { client ->
-                            ClientModel(client.id, client.name, client.info, client.status)
-                        }
-                    )
-                    is MeshResult.Error -> throw result.cause
-                }
+                MeshModel(
+                    clients = result.clientList.map { client ->
+                        ClientModel(client.id, client.name, client.info, client.status)
+                    }
+                )
             }
     }
 

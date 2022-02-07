@@ -14,9 +14,10 @@ import io.flaterlab.meshexam.librariy.mesh.common.dto.*
 import io.flaterlab.meshexam.librariy.mesh.common.parser.AdvertiserInfoJsonParser
 import io.flaterlab.meshexam.librariy.mesh.common.parser.JsonParserHelper
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
@@ -35,18 +36,24 @@ internal class ClientDiscoveryMeshManager(
     private var selfInfo: ClientInfo? = null
     private var joinResult: CompletableDeferred<ParentInfo>? = null
     private var parentInfo: ParentInfo? = null
+    private var onAdvertiserSetChangeListener: ((MeshResult<ClientMesh>) -> Unit)? = null
 
     private val advertiserInfoCache = AdvertiserInfoCache()
-    private val advertisersFlow = MutableSharedFlow<MeshResult<ClientMesh>>(1)
 
     init {
         discoveryCallback.adapterCallback = this
         connectionsCallback.adapterCallback = this
     }
 
-    fun discoverExams(): Flow<MeshResult<ClientMesh>> {
+    fun discoverExams(): Flow<ClientMesh> = callbackFlow {
+        onAdvertiserSetChangeListener = { result ->
+            when (result) {
+                is MeshResult.Success -> trySend(result.data)
+                is MeshResult.Error -> throw result.cause
+            }
+        }
         discover()
-        return advertisersFlow
+        awaitClose { stopDiscovery() }
     }
 
     private fun discover() {
@@ -54,9 +61,12 @@ internal class ClientDiscoveryMeshManager(
             .setStrategy(Strategy.P2P_CLUSTER)
             .build()
         nearby.startDiscovery(serviceId, discoveryCallback, options)
+            .addOnSuccessListener {
+                Timber.d("Discovery started successfully...")
+            }
             .addOnFailureListener { e ->
                 Timber.d("Discovery failed: $e")
-                advertisersFlow.tryEmit(MeshResult.Error(e))
+                onAdvertiserSetChangeListener!!(MeshResult.Error(e))
             }
     }
 
@@ -70,25 +80,25 @@ internal class ClientDiscoveryMeshManager(
     }
 
     private fun emmitAdvertisers() {
-        Timber.d("Advertisers: $advertiserInfoCache")
-        advertisersFlow.tryEmit(
+        Timber.d("Emitting advertisers: $advertiserInfoCache")
+        onAdvertiserSetChangeListener!!(
             MeshResult.Success(
                 ClientMesh(advertiserInfoCache.getUniqueListByExamId())
             )
         )
     }
 
-    fun stopDiscovery() {
+    private fun stopDiscovery() {
         nearby.stopDiscovery()
         advertiserInfoCache.clear()
-        emmitAdvertisers()
+        onAdvertiserSetChangeListener = null
     }
 
     suspend fun joinExam(examId: String, clientInfo: ClientInfo): AdvertiserInfo =
         coroutineScope {
             selfInfo = clientInfo
             val endpointId = advertiserInfoCache.getEndpointByExamId(examId)
-                ?: throw provideConnectionException()
+                ?: throw IllegalArgumentException("Exam with id $examId does not exist")
             join(endpointId)
             try {
                 CompletableDeferred<ParentInfo>()

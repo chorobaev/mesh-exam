@@ -7,5 +7,5 @@ interface DiscoveryDataSource {
 
     fun discoverExams(): Flow<List<ExamInfoModel>>
 
-    suspend fun joinExam(examId: Long)
+    suspend fun joinExam(examId: String)
 }
