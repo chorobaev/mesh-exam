@@ -9,6 +9,7 @@
     <include app:graph="@navigation/nav_exams" />
     <include app:graph="@navigation/nav_profile" />
     <include app:graph="@navigation/nav_create_exam" />
+    <include app:graph="@navigation/nav_examination" />
 
     <fragment
         android:id="@+id/homeFragment"
@@ -49,5 +50,12 @@
         android:id="@+id/editProfileDialogFragment"
         android:name="io.flaterlab.meshexam.presentation.profile.ui.edit.EditProfileDialogFragment"
         android:label="EditProfileDialogFragment" />
+    <action
+        android:id="@+id/action_global_nav_examination"
+        app:destination="@id/nav_examination"
+        app:enterAnim="@anim/enter_from_right"
+        app:exitAnim="@anim/exit_to_left"
+        app:popEnterAnim="@anim/enter_from_left"
+        app:popExitAnim="@anim/exit_to_right" />
 
 </navigation>

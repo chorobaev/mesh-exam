@@ -51,6 +51,8 @@ internal class ExamInfoDialogFragment :
         viewModel.examInfoItemList.observe(viewLifecycleOwner, ::onInfoItemsReceived)
         viewModel.commandEditClient.observe(viewLifecycleOwner) { discoverRouter.openEditProfile() }
         viewModel.commandJoinExam.observe(viewLifecycleOwner, discoverRouter::joinExam)
+
+        binding.btnJoinExam.clickWithDebounce(action = viewModel::onJoinClicked)
     }
 
     private fun onInfoItemsReceived(items: List<ExamInfoItemDvo>) =

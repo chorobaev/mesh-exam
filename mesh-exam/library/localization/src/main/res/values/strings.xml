@@ -12,6 +12,9 @@
     <string name="common_string_min">%s min</string>
     <string name="common_empty">Empty</string>
     <string name="common_history">History</string>
+    <string name="common_loading">Loading…</string>
+
+    <string name="common_appIconContentDesc">Icon of the application</string>
 
     <string name="exams_my_exams">My examinations</string>
 
@@ -57,4 +60,8 @@
     <string name="profile_main_nameHint">Your Name</string>
     <string name="profile_main_infoHint">Info</string>
     <string name="profile_main_initialsHint">YN</string>
+
+
+    <string name="exam_join_connecting">Connecting</string>
+    <string name="exam_join_connectedTitle">Successfully connected!\nThe host will start the examination soon.</string>
 </resources>

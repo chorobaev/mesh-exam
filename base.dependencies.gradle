@@ -72,10 +72,11 @@ ext {
     ]
 
     feature = [
-            exams   : project(':mesh-exam:feature:exams'),
-            discover: project(':mesh-exam:feature:discover'),
-            profile : project(':mesh-exam:feature:profile'),
-            create  : project(':mesh-exam:feature:create'),
-            meshroom: project(':mesh-exam:feature:meshroom'),
+            exams      : project(':mesh-exam:feature:exams'),
+            discover   : project(':mesh-exam:feature:discover'),
+            profile    : project(':mesh-exam:feature:profile'),
+            create     : project(':mesh-exam:feature:create'),
+            meshroom   : project(':mesh-exam:feature:meshroom'),
+            examination: project(':mesh-exam:feature:examination'),
     ]
 }

@@ -43,7 +43,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_exam_name" />
 
             <Button
-                android:id="@+id/btn_edit_profile_save"
+                android:id="@+id/btn_join_exam"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_medium"
