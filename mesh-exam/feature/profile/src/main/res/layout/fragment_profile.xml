@@ -1,14 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ProfileFragment"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".main.ProfileFragment">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_text_avatar"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/margin_between"
+        app:cardBackgroundColor="?attr/colorPrimary"
+        app:cardCornerRadius="22dp"
+        app:cardElevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_text_avatar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            android:gravity="center"
+            android:maxLength="2"
+            android:padding="10dp"
+            android:text="@string/profile_main_initialsHint"
+            android:textAppearance="@style/TextAppearance.MeshExam.Large.Medium"
+            android:textColor="?attr/colorOnPrimary"
+            app:autoSizeMaxTextSize="30sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="1sp"
+            app:autoSizeTextType="uniform" />
+
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
+        android:id="@+id/tv_profile_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:ellipsize="end"
+        android:hint="@string/profile_main_nameHint"
+        android:lines="1"
+        android:textAppearance="@style/TextAppearance.MeshExam.Normal.Medium"
+        app:layout_constraintEnd_toStartOf="@id/btn_edit_profile"
+        app:layout_constraintStart_toEndOf="@id/cv_text_avatar"
+        app:layout_constraintTop_toTopOf="@id/cv_text_avatar" />
+
+    <TextView
+        android:id="@+id/tv_profile_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:ellipsize="end"
+        android:hint="@string/profile_main_infoHint"
+        android:lines="1"
+        android:textAppearance="@style/TextAppearance.MeshExam.Small.Regular"
+        app:layout_constraintEnd_toStartOf="@id/btn_edit_profile"
+        app:layout_constraintStart_toEndOf="@id/cv_text_avatar"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_name" />
+
+    <io.flaterlab.meshexam.uikit.view.ActionButton
+        android:id="@+id/btn_edit_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:src="@drawable/ic_pencil"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cv_text_avatar" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_profile_header_bottom"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Profile" />
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:barrierMargin="@dimen/margin_small"
+        app:constraint_referenced_ids="cv_text_avatar,tv_profile_info,tv_profile_name,btn_edit_profile" />
+
+    <TextView
+        android:id="@+id/tv_title_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_between"
+        android:paddingHorizontal="@dimen/margin_medium"
+        android:text="@string/common_history"
+        android:textAppearance="@style/TextAppearance.MeshExam.Headline2"
+        app:layout_constraintTop_toBottomOf="@id/barrier_profile_header_bottom" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_history"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_small"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title_history"
+        tools:listitem="@layout/item_exam_card" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

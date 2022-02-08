@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_bottom_sheet"
+    tools:context=".edit.EditProfileDialogFragment">
+
+    <io.flaterlab.meshexam.uikit.view.BottomSheetDialogTopView
+        android:id="@+id/dialog_handler_edit_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_text_change_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:gravity="center"
+        android:text="@string/profile_edit_editProfileTitle"
+        android:textAppearance="@style/TextAppearance.MeshExam.Headline2"
+        app:layout_constraintTop_toBottomOf="@id/dialog_handler_edit_profile" />
+
+    <io.flaterlab.meshexam.uikit.view.TitledTextInput
+        android:id="@+id/tet_first_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_between"
+        android:hint="@string/profile_edit_firstNameHint"
+        app:layout_constraintTop_toBottomOf="@id/tv_text_change_title"
+        app:title="@string/profile_edit_firstNameTitle" />
+
+    <io.flaterlab.meshexam.uikit.view.TitledTextInput
+        android:id="@+id/tet_last_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_between"
+        android:hint="@string/profile_edit_lastNameHint"
+        android:imeOptions="actionDone"
+        app:layout_constraintTop_toBottomOf="@id/tet_first_name"
+        app:title="@string/profile_edit_lastNameTitle" />
+
+    <io.flaterlab.meshexam.uikit.view.TitledTextInput
+        android:id="@+id/tet_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_between"
+        android:hint="@string/profile_edit_infoHint"
+        android:imeOptions="actionDone"
+        app:layout_constraintTop_toBottomOf="@id/tet_last_name"
+        app:title="@string/profile_edit_infoTitle" />
+
+    <Button
+        android:id="@+id/btn_edit_profile_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginBottom="@dimen/margin_medium"
+        android:text="@string/common_save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tet_info"
+        app:layout_constraintVertical_bias="1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

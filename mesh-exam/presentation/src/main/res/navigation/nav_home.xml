@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="io.flaterlab.meshexam.presentation.profile.ProfileFragment"
+        android:name="io.flaterlab.meshexam.presentation.profile.main.ProfileFragment"
         tools:layout="@layout/fragment_profile" />
 
 </navigation>

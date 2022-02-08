@@ -2,6 +2,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cv_exam_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/margin_medium"
@@ -45,11 +46,24 @@
             android:textAppearance="@style/TextAppearance.MeshExam.Small.Regular"
             android:textColor="?attr/colorOnBackgroundLight"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/tv_exam_name"
+            app:layout_constraintEnd_toStartOf="@id/tv_exam_status"
             app:layout_constraintStart_toStartOf="@id/tv_exam_name"
             app:layout_constraintTop_toBottomOf="@id/tv_exam_name"
             app:layout_constraintVertical_bias="0"
             tools:text="30 min" />
+
+        <TextView
+            android:id="@+id/tv_exam_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:textAppearance="@style/TextAppearance.MeshExam.Small.Regular"
+            android:textColor="?attr/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/tv_exam_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_exam_name"
+            app:layout_constraintVertical_bias="0"
+            tools:text="Hosted" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

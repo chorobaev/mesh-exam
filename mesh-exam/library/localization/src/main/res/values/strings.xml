@@ -11,6 +11,7 @@
     <string name="common_text">Text</string>
     <string name="common_string_min">%s min</string>
     <string name="common_empty">Empty</string>
+    <string name="common_history">History</string>
 
     <string name="exams_my_exams">My examinations</string>
 
@@ -38,4 +39,19 @@
     <string name="mesh_exam_name_title">Exam: %s</string>
     <string name="mesh_search_hint">Search here</string>
     <string name="mesh_start_exam">Start exam</string>
+
+
+    <string name="profile_edit_editProfileTitle">Edit</string>
+    <string name="profile_edit_firstNameTitle">First name*</string>
+    <string name="profile_edit_firstNameHint">James</string>
+    <string name="profile_edit_firstNameErrorMessage">Name must contain at least 2 characters</string>
+    <string name="profile_edit_lastNameTitle">Last name*</string>
+    <string name="profile_edit_lastNameHint">Bond</string>
+    <string name="profile_edit_lastNameErrorMessage">Name must contain at least 2 characters</string>
+    <string name="profile_edit_infoTitle">Info</string>
+    <string name="profile_edit_infoHint">the British Secret Intelligence Service</string>
+    <string name="profile_main_hosted">Hosted</string>
+    <string name="profile_main_nameHint">Your Name</string>
+    <string name="profile_main_infoHint">Info</string>
+    <string name="profile_main_initialsHint">YN</string>
 </resources>
