@@ -2,6 +2,7 @@ package io.flaterlab.meshexam.presentation.profile.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -60,7 +61,7 @@ internal class HistoryListAdapter @Inject constructor(
                     if (item.isHosted) R.attr.colorSurface else android.R.attr.colorBackground
                 )
             )
-            tvExamStatus.isEnabled = item.isHosted
+            tvExamStatus.isVisible = item.isHosted
         }
     }
 

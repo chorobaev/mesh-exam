@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshResult
 import io.flaterlab.meshexam.librariy.mesh.common.dto.AdvertiserInfo
 import io.flaterlab.meshexam.librariy.mesh.host.HostMeshManager
 import io.flaterlab.meshexam.test.R
@@ -63,27 +61,16 @@ class HostMeshFragment : Fragment() {
                         .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                         .collectLatest { result ->
                             Timber.d("Clients: $result")
-                            when (result) {
-                                is MeshResult.Success -> {
-                                    linear_layout.run {
-                                        removeAllViews()
-                                        result.data.clientList.forEach { clientInfo ->
-                                            val text = layoutInflater.inflate(
-                                                R.layout.item_text,
-                                                this,
-                                                false
-                                            ) as TextView
-                                            text.text = clientInfo.name
-                                            addView(text)
-                                        }
-                                    }
-                                }
-                                is MeshResult.Error -> {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        result.cause.toString(),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                            linear_layout.run {
+                                removeAllViews()
+                                result.clientList.forEach { clientInfo ->
+                                    val text = layoutInflater.inflate(
+                                        R.layout.item_text,
+                                        this,
+                                        false
+                                    ) as TextView
+                                    text.text = clientInfo.name
+                                    addView(text)
                                 }
                             }
                         }

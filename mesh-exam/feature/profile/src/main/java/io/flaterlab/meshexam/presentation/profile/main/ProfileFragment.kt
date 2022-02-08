@@ -35,6 +35,10 @@ internal class ProfileFragment : ViewBindingFragment<FragmentProfileBinding>() {
             }
         }
         viewModel.historyItems.observe(viewLifecycleOwner, historyAdapter::submitList)
+        viewModel.historyListState.observe(
+            viewLifecycleOwner,
+            binding.recyclerViewHistory::setState
+        )
         viewModel.commandEditName.observe(viewLifecycleOwner) {
             EditProfileDialogFragment.show(childFragmentManager)
         }

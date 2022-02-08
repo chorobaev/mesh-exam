@@ -34,6 +34,7 @@ ext {
             navigationUi          : 'androidx.navigation:navigation-ui-ktx:' + navigationVersion,
             nearby                : 'com.google.android.gms:play-services-nearby:18.0.0',
             material              : 'com.google.android.material:material:1.4.0',
+            recyclerView          : 'androidx.recyclerview:recyclerview:1.2.1',
             room                  : 'androidx.room:room-runtime:' + roomVersion,
             roomKtx               : 'androidx.room:room-ktx:' + roomVersion,
             timber                : 'com.jakewharton.timber:timber:5.0.1',
