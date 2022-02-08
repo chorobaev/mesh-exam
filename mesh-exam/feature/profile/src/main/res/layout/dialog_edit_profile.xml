@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_bottom_sheet"
-    tools:context=".edit.EditProfileDialogFragment">
+    tools:context=".ui.edit.EditProfileDialogFragment">
 
     <io.flaterlab.meshexam.uikit.view.BottomSheetDialogTopView
         android:id="@+id/dialog_handler_edit_profile"

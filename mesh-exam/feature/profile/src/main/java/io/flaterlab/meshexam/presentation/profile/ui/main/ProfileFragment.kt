@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.presentation.profile.main
+package io.flaterlab.meshexam.presentation.profile.ui.main
 
 import android.os.Bundle
 import android.view.View
@@ -6,9 +6,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.flaterlab.meshexam.androidbase.ViewBindingFragment
 import io.flaterlab.meshexam.androidbase.ViewBindingProvider
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
-import io.flaterlab.meshexam.presentation.profile.adapter.HistoryListAdapter
+import io.flaterlab.meshexam.presentation.profile.ui.adapter.HistoryListAdapter
 import io.flaterlab.meshexam.presentation.profile.databinding.FragmentProfileBinding
-import io.flaterlab.meshexam.presentation.profile.edit.EditProfileDialogFragment
+import io.flaterlab.meshexam.presentation.profile.ui.edit.EditProfileDialogFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint

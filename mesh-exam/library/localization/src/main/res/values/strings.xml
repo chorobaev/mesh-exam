@@ -16,6 +16,10 @@
     <string name="exams_my_exams">My examinations</string>
 
     <string name="discover_available_exams">Available examinations</string>
+    <string name="discover_examInfo_hostTitle">Host:</string>
+    <string name="discover_examInfo_durationTitle">Duration:</string>
+    <string name="discover_examInfo_clientTitle">Join as:</string>
+    <string name="discover_examInfo_buttonJoin">Join</string>
 
     <string name="create_create_exam">Create exam</string>
     <string name="create_create_exam_examNameInputTitle">Name*</string>
@@ -39,7 +43,6 @@
     <string name="mesh_exam_name_title">Exam: %s</string>
     <string name="mesh_search_hint">Search here</string>
     <string name="mesh_start_exam">Start exam</string>
-
 
     <string name="profile_edit_editProfileTitle">Edit</string>
     <string name="profile_edit_firstNameTitle">First name*</string>

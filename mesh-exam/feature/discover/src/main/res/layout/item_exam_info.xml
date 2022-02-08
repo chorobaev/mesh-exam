@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_exam_info_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_small"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:lines="1"
+        android:text="@string/discover_examInfo_hostTitle"
+        android:textAppearance="@style/TextAppearance.MeshExam.Large.Bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_exam_info_item_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:textAppearance="@style/TextAppearance.MeshExam.Large.Regular"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_exam_info_item_title"
+        app:layout_constraintEnd_toStartOf="@id/btn_exam_info_edit"
+        app:layout_constraintStart_toEndOf="@id/tv_exam_info_item_title"
+        tools:text="Burul Shambetova" />
+
+    <io.flaterlab.meshexam.uikit.view.ActionButton
+        android:id="@+id/btn_exam_info_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:src="@drawable/ic_pencil"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <io.flaterlab.meshexam.uikit.view.Divider
+        android:id="@+id/divider_exam_info_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

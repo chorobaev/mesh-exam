@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.presentation.profile.edit
+package io.flaterlab.meshexam.presentation.profile.ui.edit
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope

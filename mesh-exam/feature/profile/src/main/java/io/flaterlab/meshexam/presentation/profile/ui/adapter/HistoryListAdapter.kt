@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.presentation.profile.adapter
+package io.flaterlab.meshexam.presentation.profile.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

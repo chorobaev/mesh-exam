@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.presentation.discover
+package io.flaterlab.meshexam.presentation.discover.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +12,8 @@ import io.flaterlab.meshexam.androidbase.BaseFragment
 import io.flaterlab.meshexam.androidbase.common.adapter.ExamListAdapter
 import io.flaterlab.meshexam.presentation.discover.databinding.FragmentDiscoverBinding
 import io.flaterlab.meshexam.presentation.discover.dvo.AvailableExamDvo
+import io.flaterlab.meshexam.presentation.discover.ui.info.ExamInfoDialogFragment
+import io.flaterlab.meshexam.presentation.discover.ui.info.ExamInfoLauncher
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -45,6 +47,18 @@ class DiscoverFragment : BaseFragment() {
             viewModel.exams
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collectLatest(examsAdapter::submitList)
+        }
+
+        viewModel.commandOpenExam.observe(viewLifecycleOwner) { exam ->
+            ExamInfoDialogFragment.show(
+                ExamInfoLauncher(
+                    examId = exam.id,
+                    examName = exam.name,
+                    examDurationInMin = exam.durationInMin,
+                    examHostName = exam.hostName
+                ),
+                childFragmentManager
+            )
         }
     }
 

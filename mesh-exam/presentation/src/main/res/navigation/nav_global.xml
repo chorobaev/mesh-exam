@@ -28,6 +28,9 @@
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
             app:popExitAnim="@anim/exit_to_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_editProfileDialogFragment"
+            app:destination="@id/editProfileDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/createQuestionFragment"
@@ -42,5 +45,9 @@
         app:popEnterAnim="@anim/enter_from_left"
         app:popExitAnim="@anim/exit_to_right"
         app:popUpTo="@id/homeFragment" />
+    <fragment
+        android:id="@+id/editProfileDialogFragment"
+        android:name="io.flaterlab.meshexam.presentation.profile.ui.edit.EditProfileDialogFragment"
+        android:label="EditProfileDialogFragment" />
 
 </navigation>

@@ -12,12 +12,12 @@
 
     <fragment
         android:id="@+id/discoverFragment"
-        android:name="io.flaterlab.meshexam.presentation.discover.DiscoverFragment"
+        android:name="io.flaterlab.meshexam.presentation.discover.ui.main.DiscoverFragment"
         tools:layout="@layout/fragment_discover" />
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="io.flaterlab.meshexam.presentation.profile.main.ProfileFragment"
+        android:name="io.flaterlab.meshexam.presentation.profile.ui.main.ProfileFragment"
         tools:layout="@layout/fragment_profile" />
 
 </navigation>

@@ -6,4 +6,6 @@ data class UserProfileModel(
     val lastName: String,
     val info: String,
     val initials: String,
-)
+) {
+    val fullName get() = "$firstName $lastName"
+}

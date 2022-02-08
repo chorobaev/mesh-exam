@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.presentation.profile.main
+package io.flaterlab.meshexam.presentation.profile.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
