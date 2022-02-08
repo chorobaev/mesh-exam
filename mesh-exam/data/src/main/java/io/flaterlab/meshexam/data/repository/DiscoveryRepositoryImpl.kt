@@ -1,15 +1,15 @@
-package io.flaterlab.meshexam.data.datasource
+package io.flaterlab.meshexam.data.repository
 
 import io.flaterlab.meshexam.domain.api.model.ExamInfoModel
-import io.flaterlab.meshexam.domain.datasource.DiscoveryDataSource
+import io.flaterlab.meshexam.domain.repository.DiscoveryRepository
 import io.flaterlab.meshexam.librariy.mesh.client.ClientMeshManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-internal class DiscoveryDataSourceImpl @Inject constructor(
+internal class DiscoveryRepositoryImpl @Inject constructor(
     private val clientMeshManager: ClientMeshManager,
-) : DiscoveryDataSource {
+) : DiscoveryRepository {
 
     override fun discoverExams(): Flow<List<ExamInfoModel>> {
         return clientMeshManager.discoverExams()

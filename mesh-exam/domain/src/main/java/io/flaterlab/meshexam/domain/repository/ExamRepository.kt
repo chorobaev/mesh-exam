@@ -1,11 +1,11 @@
-package io.flaterlab.meshexam.domain.datasource
+package io.flaterlab.meshexam.domain.repository
 
 import io.flaterlab.meshexam.domain.api.model.CreateExamModel
 import io.flaterlab.meshexam.domain.api.model.ExamModel
 import io.flaterlab.meshexam.domain.create.model.*
 import kotlinx.coroutines.flow.Flow
 
-interface ExamDataSource {
+interface ExamRepository {
 
     fun exams(): Flow<List<ExamModel>>
 

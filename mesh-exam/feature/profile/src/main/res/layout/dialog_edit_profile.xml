@@ -31,6 +31,7 @@
         android:layout_marginHorizontal="@dimen/margin_medium"
         android:layout_marginTop="@dimen/margin_between"
         android:hint="@string/profile_edit_firstNameHint"
+        android:inputType="textPersonName"
         app:layout_constraintTop_toBottomOf="@id/tv_text_change_title"
         app:title="@string/profile_edit_firstNameTitle" />
 
@@ -41,7 +42,7 @@
         android:layout_marginHorizontal="@dimen/margin_medium"
         android:layout_marginTop="@dimen/margin_between"
         android:hint="@string/profile_edit_lastNameHint"
-        android:imeOptions="actionDone"
+        android:inputType="textPersonName"
         app:layout_constraintTop_toBottomOf="@id/tet_first_name"
         app:title="@string/profile_edit_lastNameTitle" />
 

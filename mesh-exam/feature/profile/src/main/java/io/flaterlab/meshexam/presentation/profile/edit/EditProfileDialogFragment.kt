@@ -3,6 +3,7 @@ package io.flaterlab.meshexam.presentation.profile.edit
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentManager
+import dagger.hilt.android.AndroidEntryPoint
 import io.flaterlab.meshexam.androidbase.TextWatcherManager
 import io.flaterlab.meshexam.androidbase.ViewBindingBottomSheetDialogFragment
 import io.flaterlab.meshexam.androidbase.ViewBindingProvider
@@ -12,6 +13,7 @@ import io.flaterlab.meshexam.androidbase.ext.setOnDoneClickListener
 import io.flaterlab.meshexam.androidbase.text.setError
 import io.flaterlab.meshexam.presentation.profile.databinding.DialogEditProfileBinding
 
+@AndroidEntryPoint
 internal class EditProfileDialogFragment :
     ViewBindingBottomSheetDialogFragment<DialogEditProfileBinding>() {
 
@@ -40,9 +42,9 @@ internal class EditProfileDialogFragment :
         viewModel.isSaveEnabled.observe(viewLifecycleOwner, binding.btnEditProfileSave::setEnabled)
         viewModel.userProfile.observe(viewLifecycleOwner) { dvo ->
             with(binding) {
-                tetFirstName.editText.setText(dvo.firstName)
-                tetLastName.editText.setText(dvo.lastName)
-                tetInfo.editText.setText(dvo.info)
+                if (dvo.firstName.isNotBlank()) tetFirstName.editText.setText(dvo.firstName)
+                if (dvo.lastName.isNotBlank()) tetLastName.editText.setText(dvo.lastName)
+                if (dvo.info.isNotBlank()) tetInfo.editText.setText(dvo.info)
             }
         }
         viewModel.commandOnSaved.observe(viewLifecycleOwner) { dismiss() }
@@ -60,6 +62,6 @@ internal class EditProfileDialogFragment :
 
         binding.btnEditProfileSave.clickWithDebounce(action = viewModel::onSavePressed)
 
-        binding.tetLastName.editText.setOnDoneClickListener(viewModel::onSavePressed)
+        binding.tetInfo.editText.setOnDoneClickListener(viewModel::onSavePressed)
     }
 }

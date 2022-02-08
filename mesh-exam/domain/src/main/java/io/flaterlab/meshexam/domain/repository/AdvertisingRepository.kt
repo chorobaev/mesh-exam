@@ -1,8 +1,8 @@
-package io.flaterlab.meshexam.domain.api.datasource
+package io.flaterlab.meshexam.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 
-interface AdvertisingDataSource {
+interface AdvertisingRepository {
 
     fun startExam(examId: String): Flow<Unit>
 }

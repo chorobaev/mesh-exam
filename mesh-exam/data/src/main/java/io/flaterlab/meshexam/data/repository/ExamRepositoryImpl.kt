@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.data.datasource
+package io.flaterlab.meshexam.data.repository
 
 import androidx.room.withTransaction
 import io.flaterlab.meshexam.core.Mapper
@@ -13,20 +13,20 @@ import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
 import io.flaterlab.meshexam.domain.api.model.CreateExamModel
 import io.flaterlab.meshexam.domain.api.model.ExamModel
 import io.flaterlab.meshexam.domain.create.model.*
-import io.flaterlab.meshexam.domain.datasource.ExamDataSource
+import io.flaterlab.meshexam.domain.repository.ExamRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.util.*
 import javax.inject.Inject
 
-internal class ExamDataSourceImpl @Inject constructor(
+internal class ExamRepositoryImpl @Inject constructor(
     private val database: MeshDatabase,
     private val idGenerator: IdGeneratorStrategy,
     private val createExamModelMapper: Mapper<CreateExamModel, ExamEntity>,
     private val examEntityMapper: Mapper<ExamEntity, ExamModel>,
     private val createQuestionModelMapper: Mapper<CreateQuestionModel, QuestionEntity>,
-) : ExamDataSource {
+) : ExamRepository {
 
     private val examDao = database.examDao()
     private val questionDao = database.questionsDao()

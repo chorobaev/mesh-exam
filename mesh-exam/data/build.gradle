@@ -16,6 +16,7 @@ dependencies {
     implementation libraries.work
     implementation libraries.hiltWork
     implementation libraries.gson
+    implementation libraries.datastore
 
     implementation libraries.coroutinesPlayServices
 

@@ -1,13 +1,13 @@
-package io.flaterlab.meshexam.data.datasource
+package io.flaterlab.meshexam.data.repository
 
-import io.flaterlab.meshexam.domain.api.datasource.AdvertisingDataSource
+import io.flaterlab.meshexam.domain.repository.AdvertisingRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import javax.inject.Inject
 
-internal class AdvertisingDataSourceImpl @Inject constructor(
+internal class AdvertisingRepositoryImpl @Inject constructor(
 
-) : AdvertisingDataSource {
+) : AdvertisingRepository {
 
     override fun startExam(examId: String): Flow<Unit> {
         // TODO: add actual info

@@ -1,18 +1,28 @@
 package io.flaterlab.meshexam.presentation.profile.edit
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.androidbase.text.Text
+import io.flaterlab.meshexam.domain.profile.model.UpdateUserProfileModel
+import io.flaterlab.meshexam.domain.profile.usecase.GetUserProfileUseCase
+import io.flaterlab.meshexam.domain.profile.usecase.UpdateUserProfileUseCase
 import io.flaterlab.meshexam.presentation.profile.R
 import io.flaterlab.meshexam.presentation.profile.dvo.UserProfileDvo
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
+@HiltViewModel
 internal class EditProfileViewModel @Inject constructor(
-
+    private val getUserProfileUseCase: GetUserProfileUseCase,
+    private val updateUserProfileUseCase: UpdateUserProfileUseCase,
 ) : BaseViewModel() {
 
-    val userProfile = MutableLiveData<UserProfileDvo>()
+    val userProfile = SingleLiveEvent<UserProfileDvo>()
     val isSaveEnabled = MutableLiveData(false)
 
     val firstNameError = MutableLiveData(Text.empty())
@@ -23,6 +33,24 @@ internal class EditProfileViewModel @Inject constructor(
     private var firstName: String? = null
     private var lastName: String? = null
     private var info: String? = null
+
+    init {
+        viewModelScope.launch {
+            val profile = getUserProfileUseCase()
+                .firstOrNull()
+            firstName = profile?.firstName
+            lastName = profile?.lastName
+            info = profile?.info
+            if (profile != null) {
+                userProfile.value = UserProfileDvo(
+                    profile.firstName,
+                    profile.lastName,
+                    profile.initials,
+                    profile.info
+                )
+            }
+        }
+    }
 
     fun onFirstNameChanged(name: String?) {
         firstName = name
@@ -68,7 +96,20 @@ internal class EditProfileViewModel @Inject constructor(
 
     fun onSavePressed() {
         if (isSaveButtonAvailable()) {
-
+            viewModelScope.launch {
+                try {
+                    updateUserProfileUseCase(
+                        UpdateUserProfileModel(
+                            firstName.orEmpty(),
+                            lastName.orEmpty(),
+                            info.orEmpty()
+                        )
+                    )
+                    commandOnSaved.call()
+                } catch (e: IOException) {
+                    e.showLocalizedMessage()
+                }
+            }
         }
     }
 

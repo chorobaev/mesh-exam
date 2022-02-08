@@ -12,6 +12,7 @@ dependencies {
     implementation localModules.core
     implementation localModules.uiKit
     implementation localModules.androidBase
+    implementation localModules.domain
     implementation libraryModules.localization
 
     implementation libraries.appcompat

@@ -7,6 +7,12 @@ import io.flaterlab.meshexam.androidbase.text.Text
 abstract class BaseViewModel : ViewModel() {
 
     val message = SingleLiveEvent<Text>()
+
+    protected fun Throwable.showLocalizedMessage() {
+        localizedMessage
+            ?.let(Text::from)
+            ?.let(this@BaseViewModel.message::setValue)
+    }
 }
 
 fun <T> SavedStateHandle.getLauncher(): T {

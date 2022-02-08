@@ -29,9 +29,9 @@ internal class ProfileFragment : ViewBindingFragment<FragmentProfileBinding>() {
 
         viewModel.userProfile.observe(viewLifecycleOwner) { dvo ->
             with(binding) {
-                tvTextAvatar.text = dvo.initials
-                tvProfileName.text = dvo.fullName
-                tvProfileInfo.text = dvo.info
+                if (dvo.initials.isNotBlank()) tvTextAvatar.text = dvo.initials
+                if (dvo.fullName.isNotBlank()) tvProfileName.text = dvo.fullName
+                if (dvo.info.isNotBlank()) tvProfileInfo.text = dvo.info
             }
         }
         viewModel.historyItems.observe(viewLifecycleOwner, historyAdapter::submitList)

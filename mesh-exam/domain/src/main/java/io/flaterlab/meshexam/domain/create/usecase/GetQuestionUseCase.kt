@@ -1,15 +1,15 @@
 package io.flaterlab.meshexam.domain.create.usecase
 
 import io.flaterlab.meshexam.domain.create.model.QuestionModel
-import io.flaterlab.meshexam.domain.datasource.ExamDataSource
+import io.flaterlab.meshexam.domain.repository.ExamRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetQuestionUseCase @Inject constructor(
-    private val examDataSource: ExamDataSource,
+    private val examRepository: ExamRepository,
 ) {
 
     operator fun invoke(questionId: String): Flow<QuestionModel> {
-        return examDataSource.questionById(questionId)
+        return examRepository.questionById(questionId)
     }
 }

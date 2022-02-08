@@ -1,9 +1,9 @@
-package io.flaterlab.meshexam.domain.datasource
+package io.flaterlab.meshexam.domain.repository
 
 import io.flaterlab.meshexam.domain.api.model.ExamInfoModel
 import kotlinx.coroutines.flow.Flow
 
-interface DiscoveryDataSource {
+interface DiscoveryRepository {
 
     fun discoverExams(): Flow<List<ExamInfoModel>>
 

@@ -1,9 +1,9 @@
-package io.flaterlab.meshexam.domain.datasource
+package io.flaterlab.meshexam.domain.repository
 
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
 import kotlinx.coroutines.flow.Flow
 
-interface MeshDataSource {
+interface MeshRepository {
 
     fun startMesh(examId: String): Flow<MeshModel>
 

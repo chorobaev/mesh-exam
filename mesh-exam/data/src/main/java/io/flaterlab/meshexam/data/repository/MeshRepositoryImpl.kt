@@ -1,7 +1,7 @@
-package io.flaterlab.meshexam.data.datasource
+package io.flaterlab.meshexam.data.repository
 
 import io.flaterlab.meshexam.data.database.MeshDatabase
-import io.flaterlab.meshexam.domain.datasource.MeshDataSource
+import io.flaterlab.meshexam.domain.repository.MeshRepository
 import io.flaterlab.meshexam.domain.mesh.model.ClientModel
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
 import io.flaterlab.meshexam.librariy.mesh.common.dto.AdvertiserInfo
@@ -13,10 +13,10 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-internal class MeshDataSourceImpl @Inject constructor(
+internal class MeshRepositoryImpl @Inject constructor(
     private val database: MeshDatabase,
     private val hostMeshManager: HostMeshManager,
-) : MeshDataSource {
+) : MeshRepository {
 
     private val examDao = database.examDao()
 

@@ -19,6 +19,7 @@ ext {
             core                  : 'androidx.core:core-ktx:1.7.0',
             coroutines            : 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0',
             coroutinesPlayServices: 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0',
+            datastore             : 'androidx.datastore:datastore-preferences:1.0.0',
             firebaseAnalytics     : 'com.google.firebase:firebase-analytics-ktx:20.0.2',
             firebaseCrashlytics   : 'com.google.firebase:firebase-crashlytics-ktx:18.2.7',
             fragment              : 'androidx.fragment:fragment-ktx:' + fragmentVersion,
