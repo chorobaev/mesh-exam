@@ -49,7 +49,7 @@ internal class ClientDiscoveryMeshManager(
         onAdvertiserSetChangeListener = { result ->
             when (result) {
                 is MeshResult.Success -> trySend(result.data)
-                is MeshResult.Error -> throw result.cause
+                is MeshResult.Error -> close(result.cause.also(Timber::e))
             }
         }
         discover()

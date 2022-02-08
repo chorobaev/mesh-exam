@@ -26,8 +26,6 @@ class HostMeshManager internal constructor(
 ) : ConnectionsLifecycleAdapterCallback2.AdapterCallback<ClientInfo>,
     HostPayloadAdapterCallback.AdapterCallback {
 
-    private val lock = Object()
-
     private var advertiserInfo: AdvertiserInfo? = null
     private var onClientSetChangeListener: ((MeshResult<HostMesh>) -> Unit)? = null
     private val left = MeshList()
@@ -45,7 +43,7 @@ class HostMeshManager internal constructor(
             if (isActive) {
                 when (result) {
                     is MeshResult.Success -> trySend(result.data)
-                    is MeshResult.Error -> throw result.cause
+                    is MeshResult.Error -> close(result.cause.also(Timber::e))
                 }
             }
         }
