@@ -8,6 +8,4 @@ interface MeshRepository {
     fun startMesh(examId: String): Flow<MeshModel>
 
     suspend fun removeClient(clientId: String)
-
-    suspend fun joinExam(examId: String)
 }

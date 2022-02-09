@@ -25,6 +25,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        mock {
+            initWith debug
+            applicationIdSuffix ".mock"
+            versionNameSuffix "-mock"
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

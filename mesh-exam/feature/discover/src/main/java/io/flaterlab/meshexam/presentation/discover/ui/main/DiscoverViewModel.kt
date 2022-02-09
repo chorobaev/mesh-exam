@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
-import io.flaterlab.meshexam.domain.create.usecase.DiscoverExamsUseCase
+import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
 import io.flaterlab.meshexam.presentation.discover.dvo.AvailableExamDvo
 import io.flaterlab.meshexam.uikit.view.StateRecyclerView
 import kotlinx.coroutines.flow.Flow
@@ -15,10 +15,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
-    discoverExamsUseCase: DiscoverExamsUseCase,
+    examinationInteractor: ExaminationInteractor,
 ) : BaseViewModel() {
 
-    val exams: Flow<List<AvailableExamDvo>> = discoverExamsUseCase()
+    val exams: Flow<List<AvailableExamDvo>> = examinationInteractor.discoverExams()
         .map { list ->
             list.map { exam ->
                 AvailableExamDvo(exam.id, exam.name, exam.host, exam.duration)
