@@ -1,36 +1,146 @@
 [
   {
-    "testId": "86500f25-b978-467b-a9cf-271c9a6bb7de",
-    "name": "History of Kyrgyzstan",
-    "type": "State exam",
-    "duration": 30,
+    "name": "Agile Manifesto",
+    "type": "Default",
+    "durationInMin": 15,
     "questions": [
       {
-        "questionId": "9b062c41-cda8-4bd3-9df5-6b28abc96e60",
-        "question": "When is the Independence day?",
+        "question": "What is MOST important according to the Agile Manifesto?",
         "type": "MULTIPLE_CHOICE",
-        "score": 1.5,
-        "answer": [
+        "score": 1,
+        "orderNumber": 0,
+        "answers": [
           {
-            "answerId": "8cec80c4-d4f2-4d01-9d84-a68d16ce51b0",
-            "answer": "31st of August",
-            "correct": true,
-            "createdAt": 0,
-            "updatedAt": 0
+            "answer": "Documentation and planning",
+            "orderNumber": 0,
+            "isCorrect": false
           },
           {
-            "answerId": "43923d68-d617-470e-8bc2-d2005c7499e9",
-            "answer": "1st of January",
-            "correct": false,
-            "createdAt": 0,
-            "updatedAt": 0
+            "answer": "People and how they communicate",
+            "orderNumber": 1,
+            "isCorrect": true
           },
           {
-            "answerId": "d65ac515-ec71-4c6a-8390-e372d84a5965",
-            "answer": "20th of Jun",
-            "correct": false,
-            "createdAt": 0,
-            "updatedAt": 0
+            "answer": "Control and management",
+            "orderNumber": 2,
+            "isCorrect": false
+          },
+          {
+            "answer": "Processes and tools",
+            "orderNumber": 3,
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "question": "Agile Manifesto says to value responding to change over following a plan. Which of the following statements illustrates this?",
+        "type": "MULTIPLE_CHOICE",
+        "score": 1,
+        "orderNumber": 1,
+        "answers": [
+          {
+            "answer": "Changes are accepted up until the point that the first Sprint begins. Then, changes are deferred to a future release",
+            "orderNumber": 0,
+            "isCorrect": false
+          },
+          {
+            "answer": "Changes are accepted only if other features are removed from the backlog such that a fixed end-date is maintained.",
+            "orderNumber": 1,
+            "isCorrect": false
+          },
+          {
+            "answer": "Changes are accepted up until about halfway through the project, then all changes are deferred to a future release.",
+            "orderNumber": 2,
+            "isCorrect": false
+          },
+          {
+            "answer": "Changes are accepted at any time during the development effort depending on the business value of the change, the PO's acceptance, and the ability of the Scrum Team to respond in a timeframe acceptable to the PO.",
+            "orderNumber": 3,
+            "isCorrect": true
+          }
+        ]
+      },
+      {
+        "question": "What emerges from a self organized team?",
+        "type": "MULTIPLE_CHOICE",
+        "score": 1,
+        "orderNumber": 2,
+        "answers": [
+          {
+            "answer": "The best architecture, requirements and design",
+            "orderNumber": 0,
+            "isCorrect": true
+          },
+          {
+            "answer": "The best user stories and requirements",
+            "orderNumber": 1,
+            "isCorrect": false
+          },
+          {
+            "answer": "The best process flows, user stories and requirements",
+            "orderNumber": 2,
+            "isCorrect": false
+          },
+          {
+            "answer": "All are valid considerations",
+            "orderNumber": 3,
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "question": "In Agile Manifesto which of the following is stated as value ?",
+        "type": "MULTIPLE_CHOICE",
+        "score": 1,
+        "orderNumber": 1,
+        "answers": [
+          {
+            "answer": " Individuals and interactions over Following a plan",
+            "orderNumber": 0,
+            "isCorrect": false
+          },
+          {
+            "answer": "Working software over comprehensive documentation",
+            "orderNumber": 1,
+            "isCorrect": true
+          },
+          {
+            "answer": "Customer collaboration over processes and tools",
+            "orderNumber": 2,
+            "isCorrect": false
+          },
+          {
+            "answer": "Responding to change over contract negotiation",
+            "orderNumber": 3,
+            "isCorrect": false
+          }
+        ]
+      },
+      {
+        "question": "In Agile Manifesto the first principle states that individuals and interactions are _____ processes and tools.",
+        "type": "MULTIPLE_CHOICE",
+        "score": 1,
+        "orderNumber": 1,
+        "answers": [
+          {
+            "answer": "As important as",
+            "orderNumber": 0,
+            "isCorrect": false
+          },
+          {
+            "answer": "Little important than",
+            "orderNumber": 1,
+            "isCorrect": false
+          },
+          {
+            "answer": "More important than",
+            "orderNumber": 2,
+            "isCorrect": true
+          },
+          {
+            "answer": "Less important than",
+            "orderNumber": 3,
+            "isCorrect": false
           }
         ]
       }

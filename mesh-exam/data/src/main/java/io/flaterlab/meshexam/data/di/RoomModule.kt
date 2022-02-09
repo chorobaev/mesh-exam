@@ -1,7 +1,6 @@
 package io.flaterlab.meshexam.data.di
 
 import android.content.Context
-import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,9 +17,7 @@ internal class RoomModule {
     @Singleton
     fun provideMeshDatabase(
         @ApplicationContext context: Context,
-    ): MeshDatabase = Room
-        .databaseBuilder(context, MeshDatabase::class.java, "mesh_db")
-        .build()
+    ): MeshDatabase = MeshDatabase.getInstance(context)
 }
 
 
