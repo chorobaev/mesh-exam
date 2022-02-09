@@ -7,6 +7,7 @@ import com.google.android.gms.nearby.connection.ConnectionsClient
 import com.google.android.gms.nearby.connection.Strategy
 import com.google.gson.GsonBuilder
 import io.flaterlab.meshexam.librariy.mesh.common.ConnectionsLifecycleAdapterCallback2
+import io.flaterlab.meshexam.librariy.mesh.common.LOW_ENERGY
 import io.flaterlab.meshexam.librariy.mesh.common.dto.AdvertiserInfo
 import io.flaterlab.meshexam.librariy.mesh.common.dto.ChildInfo
 import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
@@ -46,6 +47,7 @@ internal class ClientAdvertisingMeshManager(
         val options = AdvertisingOptions.Builder()
             .setDisruptiveUpgrade(false)
             .setStrategy(Strategy.P2P_CLUSTER)
+            .setLowPower(LOW_ENERGY)
             .build()
         nearby.startAdvertising(infoJson, serviceId, connectionsCallback, options)
             .addOnFailureListener(::onError)

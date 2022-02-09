@@ -50,6 +50,7 @@ class ClientMeshManager internal constructor(
             discoveryMesh.joinExam(examId, clientInfo)
                 .also { advertisingMesh.advertise(it) }
         } catch (e: Exception) {
+            Timber.e(e)
             if (reconnectTryCount.getAndIncrement() >= RECONNECT_TRY_COUNT) {
                 reconnectTryCount.set(0)
                 throw MeshConnectionException(e)

@@ -49,7 +49,7 @@ class ClientListAdapter @Inject constructor(
             val order = "${adapterPosition + 1}."
             tvClientOrderNumber.text = order
             tvClientName.text = item.fullName
-            tvClientInfo.text = item.info
+            tvClientInfo.text = item.info.ifBlank { "-" }
             tvClientStatus.text = item.status
             tvClientStatus.setTextColor(item.provideStatusTextColor(tvClientStatus.context))
         }
@@ -73,10 +73,7 @@ class ClientListAdapter @Inject constructor(
             }
 
             override fun areContentsTheSame(oldItem: ClientItem, newItem: ClientItem): Boolean {
-                return oldItem.id == newItem.id &&
-                        oldItem.fullName == newItem.fullName &&
-                        oldItem.info == newItem.info &&
-                        oldItem.status == newItem.status
+                return false
             }
         }
     }

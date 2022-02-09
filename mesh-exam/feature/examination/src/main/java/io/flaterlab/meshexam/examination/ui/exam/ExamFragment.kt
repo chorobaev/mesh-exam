@@ -42,6 +42,10 @@ internal class ExamFragment : ViewBindingFragment<FragmentExamBinding>() {
     private fun initBackPressHandle() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
 
+            if (isEnabled) {
+                isEnabled = false
+                requireActivity().onBackPressed()
+            }
         }
     }
 

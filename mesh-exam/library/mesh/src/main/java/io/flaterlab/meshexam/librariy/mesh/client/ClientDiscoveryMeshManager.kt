@@ -10,6 +10,7 @@ import com.google.gson.GsonBuilder
 import io.flaterlab.meshexam.librariy.mesh.client.exception.MeshConnectionException
 import io.flaterlab.meshexam.librariy.mesh.common.ConnectionsLifecycleAdapterCallback
 import io.flaterlab.meshexam.librariy.mesh.common.EndpointDiscoveryAdapterCallback
+import io.flaterlab.meshexam.librariy.mesh.common.LOW_ENERGY
 import io.flaterlab.meshexam.librariy.mesh.common.dto.*
 import io.flaterlab.meshexam.librariy.mesh.common.parser.AdvertiserInfoJsonParser
 import io.flaterlab.meshexam.librariy.mesh.common.parser.JsonParserHelper
@@ -53,12 +54,16 @@ internal class ClientDiscoveryMeshManager(
             }
         }
         discover()
-        awaitClose { stopDiscovery() }
+        awaitClose {
+            onAdvertiserSetChangeListener = null
+            stopDiscovery()
+        }
     }
 
     private fun discover() {
         val options = DiscoveryOptions.Builder()
             .setStrategy(Strategy.P2P_CLUSTER)
+            .setLowPower(LOW_ENERGY)
             .build()
         nearby.startDiscovery(serviceId, discoveryCallback, options)
             .addOnSuccessListener {
@@ -90,15 +95,15 @@ internal class ClientDiscoveryMeshManager(
 
     private fun stopDiscovery() {
         nearby.stopDiscovery()
-        advertiserInfoCache.clear()
-        onAdvertiserSetChangeListener = null
     }
 
     suspend fun joinExam(examId: String, clientInfo: ClientInfo): AdvertiserInfo =
         coroutineScope {
             selfInfo = clientInfo
             val endpointId = advertiserInfoCache.getEndpointByExamId(examId)
-                ?: throw IllegalArgumentException("Exam with id $examId does not exist")
+                ?: throw IllegalArgumentException(
+                    "Exam with id $examId does not exist. Cache - $advertiserInfoCache"
+                )
             join(endpointId)
             try {
                 CompletableDeferred<ParentInfo>()
@@ -109,6 +114,7 @@ internal class ClientDiscoveryMeshManager(
             } finally {
                 joinResult = null
                 stopDiscovery()
+                advertiserInfoCache.clear()
             }
         }
 

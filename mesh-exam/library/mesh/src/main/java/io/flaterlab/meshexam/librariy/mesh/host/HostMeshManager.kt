@@ -7,6 +7,7 @@ import com.google.android.gms.nearby.connection.ConnectionsClient
 import com.google.android.gms.nearby.connection.Strategy
 import com.google.gson.GsonBuilder
 import io.flaterlab.meshexam.librariy.mesh.common.ConnectionsLifecycleAdapterCallback2
+import io.flaterlab.meshexam.librariy.mesh.common.LOW_ENERGY
 import io.flaterlab.meshexam.librariy.mesh.common.dto.*
 import io.flaterlab.meshexam.librariy.mesh.common.parser.AdvertiserInfoJsonParser
 import io.flaterlab.meshexam.librariy.mesh.common.parser.ClientInfoJsonParser
@@ -70,6 +71,7 @@ class HostMeshManager internal constructor(
             .toByteArray()
         val options = AdvertisingOptions.Builder()
             .setStrategy(Strategy.P2P_CLUSTER)
+            .setLowPower(LOW_ENERGY)
             .setDisruptiveUpgrade(false)
             .build()
         nearby.startAdvertising(infoBytes, serviceId, connectionsCallback, options)
