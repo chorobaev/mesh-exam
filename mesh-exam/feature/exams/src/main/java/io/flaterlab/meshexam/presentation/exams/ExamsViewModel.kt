@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
-import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.domain.create.usecase.GetMyExamsUseCase
 import io.flaterlab.meshexam.presentation.exams.dvo.ExamDvo
+import io.flaterlab.meshexam.uikit.view.StateRecyclerView
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -20,6 +20,7 @@ internal class ExamsViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val exams = MutableLiveData<List<ExamDvo>>(emptyList())
+    val examListState = MutableLiveData(StateRecyclerView.State.LOADING)
 
     val openCreateCommand = SingleLiveEvent<Unit>()
     val openExamCommand = SingleLiveEvent<ExamDvo>()
@@ -28,13 +29,19 @@ internal class ExamsViewModel @Inject constructor(
         loadExams()
     }
 
-    fun loadExams() {
+    private fun loadExams() {
         getMyExamsUseCase()
             .map { list ->
                 list.map { ExamDvo(it.id, it.name, it.durationInMin) }
             }
-            .onEach(exams::setValue)
-            .catch { it.localizedMessage?.let(Text::from)?.let(message::setValue) }
+            .onEach { exams ->
+                examListState.value = when {
+                    exams.isEmpty() -> StateRecyclerView.State.EMPTY
+                    else -> StateRecyclerView.State.NORMAL
+                }
+                this.exams.value = exams
+            }
+            .catch { it.showLocalizedMessage() }
             .launchIn(viewModelScope)
     }
 

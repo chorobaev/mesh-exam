@@ -1,11 +1,10 @@
 package io.flaterlab.meshexam.presentation.exams
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
-import io.flaterlab.meshexam.androidbase.BaseFragment
+import io.flaterlab.meshexam.androidbase.ViewBindingFragment
+import io.flaterlab.meshexam.androidbase.ViewBindingProvider
 import io.flaterlab.meshexam.androidbase.common.adapter.ExamListAdapter
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
 import io.flaterlab.meshexam.presentation.exams.databinding.FragmentExamsBinding
@@ -14,11 +13,9 @@ import io.flaterlab.meshexam.presentation.exams.router.ExamsRouter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-internal class ExamsFragment : BaseFragment() {
+internal class ExamsFragment : ViewBindingFragment<FragmentExamsBinding>() {
 
     private val viewModel: ExamsViewModel by vm()
-    private var _binding: FragmentExamsBinding? = null
-    private val binding get() = _binding!!
 
     @Inject
     lateinit var examsRouter: ExamsRouter
@@ -26,21 +23,15 @@ internal class ExamsFragment : BaseFragment() {
     @Inject
     lateinit var examsAdapter: ExamListAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentExamsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override val viewBinder: ViewBindingProvider<FragmentExamsBinding>
+        get() = FragmentExamsBinding::inflate
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initRecyclerView()
-        viewModel.exams.observe(viewLifecycleOwner, examsAdapter::submitList)
 
+        viewModel.examListState.observe(viewLifecycleOwner, binding.recyclerViewExams::setState)
+        viewModel.exams.observe(viewLifecycleOwner, examsAdapter::submitList)
         viewModel.openCreateCommand.observe(viewLifecycleOwner) {
             examsRouter.openCreateExam()
         }
@@ -54,10 +45,5 @@ internal class ExamsFragment : BaseFragment() {
     private fun initRecyclerView() = with(binding.recyclerViewExams) {
         adapter = examsAdapter
         examsAdapter.onExamClickListener = { viewModel.onExamPressed(it as ExamDvo) }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

@@ -67,9 +67,7 @@ class ExamListAdapter @Inject constructor(
             }
 
             override fun areContentsTheSame(oldItem: ExamItem, newItem: ExamItem): Boolean {
-                return oldItem.id == newItem.id &&
-                        oldItem.name == newItem.name &&
-                        oldItem.durationInMin == newItem.durationInMin
+                return false
             }
         }
     }
