@@ -1,8 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.exam.ExamFragment">
+
+    <io.flaterlab.meshexam.uikit.view.MeshToolbar
+        android:id="@+id/toolbar_examination"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/cv_exam_timer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:toolbarTitle="Human and computer interactions" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_exam_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_medium"
+        app:cardBackgroundColor="?attr/colorAccent"
+        app:cardCornerRadius="@dimen/radius_medium"
+        app:layout_constraintBottom_toBottomOf="@id/toolbar_examination"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/toolbar_examination">
+
+        <TextView
+            android:id="@+id/tv_exam_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="12dp"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:drawablePadding="4dp"
+            android:minWidth="72dp"
+            android:text="@string/exam_main_timerPlaceholder"
+            android:textAppearance="@style/TextAppearance.MeshExam.Large.Regular"
+            android:textColor="?attr/colorOnPrimary"
+            app:drawableStartCompat="@drawable/ic_stopwatch" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout_numbers"
+        style="@style/Widget.MeshExam.TabLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/tab_side"
+        android:layout_marginTop="@dimen/margin_between"
+        android:background="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_examination"
+        app:tabGravity="start"
+        app:tabMode="scrollable"
+        app:tabPaddingEnd="0dp"
+        app:tabPaddingStart="0dp" />
+
+    <io.flaterlab.meshexam.uikit.view.Divider
+        android:id="@+id/divider_examination_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_medium"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout_numbers" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager_questions"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider_examination_question" />
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginBottom="@dimen/margin_medium"
+        android:text="@string/exam_main_buttonSubmit"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

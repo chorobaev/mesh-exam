@@ -94,6 +94,7 @@ class MeshToolbar : AppBarLayout {
 
     fun setSubtitle(subtitle: String) {
         this.subtitle = subtitle
+        showSubtitle()
     }
 
     fun showSubtitle() {

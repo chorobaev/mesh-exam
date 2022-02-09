@@ -53,3 +53,9 @@ fun Parcelable.toBundleArgs() = bundleOf(
 
 inline fun <reified T : Parcelable> BaseFragment.getLauncher(): T =
     requireArguments().getParcelable<T>(LAUNCHER) as T
+
+fun BaseFragment.setLauncher(launcher: Parcelable) {
+    arguments = bundleOf(
+        LAUNCHER to launcher
+    )
+}

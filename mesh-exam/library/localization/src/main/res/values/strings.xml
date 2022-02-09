@@ -64,4 +64,6 @@
 
     <string name="exam_join_connecting">Connecting</string>
     <string name="exam_join_connectedTitle">Successfully connected!\nThe host will start the examination soon.</string>
+    <string name="exam_main_buttonSubmit">Submit</string>
+    <string name="exam_main_timerPlaceholder">--:--</string>
 </resources>

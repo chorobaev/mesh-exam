@@ -20,7 +20,7 @@ import javax.inject.Inject
 internal class ExamInfoDialogFragment :
     ViewBindingBottomSheetDialogFragment<DialogExamInfoBinding> {
 
-    @Deprecated(message = DEPRECATION_MESSAGE)
+    @Deprecated(message = DEPRECATION_MESSAGE, level = DeprecationLevel.ERROR)
     constructor()
 
     constructor(launcher: ExamInfoLauncher) {
