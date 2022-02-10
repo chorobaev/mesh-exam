@@ -3,12 +3,14 @@ package io.flaterlab.meshexam.di
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.components.SingletonComponent
 import io.flaterlab.meshexam.domain.impl.ExaminationInteractorImpl
+import io.flaterlab.meshexam.domain.impl.ProfileInteractorImpl
 import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
+import io.flaterlab.meshexam.domain.interactor.ProfileInteractor
 
 @Module
-@InstallIn(dagger.hilt.components.SingletonComponent::class)
+@InstallIn(SingletonComponent::class)
 interface InteractorBindingModule {
 
     @Binds
