@@ -1,6 +1,8 @@
 package io.flaterlab.meshexam.presentation.router
 
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.androidbase.toBundleArgs
 import io.flaterlab.meshexam.create.ui.question.CreateQuestionActionBehavior
 import io.flaterlab.meshexam.feature.meshroom.MeshRoomLauncher
@@ -29,12 +31,22 @@ class CreateQuestionBehavior(
     }
 
     private fun openMeshRoom(fragment: Fragment) {
-        FragmentEntryPoint.resolve(fragment)
-            .globalNavControllerProvider
-            .get()
-            .navigate(
-                R.id.action_global_nav_mesh,
-                MeshRoomLauncher(examId).toBundleArgs()
-            )
+        val entryPoint = FragmentEntryPoint.resolve(fragment)
+        fragment.viewLifecycleOwner.lifecycleScope
+            .launchWhenCreated {
+                val isProfileSetUp = entryPoint.profileInteractor.isProfileSetUp()
+                if (isProfileSetUp) {
+                    entryPoint
+                        .globalNavControllerProvider.get()
+                        .navigate(
+                            R.id.action_global_nav_mesh,
+                            MeshRoomLauncher(examId).toBundleArgs()
+                        )
+                } else {
+                    entryPoint.profileNavigator.openEditProfile(
+                        Text.from(R.string.mesh_start_createProfile)
+                    )
+                }
+            }
     }
 }

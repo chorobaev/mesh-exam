@@ -1,6 +1,7 @@
 package io.flaterlab.meshexam.presentation.router
 
 import io.flaterlab.meshexam.androidbase.GlobalNavControllerProvider
+import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.androidbase.toBundleArgs
 import io.flaterlab.meshexam.examination.ExamLauncher
 import io.flaterlab.meshexam.presentation.R
@@ -13,7 +14,7 @@ internal class DiscoverRouterImpl @Inject constructor(
     private val generalNavControllerProvider: GlobalNavControllerProvider,
 ) : DiscoverRouter {
 
-    override fun openEditProfile() = profileNavigator.openEditProfile()
+    override fun openEditProfile(title: Text) = profileNavigator.openEditProfile(title)
 
     override fun joinExam(examId: String) {
         generalNavControllerProvider.get()

@@ -49,6 +49,7 @@
     <string name="mesh_exam_name_title">Exam: %s</string>
     <string name="mesh_search_hint">Search here</string>
     <string name="mesh_start_exam">Start exam</string>
+    <string name="mesh_start_createProfile">Create profile before starting</string>
 
     <string name="profile_edit_editProfileTitle">Edit</string>
     <string name="profile_edit_firstNameTitle">First name*</string>
@@ -71,4 +72,5 @@
     <string name="exam_main_timerPlaceholder">--:--</string>
 
     <string name="permission_mesh_message">MeshExam uses the device\'s location to find nearby examinations. Please grand access to the camera in the application settings.</string>
+    <string name="exam_join_createProfile">Create profile before joining</string>
 </resources>

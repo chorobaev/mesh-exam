@@ -1,10 +1,12 @@
 package io.flaterlab.meshexam.presentation.profile.ui.edit
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
+import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.domain.profile.model.UpdateUserProfileModel
 import io.flaterlab.meshexam.domain.profile.usecase.GetUserProfileUseCase
@@ -18,10 +20,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class EditProfileViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val getUserProfileUseCase: GetUserProfileUseCase,
     private val updateUserProfileUseCase: UpdateUserProfileUseCase,
 ) : BaseViewModel() {
 
+    private val launcher: EditProfileLauncher = savedStateHandle.getLauncher()
+
+    val profileTitle = MutableLiveData(launcher.title)
     val userProfile = SingleLiveEvent<UserProfileDvo>()
     val isSaveEnabled = MutableLiveData(false)
 

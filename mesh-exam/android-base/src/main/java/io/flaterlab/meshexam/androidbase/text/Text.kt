@@ -1,15 +1,19 @@
 package io.flaterlab.meshexam.androidbase.text
 
 import android.content.Context
+import android.os.Parcelable
 import android.widget.TextView
 import androidx.annotation.StringRes
 import io.flaterlab.meshexam.uikit.view.TitledTextInput
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 
+@Parcelize
 class Text private constructor(
     val rawText: String? = null,
     @StringRes val resourceText: Int? = null,
-    val formatArgs: @JvmSuppressWildcards Array<out Any?>? = null,
-) {
+    val formatArgs: @RawValue Array<out Any?>? = null,
+): Parcelable {
 
     val isEmpty get() = rawText == null && resourceText == null
 
@@ -19,6 +23,9 @@ class Text private constructor(
 
         fun from(@StringRes resId: Int) = Text(resourceText = resId)
 
+        /**
+         * Use only parcelable primitives as args
+         */
         fun from(@StringRes resId: Int, vararg args: Any?) =
             Text(resourceText = resId, formatArgs = args)
 

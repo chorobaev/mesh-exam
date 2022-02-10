@@ -4,22 +4,38 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import dagger.hilt.android.AndroidEntryPoint
-import io.flaterlab.meshexam.androidbase.TextWatcherManager
-import io.flaterlab.meshexam.androidbase.ViewBindingBottomSheetDialogFragment
-import io.flaterlab.meshexam.androidbase.ViewBindingProvider
-import io.flaterlab.meshexam.androidbase.bindTextWatcher
+import io.flaterlab.meshexam.androidbase.*
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
 import io.flaterlab.meshexam.androidbase.ext.setOnDoneClickListener
+import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.androidbase.text.setError
+import io.flaterlab.meshexam.androidbase.text.setText
+import io.flaterlab.meshexam.presentation.profile.R
 import io.flaterlab.meshexam.presentation.profile.databinding.DialogEditProfileBinding
 
 @AndroidEntryPoint
 internal class EditProfileDialogFragment :
-    ViewBindingBottomSheetDialogFragment<DialogEditProfileBinding>() {
+    ViewBindingBottomSheetDialogFragment<DialogEditProfileBinding> {
+
+    @Deprecated(DEPRECATION_MESSAGE, level = DeprecationLevel.ERROR)
+    constructor()
+
+    constructor(launcher: EditProfileLauncher) {
+        setLauncher(launcher)
+    }
 
     companion object {
         fun show(fm: FragmentManager) {
-            EditProfileDialogFragment().show(
+            EditProfileDialogFragment(
+                EditProfileLauncher(Text.from(R.string.profile_edit_editProfileTitle))
+            ).show(
+                fm,
+                EditProfileDialogFragment::class.java.canonicalName
+            )
+        }
+
+        fun show(launcher: EditProfileLauncher, fm: FragmentManager) {
+            EditProfileDialogFragment(launcher).show(
                 fm,
                 EditProfileDialogFragment::class.java.canonicalName
             )
@@ -37,6 +53,7 @@ internal class EditProfileDialogFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.profileTitle.observe(viewLifecycleOwner, binding.tvTextChangeTitle::setText)
         viewModel.firstNameError.observe(viewLifecycleOwner, binding.tetFirstName::setError)
         viewModel.lastNameError.observe(viewLifecycleOwner, binding.tetLastName::setError)
         viewModel.isSaveEnabled.observe(viewLifecycleOwner, binding.btnEditProfileSave::setEnabled)

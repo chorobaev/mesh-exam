@@ -8,9 +8,12 @@ import io.flaterlab.meshexam.domain.impl.ExaminationInteractorImpl
 import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(dagger.hilt.components.SingletonComponent::class)
 interface InteractorBindingModule {
 
     @Binds
     fun bindExaminationInteractor(impl: ExaminationInteractorImpl): ExaminationInteractor
+
+    @Binds
+    fun bindProfileInteractor(impl: ProfileInteractorImpl): ProfileInteractor
 }
