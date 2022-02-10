@@ -12,6 +12,7 @@ dependencies {
     implementation localModules.uiKit
     implementation localModules.androidBase
     implementation libraryModules.localization
+    implementation libraryModules.permission
 
     implementation libraries.appcompat
     implementation libraries.constraintLayout

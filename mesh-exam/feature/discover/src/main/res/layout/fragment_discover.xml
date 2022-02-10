@@ -29,4 +29,23 @@
         tools:itemCount="5"
         tools:listitem="@layout/item_exam_card" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/permission_needed_state"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_discover_title">
+
+        <TextView
+            android:id="@+id/tv_permissions_needed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:lineSpacingExtra="@dimen/margin_small"
+            android:padding="@dimen/margin_medium"
+            android:text="@string/discover_main_permissionsNeeded" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

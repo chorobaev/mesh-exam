@@ -32,8 +32,24 @@ class DiscoverViewModel @Inject constructor(
         }
         .catch { it.showLocalizedMessage() }
     val examListState = MutableLiveData(StateRecyclerView.State.LOADING)
+    val permissionNeededState = MutableLiveData(false)
 
     val commandOpenExam = SingleLiveEvent<AvailableExamDvo>()
+    val commandRequestPermission = SingleLiveEvent<Unit>()
+    val commandObserveExams = SingleLiveEvent<Unit>()
+
+    fun onPermissionsChanged(granted: Boolean, shouldRequest: Boolean = false) {
+        if (granted) {
+            commandObserveExams.call()
+        } else if (shouldRequest) {
+            commandRequestPermission.call()
+        }
+        permissionNeededState.value = !granted
+    }
+
+    fun onRequestPermissionsClicked() {
+        commandRequestPermission.call()
+    }
 
     fun onExamClicked(dvo: AvailableExamDvo) {
         commandOpenExam.value = dvo

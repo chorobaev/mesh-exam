@@ -14,6 +14,7 @@ dependencies {
     implementation localModules.domain
     implementation localModules.androidBase
     implementation libraryModules.localization
+    implementation libraryModules.permission
 
     implementation libraries.appcompat
     implementation libraries.constraintLayout

@@ -69,7 +69,8 @@ ext {
     libraryModules = [
             localization: project(':mesh-exam:library:localization'),
             nearby      : project(':mesh-exam:library:nearby'),
-            mesh        : project(':mesh-exam:library:mesh')
+            mesh        : project(':mesh-exam:library:mesh'),
+            permission  : project(':mesh-exam:library:permission'),
     ]
 
     feature = [
