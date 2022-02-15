@@ -36,7 +36,7 @@ internal class MeshRepositoryImpl @Inject constructor(
             .map { result ->
                 MeshModel(
                     clients = result.clientList.map { client ->
-                        ClientModel(client.id, client.name, client.info, client.status)
+                        ClientModel(client.id, client.name, client.info, client.positionInMesh)
                     }
                 )
             }
@@ -45,4 +45,6 @@ internal class MeshRepositoryImpl @Inject constructor(
     override suspend fun removeClient(clientId: String) {
         TODO("implement removal when reconnect logic is ready")
     }
+
+    override fun stopMesh() = hostMeshManager.stop()
 }

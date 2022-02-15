@@ -11,6 +11,9 @@ import io.flaterlab.meshexam.android_base.R
 import io.flaterlab.meshexam.android_base.databinding.ItemClientBinding
 import io.flaterlab.meshexam.androidbase.ext.applyLayoutParams
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
+import io.flaterlab.meshexam.androidbase.text.Text
+import io.flaterlab.meshexam.androidbase.text.resolve
+import io.flaterlab.meshexam.androidbase.text.setText
 import javax.inject.Inject
 
 class ClientListAdapter @Inject constructor(
@@ -49,8 +52,8 @@ class ClientListAdapter @Inject constructor(
             val order = "${adapterPosition + 1}."
             tvClientOrderNumber.text = order
             tvClientName.text = item.fullName
-            tvClientInfo.text = item.info.ifBlank { "-" }
-            tvClientStatus.text = item.status
+            tvClientInfo.text = item.info.resolve(itemView.context, default = "").ifBlank { "-" }
+            tvClientStatus.setText(item.status)
             tvClientStatus.setTextColor(item.provideStatusTextColor(tvClientStatus.context))
         }
     }
@@ -58,8 +61,8 @@ class ClientListAdapter @Inject constructor(
     interface ClientItem {
         val id: String
         val fullName: String
-        val info: String
-        val status: String
+        val info: Text
+        val status: Text
 
         @ColorInt
         fun provideStatusTextColor(context: Context): Int

@@ -17,6 +17,6 @@ internal class JoinedViewModel @Inject constructor(
 
     init {
         // TODO: add actual implementation
-        commandExamStarted.value = "examId"
+//        commandExamStarted.value = "examId"
     }
 }

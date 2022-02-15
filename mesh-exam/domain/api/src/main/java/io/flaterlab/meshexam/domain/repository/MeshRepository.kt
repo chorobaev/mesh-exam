@@ -7,5 +7,7 @@ interface MeshRepository {
 
     fun startMesh(examId: String): Flow<MeshModel>
 
+    fun stopMesh()
+
     suspend fun removeClient(clientId: String)
 }

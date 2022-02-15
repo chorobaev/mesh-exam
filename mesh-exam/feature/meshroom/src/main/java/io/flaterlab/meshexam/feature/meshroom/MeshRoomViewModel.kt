@@ -8,6 +8,7 @@ import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.domain.create.usecase.GetExamUseCase
+import io.flaterlab.meshexam.domain.interactor.MeshInteractor
 import io.flaterlab.meshexam.domain.mesh.usecase.CreateMeshUseCase
 import io.flaterlab.meshexam.domain.mesh.usecase.RemoveClientUseCase
 import io.flaterlab.meshexam.feature.meshroom.dvo.ClientDvo
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.absoluteValue
 
 @HiltViewModel
 internal class MeshRoomViewModel @Inject constructor(
@@ -25,6 +27,7 @@ internal class MeshRoomViewModel @Inject constructor(
     private val getExamUseCase: GetExamUseCase,
     private val createMeshUseCase: CreateMeshUseCase,
     private val removeClientUseCase: RemoveClientUseCase,
+    private val meshInteractor: MeshInteractor,
 ) : BaseViewModel() {
 
     private val launcher = savedStateHandle.getLauncher<MeshRoomLauncher>()
@@ -54,7 +57,19 @@ internal class MeshRoomViewModel @Inject constructor(
         meshJob = createMeshUseCase(launcher.examId)
             .onEach { meshModel ->
                 _clients = meshModel.clients.map { client ->
-                    ClientDvo(client.id, client.fullName, client.info, client.status)
+                    ClientDvo(
+                        client.id,
+                        client.fullName,
+                        Text.from(client.info),
+                        Text.from(
+                            if (client.positionInMesh > 0) {
+                                R.string.mesh_client_status_intPositionRight
+                            } else {
+                                R.string.mesh_client_status_intPositionLeft
+                            },
+                            client.positionInMesh.absoluteValue
+                        )
+                    )
                 }
                 updateClientList()
                 studentAmount.value = clients.value?.size ?: 0
@@ -78,5 +93,9 @@ internal class MeshRoomViewModel @Inject constructor(
     fun onSearchTextChanged(text: String?) {
         searchText = text
         updateClientList()
+    }
+
+    fun onBackPressed() {
+        meshInteractor.stopMesh()
     }
 }

@@ -10,7 +10,7 @@ data class ClientInfo(
     @Expose val id: String,
     @Expose val name: String,
     @Expose val info: String,
-    @Expose val status: String,
+    @Expose val positionInMesh: Int,
 )
 
 internal typealias ChildInfo = Pair<String, ClientInfo>

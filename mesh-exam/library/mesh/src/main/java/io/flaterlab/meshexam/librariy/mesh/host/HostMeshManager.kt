@@ -29,8 +29,8 @@ class HostMeshManager internal constructor(
 
     private var advertiserInfo: AdvertiserInfo? = null
     private var onClientSetChangeListener: ((MeshResult<HostMesh>) -> Unit)? = null
-    private val left = MeshList()
-    private val right = MeshList()
+    private val left = MeshList(isPositiveDirection = false)
+    private val right = MeshList(isPositiveDirection = true)
 
     init {
         connectionsCallback.adapterCallback = this

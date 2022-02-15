@@ -30,7 +30,7 @@ internal class DiscoveryRepositoryImpl @Inject constructor(
             id = profile.id,
             name = profile.fullName,
             info = profile.info.orEmpty(),
-            status = ""
+            positionInMesh = 0,
         )
         clientMeshManager.joinExam(examId, clientInfo)
     }

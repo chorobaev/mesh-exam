@@ -13,7 +13,7 @@ class Text private constructor(
     val rawText: String? = null,
     @StringRes val resourceText: Int? = null,
     val formatArgs: @RawValue Array<out Any?>? = null,
-): Parcelable {
+) : Parcelable {
 
     val isEmpty get() = rawText == null && resourceText == null
 
@@ -45,6 +45,8 @@ fun Text.resolve(context: Context): String? {
         else -> null
     }
 }
+
+fun Text.resolve(context: Context, default: String = ""): String = resolve(context) ?: default
 
 fun TitledTextInput.setError(text: Text) {
     textInputLayout.isErrorEnabled = !text.isEmpty

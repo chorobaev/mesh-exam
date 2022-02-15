@@ -108,7 +108,7 @@ class ConnectFragment : Fragment() {
                         UUID.randomUUID().toString(),
                         "Discoverer",
                         "COM-18",
-                        ""
+                        0
                     ).let(Gson()::toJson).toByteArray()
                     client.requestConnection(clientInfo, endpointId, discovererCallback)
                         .addOnSuccessListener {

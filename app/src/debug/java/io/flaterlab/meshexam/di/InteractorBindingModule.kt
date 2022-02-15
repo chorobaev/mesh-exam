@@ -5,8 +5,10 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.flaterlab.meshexam.domain.impl.ExaminationInteractorImpl
+import io.flaterlab.meshexam.domain.impl.MeshInteractorImpl
 import io.flaterlab.meshexam.domain.impl.ProfileInteractorImpl
 import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
+import io.flaterlab.meshexam.domain.interactor.MeshInteractor
 import io.flaterlab.meshexam.domain.interactor.ProfileInteractor
 
 @Module
@@ -18,4 +20,7 @@ interface InteractorBindingModule {
 
     @Binds
     fun bindProfileInteractor(impl: ProfileInteractorImpl): ProfileInteractor
+
+    @Binds
+    fun bindMeshInteractor(impl: MeshInteractorImpl): MeshInteractor
 }

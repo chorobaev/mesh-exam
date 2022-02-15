@@ -49,6 +49,8 @@
     <string name="mesh_exam_name_title">Exam: %s</string>
     <string name="mesh_search_hint">Search here</string>
     <string name="mesh_start_exam">Start exam</string>
+    <string name="mesh_client_status_intPositionRight">From the right %d</string>
+    <string name="mesh_client_status_intPositionLeft">From the left %d</string>
     <string name="mesh_start_createProfile">Create profile before starting</string>
 
     <string name="profile_edit_editProfileTitle">Edit</string>

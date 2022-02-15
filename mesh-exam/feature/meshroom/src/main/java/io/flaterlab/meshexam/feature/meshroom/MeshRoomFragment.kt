@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import androidx.activity.addCallback
 import androidx.core.text.toSpannable
 import dagger.hilt.android.AndroidEntryPoint
 import io.flaterlab.meshexam.androidbase.TextWatcherManager
@@ -30,6 +31,14 @@ internal class MeshRoomFragment : ViewBindingFragment<FragmentMeshRoomBinding>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (isEnabled) {
+                isEnabled = false
+                viewModel.onBackPressed()
+                requireActivity().onBackPressed()
+            }
+        }
+
         initRecyclerView()
         initSearch()
 

@@ -4,14 +4,16 @@ import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
 import java.util.*
 
 internal class MeshList(
-    private val inner: LinkedList<ClientInfo> = LinkedList()
+    private val inner: LinkedList<ClientInfo> = LinkedList(),
+    private val isPositiveDirection: Boolean,
 ) : List<ClientInfo> by inner {
 
     fun add(client: ClientInfo, parentId: String? = null) {
         while (parentId != null && inner.isNotEmpty() && inner.last.id != parentId) {
             inner.removeLast()
         }
-        inner.add(client)
+        val position = size.inc() * if (isPositiveDirection) 1 else -1
+        inner.add(client.copy(positionInMesh = position))
     }
 
     fun remove(client: ClientInfo) {

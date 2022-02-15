@@ -22,7 +22,7 @@ class ClientMeshFragment : Fragment() {
 
     private val clientMesh
         get() = ClientMeshManager.getInstance(requireContext())
-    private val clientInfo = ClientInfo(UUID.randomUUID().toString(), "Nurbol", "COM-18", "")
+    private val clientInfo = ClientInfo(UUID.randomUUID().toString(), "Nurbol", "COM-18", 0)
 
     private var isDiscovering = false
         set(value) {
