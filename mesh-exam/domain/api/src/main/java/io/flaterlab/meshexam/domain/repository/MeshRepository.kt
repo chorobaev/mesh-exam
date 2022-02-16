@@ -5,9 +5,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface MeshRepository {
 
-    fun startMesh(examId: String): Flow<MeshModel>
+    fun createMesh(examId: String): Flow<MeshModel>
 
     fun stopMesh()
 
     suspend fun removeClient(clientId: String)
+
+    suspend fun startExam(examId: String)
 }

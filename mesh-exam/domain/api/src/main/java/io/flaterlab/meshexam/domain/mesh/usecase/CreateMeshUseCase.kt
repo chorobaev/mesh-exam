@@ -10,6 +10,6 @@ class CreateMeshUseCase @Inject constructor(
 ) {
 
     operator fun invoke(examId: String): Flow<MeshModel> {
-        return meshRepository.startMesh(examId)
+        return meshRepository.createMesh(examId)
     }
 }

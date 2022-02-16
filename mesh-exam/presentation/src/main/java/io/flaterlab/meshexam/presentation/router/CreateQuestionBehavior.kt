@@ -5,7 +5,7 @@ import androidx.lifecycle.lifecycleScope
 import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.androidbase.toBundleArgs
 import io.flaterlab.meshexam.create.ui.question.CreateQuestionActionBehavior
-import io.flaterlab.meshexam.feature.meshroom.MeshRoomLauncher
+import io.flaterlab.meshexam.feature.meshroom.ui.meshroom.MeshRoomLauncher
 import io.flaterlab.meshexam.permission.MeshPermissionDialogFragment
 import io.flaterlab.meshexam.presentation.R
 import io.flaterlab.meshexam.presentation.di.FragmentEntryPoint

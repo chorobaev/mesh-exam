@@ -20,7 +20,7 @@ internal class MeshRepositoryImpl @Inject constructor(
     private val examDao = database.examDao()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun startMesh(examId: String): Flow<MeshModel> {
+    override fun createMesh(examId: String): Flow<MeshModel> {
         return flowOf(examId)
             .map { id ->
                 val exam = examDao.getExamById(id)
@@ -42,9 +42,13 @@ internal class MeshRepositoryImpl @Inject constructor(
             }
     }
 
+    override fun stopMesh() = hostMeshManager.stop()
+
     override suspend fun removeClient(clientId: String) {
         TODO("implement removal when reconnect logic is ready")
     }
 
-    override fun stopMesh() = hostMeshManager.stop()
+    override suspend fun startExam(examId: String) {
+        TODO("Not yet implemented")
+    }
 }

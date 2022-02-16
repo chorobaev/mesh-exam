@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.feature.meshroom
+package io.flaterlab.meshexam.feature.meshroom.ui.meshroom
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

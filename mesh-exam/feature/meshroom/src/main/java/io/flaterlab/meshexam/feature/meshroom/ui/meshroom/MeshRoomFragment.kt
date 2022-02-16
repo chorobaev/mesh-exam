@@ -1,4 +1,4 @@
-package io.flaterlab.meshexam.feature.meshroom
+package io.flaterlab.meshexam.feature.meshroom.ui.meshroom
 
 import android.os.Bundle
 import android.text.Spannable
@@ -6,14 +6,15 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.activity.addCallback
 import androidx.core.text.toSpannable
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import io.flaterlab.meshexam.androidbase.TextWatcherManager
-import io.flaterlab.meshexam.androidbase.ViewBindingFragment
-import io.flaterlab.meshexam.androidbase.ViewBindingProvider
-import io.flaterlab.meshexam.androidbase.bindTextWatcher
+import io.flaterlab.meshexam.androidbase.*
 import io.flaterlab.meshexam.androidbase.common.adapter.ClientListAdapter
+import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
+import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.databinding.FragmentMeshRoomBinding
 import io.flaterlab.meshexam.feature.meshroom.dvo.ClientDvo
+import io.flaterlab.meshexam.feature.meshroom.ui.monitor.MonitorLauncher
 import io.flaterlab.meshexam.uikit.ext.getColorAttr
 import javax.inject.Inject
 
@@ -47,6 +48,14 @@ internal class MeshRoomFragment : ViewBindingFragment<FragmentMeshRoomBinding>()
             setExamName(exam.name)
         }
         viewModel.clients.observe(viewLifecycleOwner, clientListAdapter::submitList)
+        viewModel.commandStartExam.observe(viewLifecycleOwner) { examId ->
+            findNavController().navigate(
+                R.id.action_meshRoomFragment_to_monitorFragment,
+                MonitorLauncher(examId).toBundleArgs(),
+            )
+        }
+
+        binding.btnStartExam.clickWithDebounce(action = viewModel::onStartClicked)
     }
 
     private fun initRecyclerView() = with(binding.recyclerViewMeshClients) {

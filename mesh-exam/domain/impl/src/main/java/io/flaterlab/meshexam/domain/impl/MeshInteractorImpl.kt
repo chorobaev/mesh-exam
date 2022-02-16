@@ -9,4 +9,8 @@ class MeshInteractorImpl @Inject constructor(
 ) : MeshInteractor {
 
     override fun stopMesh() = meshRepository.stopMesh()
+
+    override suspend fun startExam(examId: String) {
+        meshRepository.startExam(examId)
+    }
 }

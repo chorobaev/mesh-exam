@@ -7,7 +7,20 @@
 
     <fragment
         android:id="@+id/meshRoomFragment"
-        android:name="io.flaterlab.meshexam.feature.meshroom.MeshRoomFragment"
+        android:name="io.flaterlab.meshexam.feature.meshroom.ui.meshroom.MeshRoomFragment"
         android:label="fragment_mesh_room"
-        tools:layout="@layout/fragment_mesh_room" />
+        tools:layout="@layout/fragment_mesh_room" >
+        <action
+            android:id="@+id/action_meshRoomFragment_to_monitorFragment"
+            app:destination="@id/monitorFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/monitorFragment"
+        android:name="io.flaterlab.meshexam.feature.meshroom.ui.monitor.MonitorFragment"
+        android:label="fragment_monitor"
+        tools:layout="@layout/fragment_monitor" />
 </navigation>

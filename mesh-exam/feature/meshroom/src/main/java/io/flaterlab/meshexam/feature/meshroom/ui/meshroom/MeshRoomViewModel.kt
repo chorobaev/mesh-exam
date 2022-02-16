@@ -1,16 +1,18 @@
-package io.flaterlab.meshexam.feature.meshroom
+package io.flaterlab.meshexam.feature.meshroom.ui.meshroom
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
+import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.domain.create.usecase.GetExamUseCase
 import io.flaterlab.meshexam.domain.interactor.MeshInteractor
 import io.flaterlab.meshexam.domain.mesh.usecase.CreateMeshUseCase
 import io.flaterlab.meshexam.domain.mesh.usecase.RemoveClientUseCase
+import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.dvo.ClientDvo
 import io.flaterlab.meshexam.feature.meshroom.dvo.ExamInfoDvo
 import kotlinx.coroutines.Job
@@ -36,6 +38,8 @@ internal class MeshRoomViewModel @Inject constructor(
     val exam = MutableLiveData<ExamInfoDvo>()
     val clients = MutableLiveData<List<ClientDvo>>(emptyList())
 
+    val commandStartExam = SingleLiveEvent<String>()
+
     private var _clients: List<ClientDvo> = emptyList()
     private var searchText: String? = null
     private var meshJob: Job? = null
@@ -48,7 +52,7 @@ internal class MeshRoomViewModel @Inject constructor(
     private fun loadExam() {
         viewModelScope.launch {
             val info = getExamUseCase(launcher.examId).exam
-            exam.value = ExamInfoDvo(info.id, info.name)
+            exam.value = ExamInfoDvo(info.id, info.name, info.type)
         }
     }
 
@@ -97,5 +101,16 @@ internal class MeshRoomViewModel @Inject constructor(
 
     fun onBackPressed() {
         meshInteractor.stopMesh()
+    }
+
+    fun onStartClicked() {
+        viewModelScope.launch {
+            try {
+                meshInteractor.startExam(launcher.examId)
+                commandStartExam.value = launcher.examId
+            } catch (ex: Exception) {
+                ex.showLocalizedMessage()
+            }
+        }
     }
 }
