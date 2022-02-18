@@ -15,8 +15,8 @@ internal interface ExamDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExams(vararg exams: ExamEntity)
 
-    @Query("SELECT * FROM exams")
-    fun getExams(): Flow<List<ExamEntity>>
+    @Query("SELECT * FROM exams WHERE hostUserId = :userId")
+    fun getExams(userId: String): Flow<List<ExamEntity>>
 
     @Query("SELECT * FROM exams WHERE examId = :examId")
     suspend fun getExamById(examId: String): ExamEntity

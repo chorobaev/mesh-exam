@@ -2,7 +2,7 @@ package io.flaterlab.meshexam.data.mapper
 
 import io.flaterlab.meshexam.core.Mapper
 import io.flaterlab.meshexam.data.database.entity.ExamEntity
-import io.flaterlab.meshexam.domain.api.model.ExamModel
+import io.flaterlab.meshexam.domain.create.model.ExamModel
 import javax.inject.Inject
 
 internal class ExamEntityToModelMapper @Inject constructor() : Mapper<ExamEntity, ExamModel>{

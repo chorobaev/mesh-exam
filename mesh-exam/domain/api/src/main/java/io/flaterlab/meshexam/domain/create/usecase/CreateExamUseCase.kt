@@ -1,7 +1,7 @@
 package io.flaterlab.meshexam.domain.create.usecase
 
 import io.flaterlab.meshexam.domain.repository.ExamRepository
-import io.flaterlab.meshexam.domain.api.model.CreateExamModel
+import io.flaterlab.meshexam.domain.create.model.CreateExamModel
 import javax.inject.Inject
 
 class CreateExamUseCase @Inject constructor(

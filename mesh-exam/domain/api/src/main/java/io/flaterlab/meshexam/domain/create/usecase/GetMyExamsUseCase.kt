@@ -1,7 +1,7 @@
 package io.flaterlab.meshexam.domain.create.usecase
 
 import io.flaterlab.meshexam.domain.repository.ExamRepository
-import io.flaterlab.meshexam.domain.api.model.ExamModel
+import io.flaterlab.meshexam.domain.create.model.ExamModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

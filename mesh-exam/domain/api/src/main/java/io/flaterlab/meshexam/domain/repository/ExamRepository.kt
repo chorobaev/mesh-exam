@@ -1,7 +1,7 @@
 package io.flaterlab.meshexam.domain.repository
 
-import io.flaterlab.meshexam.domain.api.model.CreateExamModel
-import io.flaterlab.meshexam.domain.api.model.ExamModel
+import io.flaterlab.meshexam.domain.create.model.CreateExamModel
+import io.flaterlab.meshexam.domain.create.model.ExamModel
 import io.flaterlab.meshexam.domain.create.model.*
 import kotlinx.coroutines.flow.Flow
 
@@ -9,7 +9,7 @@ interface ExamRepository {
 
     fun exams(): Flow<List<ExamModel>>
 
-    suspend fun createExam(createExam: CreateExamModel): String
+    suspend fun createExam(model: CreateExamModel): String
 
     suspend fun getExamWithQuestionIdsByExamId(examId: String): ExamWithQuestionIdsModel
 

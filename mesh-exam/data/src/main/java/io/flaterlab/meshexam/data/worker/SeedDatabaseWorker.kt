@@ -7,15 +7,17 @@ import androidx.work.WorkerParameters
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.JsonReader
-import io.flaterlab.meshexam.data.database.MeshDatabase
+import dagger.hilt.android.EntryPointAccessors
 import io.flaterlab.meshexam.data.database.entity.AnswerEntity
 import io.flaterlab.meshexam.data.database.entity.ExamEntity
 import io.flaterlab.meshexam.data.database.entity.QuestionEntity
+import io.flaterlab.meshexam.data.di.SeedDatabaseEntryPoint
 import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
 import io.flaterlab.meshexam.data.worker.entity.AnswerJson
 import io.flaterlab.meshexam.data.worker.entity.ExamJson
 import io.flaterlab.meshexam.data.worker.entity.QuestionJson
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
@@ -25,7 +27,10 @@ internal class SeedDatabaseWorker(
     workerParams: WorkerParameters,
 ) : CoroutineWorker(context, workerParams) {
 
-    private val database = MeshDatabase.getInstance(context)
+    private val entryPoint = EntryPointAccessors
+        .fromApplication(context.applicationContext, SeedDatabaseEntryPoint::class.java)
+    private val userProfileDao = entryPoint.userProfileDao
+    private val database = entryPoint.meshDatabase
     private val examDao get() = database.examDao()
     private val questionDao get() = database.questionsDao()
     private val answerDao get() = database.answerDao()
@@ -55,17 +60,21 @@ internal class SeedDatabaseWorker(
         }
     }
 
-    private suspend fun saveExamList(examList: List<ExamJson>) = database.withTransaction {
-        examList.forEach { exam ->
-            val newExamId = idGenerator.generate()
-            ExamEntity(
-                examId = newExamId,
-                name = exam.name,
-                type = exam.type,
-                durationInMin = exam.durationInMin
-            ).also { examDao.insertExams(it) }
+    private suspend fun saveExamList(examList: List<ExamJson>) {
+        val profile = userProfileDao.userProfile().first()
+        database.withTransaction {
+            examList.forEach { exam ->
+                val newExamId = idGenerator.generate()
+                ExamEntity(
+                    examId = newExamId,
+                    hostUserId = profile.id,
+                    name = exam.name,
+                    type = exam.type,
+                    durationInMin = exam.durationInMin
+                ).also { examDao.insertExams(it) }
 
-            saveQuestionList(newExamId, exam.questions)
+                saveQuestionList(newExamId, exam.questions)
+            }
         }
     }
 

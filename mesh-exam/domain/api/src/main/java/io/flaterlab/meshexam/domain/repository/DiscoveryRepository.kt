@@ -1,6 +1,6 @@
 package io.flaterlab.meshexam.domain.repository
 
-import io.flaterlab.meshexam.domain.api.model.ExamInfoModel
+import io.flaterlab.meshexam.domain.create.model.ExamInfoModel
 import io.flaterlab.meshexam.domain.exam.model.ExamStateModel
 import kotlinx.coroutines.flow.Flow
 

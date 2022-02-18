@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "exams")
 internal data class ExamEntity(
     @PrimaryKey val examId: String,
+    val hostUserId: String,
     val name: String,
     val type: String,
     val durationInMin: Long,

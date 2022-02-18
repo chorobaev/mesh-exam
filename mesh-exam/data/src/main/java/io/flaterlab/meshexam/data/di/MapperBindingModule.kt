@@ -8,21 +8,16 @@ import io.flaterlab.meshexam.core.Mapper
 import io.flaterlab.meshexam.data.database.entity.ExamEntity
 import io.flaterlab.meshexam.data.database.entity.QuestionEntity
 import io.flaterlab.meshexam.data.datastore.entity.UserProfileEntity
-import io.flaterlab.meshexam.data.mapper.CreateExamModelToEntityMapper
 import io.flaterlab.meshexam.data.mapper.CreateQuestionModelToEntityMapper
 import io.flaterlab.meshexam.data.mapper.ExamEntityToModelMapper
 import io.flaterlab.meshexam.data.mapper.UserProfileEntityToModelMapper
-import io.flaterlab.meshexam.domain.api.model.CreateExamModel
-import io.flaterlab.meshexam.domain.api.model.ExamModel
 import io.flaterlab.meshexam.domain.create.model.CreateQuestionModel
+import io.flaterlab.meshexam.domain.create.model.ExamModel
 import io.flaterlab.meshexam.domain.profile.model.UserProfileModel
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal interface MapperBindingModule {
-
-    @Binds
-    fun bindCreateExamModelToEntityMapper(impl: CreateExamModelToEntityMapper): Mapper<CreateExamModel, ExamEntity>
 
     @Binds
     fun bindExamEntityToModelMapper(impl: ExamEntityToModelMapper): Mapper<ExamEntity, ExamModel>

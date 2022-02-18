@@ -9,21 +9,19 @@ import io.flaterlab.meshexam.data.database.entity.QuestionEntity
 import io.flaterlab.meshexam.data.database.entity.update.AnswerContent
 import io.flaterlab.meshexam.data.database.entity.update.AnswerCorrectness
 import io.flaterlab.meshexam.data.database.entity.update.QuestionContent
+import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
-import io.flaterlab.meshexam.domain.api.model.CreateExamModel
-import io.flaterlab.meshexam.domain.api.model.ExamModel
 import io.flaterlab.meshexam.domain.create.model.*
 import io.flaterlab.meshexam.domain.repository.ExamRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import java.util.*
 import javax.inject.Inject
 
 internal class ExamRepositoryImpl @Inject constructor(
     private val database: MeshDatabase,
     private val idGenerator: IdGeneratorStrategy,
-    private val createExamModelMapper: Mapper<CreateExamModel, ExamEntity>,
+    private val userProfileDao: UserProfileDao,
     private val examEntityMapper: Mapper<ExamEntity, ExamModel>,
     private val createQuestionModelMapper: Mapper<CreateQuestionModel, QuestionEntity>,
 ) : ExamRepository {
@@ -32,12 +30,24 @@ internal class ExamRepositoryImpl @Inject constructor(
     private val questionDao = database.questionsDao()
     private val answerDao = database.answerDao()
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun exams(): Flow<List<ExamModel>> {
-        return examDao.getExams().map { it.map(examEntityMapper::invoke) }
+        return userProfileDao.userProfile()
+            .flatMapLatest { profile ->
+                examDao.getExams(profile.id)
+                    .map { it.map(examEntityMapper::invoke) }
+            }
     }
 
-    override suspend fun createExam(createExam: CreateExamModel): String {
-        val entity = createExamModelMapper(createExam)
+    override suspend fun createExam(model: CreateExamModel): String {
+        val profile = userProfileDao.userProfile().first()
+        val entity = ExamEntity(
+            examId = UUID.randomUUID().toString(),
+            hostUserId = profile.id,
+            name = model.name,
+            type = model.type ?: "",
+            durationInMin = model.durationInMin,
+        )
         examDao.insertExams(entity)
         return entity.examId
     }

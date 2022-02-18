@@ -7,7 +7,7 @@ import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.create.R
-import io.flaterlab.meshexam.domain.api.model.CreateExamModel
+import io.flaterlab.meshexam.domain.create.model.CreateExamModel
 import io.flaterlab.meshexam.domain.create.usecase.CreateExamUseCase
 import kotlinx.coroutines.launch
 import javax.inject.Inject

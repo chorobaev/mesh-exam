@@ -1,7 +1,7 @@
 package io.flaterlab.meshexam.data.repository
 
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
-import io.flaterlab.meshexam.domain.api.model.ExamInfoModel
+import io.flaterlab.meshexam.domain.create.model.ExamInfoModel
 import io.flaterlab.meshexam.domain.exam.model.ExamStateModel
 import io.flaterlab.meshexam.domain.repository.DiscoveryRepository
 import io.flaterlab.meshexam.librariy.mesh.client.ClientMeshManager
