@@ -2,6 +2,7 @@ package io.flaterlab.meshexam.data.repository
 
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.domain.api.model.ExamInfoModel
+import io.flaterlab.meshexam.domain.exam.model.ExamStateModel
 import io.flaterlab.meshexam.domain.repository.DiscoveryRepository
 import io.flaterlab.meshexam.librariy.mesh.client.ClientMeshManager
 import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
@@ -33,5 +34,20 @@ internal class DiscoveryRepositoryImpl @Inject constructor(
             positionInMesh = 0,
         )
         clientMeshManager.joinExam(examId, clientInfo)
+    }
+
+    override fun examState(examId: String): Flow<ExamStateModel> {
+        return clientMeshManager.examStarted
+            .map { started ->
+                if (started) {
+                    ExamStateModel.Started(examId)
+                } else {
+                    ExamStateModel.Waiting(examId, "Agile Manifesto")
+                }
+            }
+    }
+
+    override suspend fun leaveExam(examId: String) {
+        clientMeshManager.leaveExam(examId)
     }
 }

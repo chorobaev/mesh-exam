@@ -17,7 +17,7 @@ internal class MeshList(
     }
 
     fun remove(client: ClientInfo) {
-        if (inner.contains(client)) {
+        if (inner.any { it.id == client.id }) {
             while (inner.isNotEmpty() && inner.last != client) {
                 inner.removeLast()
             }

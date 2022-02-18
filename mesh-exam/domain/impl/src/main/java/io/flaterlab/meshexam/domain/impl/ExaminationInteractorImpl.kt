@@ -1,6 +1,7 @@
 package io.flaterlab.meshexam.domain.impl
 
 import io.flaterlab.meshexam.domain.api.model.ExamInfoModel
+import io.flaterlab.meshexam.domain.exam.model.ExamStateModel
 import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
 import io.flaterlab.meshexam.domain.repository.DiscoveryRepository
 import kotlinx.coroutines.flow.Flow
@@ -16,5 +17,13 @@ class ExaminationInteractorImpl @Inject constructor(
 
     override suspend fun joinExam(examId: String) {
         discoveryRepository.joinExam(examId)
+    }
+
+    override fun examState(examId: String): Flow<ExamStateModel> {
+        return discoveryRepository.examState(examId)
+    }
+
+    override suspend fun leaveExam(examId: String) {
+        discoveryRepository.leaveExam(examId)
     }
 }

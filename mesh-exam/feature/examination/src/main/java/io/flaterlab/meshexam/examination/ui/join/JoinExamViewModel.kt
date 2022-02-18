@@ -19,7 +19,8 @@ internal class JoinExamViewModel @Inject constructor(
 
     private val launcher: ExamLauncher = savedStateHandle.getLauncher()
 
-    val commandConnected = SingleLiveEvent<Unit>()
+    val commandConnected = SingleLiveEvent<String>()
+    val commandConnectionFailed = SingleLiveEvent<Unit>()
 
     init {
         joinExam()
@@ -29,9 +30,10 @@ internal class JoinExamViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 examinationInteractor.joinExam(launcher.examId)
-                commandConnected.call()
+                commandConnected.value = launcher.examId
             } catch (e: Exception) {
                 e.showLocalizedMessage()
+                commandConnectionFailed.call()
             }
         }
     }

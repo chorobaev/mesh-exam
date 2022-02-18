@@ -31,13 +31,13 @@ class QuestionDetailsViewModel @Inject constructor(
     private val updateAnswerCorrectnessUseCase: UpdateAnswerCorrectnessUseCase,
 ) : BaseViewModel() {
 
-    val launcher: QuestionDetailsLauncher = savedStateHandle.getLauncher()
+    private val launcher: QuestionDetailsLauncher = savedStateHandle.getLauncher()
 
     val question = getQuestionUseCase(launcher.questionId)
         .map { QuestionDvo(it.id, it.content, it.type.toString(), it.score) }
         .onEach(::_question::set)
         .onEach { Timber.d(it.toString()) }
-        .catch { it.localizedMessage?.let(Text::from)?.also(message::setValue) }
+        .catch { }
 
     val answers = getAnswersUseCase(launcher.questionId)
         .map { list ->

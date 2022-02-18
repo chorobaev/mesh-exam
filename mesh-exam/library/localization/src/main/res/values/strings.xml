@@ -15,6 +15,8 @@
     <string name="common_loading">Loading…</string>
     <string name="common_allow">Allow</string>
     <string name="common_cancel">Cancel</string>
+    <string name="common_yes">Yes</string>
+    <string name="common_no">No</string>
 
     <string name="common_appIconContentDesc">Icon of the application</string>
 
@@ -53,6 +55,8 @@
     <string name="mesh_client_status_intPositionLeft">From the left %d</string>
     <string name="mesh_start_createProfile">Create profile before starting</string>
 
+    <string name="monitor_finishConfirmMessage">Do you really want to finish the exam?</string>
+
     <string name="profile_edit_editProfileTitle">Edit</string>
     <string name="profile_edit_firstNameTitle">First name*</string>
     <string name="profile_edit_firstNameHint">James</string>
@@ -70,6 +74,7 @@
 
     <string name="exam_join_connecting">Connecting</string>
     <string name="exam_join_connectedTitle">Successfully connected!\nThe host will start the examination soon.</string>
+    <string name="exam_join_leaveConfirmMessage">Do you really want to leave the exam?</string>
     <string name="exam_main_buttonSubmit">Submit</string>
     <string name="exam_main_timerPlaceholder">--:--</string>
 

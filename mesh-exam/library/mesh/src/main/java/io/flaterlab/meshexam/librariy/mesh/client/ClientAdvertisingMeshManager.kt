@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.android.gms.nearby.Nearby
 import com.google.android.gms.nearby.connection.AdvertisingOptions
 import com.google.android.gms.nearby.connection.ConnectionsClient
+import com.google.android.gms.nearby.connection.Payload
 import com.google.android.gms.nearby.connection.Strategy
 import com.google.gson.GsonBuilder
 import io.flaterlab.meshexam.librariy.mesh.common.ConnectionsLifecycleAdapterCallback2
@@ -14,6 +15,7 @@ import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
 import io.flaterlab.meshexam.librariy.mesh.common.parser.AdvertiserInfoJsonParser
 import io.flaterlab.meshexam.librariy.mesh.common.parser.ClientInfoJsonParser
 import io.flaterlab.meshexam.librariy.mesh.common.parser.JsonParser
+import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
 internal class ClientAdvertisingMeshManager(
@@ -51,10 +53,6 @@ internal class ClientAdvertisingMeshManager(
             .build()
         nearby.startAdvertising(infoJson, serviceId, connectionsCallback, options)
             .addOnFailureListener(::onError)
-    }
-
-    fun disconnect() {
-        child?.first?.let(nearby::disconnectFromEndpoint)
     }
 
     fun close() {
@@ -103,6 +101,13 @@ internal class ClientAdvertisingMeshManager(
         close()
         onErrorListener(e)
         Timber.e(e)
+    }
+
+    suspend fun forwardPayload(payload: Payload) {
+        nearby.sendPayload(
+            child?.first ?: throw IllegalStateException("Has not child"),
+            payload
+        ).await()
     }
 
     companion object {

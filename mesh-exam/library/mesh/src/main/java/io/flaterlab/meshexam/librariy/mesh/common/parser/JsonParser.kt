@@ -1,6 +1,6 @@
 package io.flaterlab.meshexam.librariy.mesh.common.parser
 
-interface JsonParser<T> {
+internal interface JsonParser<T> {
 
     val toJsonParser get() = ::toJson
     val fromJsonParser get() = ::fromJson

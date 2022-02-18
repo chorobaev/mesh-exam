@@ -1,0 +1,13 @@
+package io.flaterlab.meshexam.domain.exam.model
+
+sealed class ExamStateModel {
+
+    data class Started(
+        val examId: String,
+    ) : ExamStateModel()
+
+    data class Waiting(
+        val examId: String,
+        val examName: String,
+    ) : ExamStateModel()
+}

@@ -6,6 +6,8 @@ import io.flaterlab.meshexam.domain.mesh.model.ClientModel
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
 import io.flaterlab.meshexam.domain.repository.MeshRepository
 import io.flaterlab.meshexam.librariy.mesh.common.dto.AdvertiserInfo
+import io.flaterlab.meshexam.librariy.mesh.common.dto.FromHostPayload
+import io.flaterlab.meshexam.librariy.mesh.common.dto.StartExamPayload
 import io.flaterlab.meshexam.librariy.mesh.host.HostMeshManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
@@ -49,6 +51,11 @@ internal class MeshRepositoryImpl @Inject constructor(
     }
 
     override suspend fun startExam(examId: String) {
-        TODO("Not yet implemented")
+        hostMeshManager.sendPayload(
+            FromHostPayload(
+                type = StartExamPayload.TYPE_KEY,
+                data = ""
+            )
+        )
     }
 }

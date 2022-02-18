@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.android.gms.nearby.Nearby
 import com.google.android.gms.nearby.connection.AdvertisingOptions
 import com.google.android.gms.nearby.connection.ConnectionsClient
+import com.google.android.gms.nearby.connection.Payload
 import com.google.android.gms.nearby.connection.Strategy
 import com.google.gson.GsonBuilder
 import io.flaterlab.meshexam.librariy.mesh.common.ConnectionsLifecycleAdapterCallback2
@@ -11,11 +12,16 @@ import io.flaterlab.meshexam.librariy.mesh.common.LOW_ENERGY
 import io.flaterlab.meshexam.librariy.mesh.common.dto.*
 import io.flaterlab.meshexam.librariy.mesh.common.parser.AdvertiserInfoJsonParser
 import io.flaterlab.meshexam.librariy.mesh.common.parser.ClientInfoJsonParser
+import io.flaterlab.meshexam.librariy.mesh.common.parser.FromHostPayloadParser
 import io.flaterlab.meshexam.librariy.mesh.common.parser.JsonParser
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
 class HostMeshManager internal constructor(
@@ -24,6 +30,7 @@ class HostMeshManager internal constructor(
     private val connectionsCallback: ConnectionsLifecycleAdapterCallback2<ClientInfo>,
     private val payloadCallback: HostPayloadAdapterCallback,
     private val advertiserJsonParser: JsonParser<AdvertiserInfo>,
+    private val fromHostPayloadParser: JsonParser<FromHostPayload>,
 ) : ConnectionsLifecycleAdapterCallback2.AdapterCallback<ClientInfo>,
     HostPayloadAdapterCallback.AdapterCallback {
 
@@ -31,6 +38,8 @@ class HostMeshManager internal constructor(
     private var onClientSetChangeListener: ((MeshResult<HostMesh>) -> Unit)? = null
     private val left = MeshList(isPositiveDirection = false)
     private val right = MeshList(isPositiveDirection = true)
+
+    private val children = MeshHand()
 
     init {
         connectionsCallback.adapterCallback = this
@@ -102,6 +111,7 @@ class HostMeshManager internal constructor(
     override fun onConnected(endpointId: String, info: ClientInfo) {
         Timber.d("Connected: $endpointId")
         clientConnected(info)
+        children.addEndpointId(endpointId)
     }
 
     override fun onRejected(endpointId: String, info: ClientInfo) {
@@ -115,6 +125,8 @@ class HostMeshManager internal constructor(
     override fun onDisconnected(endpointId: String, info: ClientInfo) {
         Timber.d("Disconnected: $endpointId -> $info")
         clientDisconnected(info)
+        children.removeEndpointId(endpointId)
+        if (left.isEmpty() xor right.isEmpty()) advertise()
     }
 
     override fun rejectConnection(endpointId: String) {
@@ -140,9 +152,6 @@ class HostMeshManager internal constructor(
         left.remove(clientInfo)
         right.remove(clientInfo)
         emmitClients()
-
-        // TODO: add reconnection logic
-        // if (left.isEmpty() xor right.isEmpty()) advertise()
     }
 
     private fun emmitClients() {
@@ -165,6 +174,15 @@ class HostMeshManager internal constructor(
         clientDisconnected(data.clientInfo)
     }
 
+    suspend fun sendPayload(payload: FromHostPayload) {
+        coroutineScope {
+            children.asList().map { endpointId ->
+                val bytes = fromHostPayloadParser.toJson(payload).toByteArray()
+                async { nearby.sendPayload(endpointId, Payload.fromBytes(bytes)).await() }
+            }.awaitAll()
+        }
+    }
+
     companion object {
 
         @Volatile
@@ -184,6 +202,7 @@ class HostMeshManager internal constructor(
                             ),
                             payloadCallback = HostPayloadAdapterCallback(gson),
                             advertiserJsonParser = AdvertiserInfoJsonParser(gson),
+                            fromHostPayloadParser = FromHostPayloadParser(gson)
                         )
                     }
                     .also(::instance::set)

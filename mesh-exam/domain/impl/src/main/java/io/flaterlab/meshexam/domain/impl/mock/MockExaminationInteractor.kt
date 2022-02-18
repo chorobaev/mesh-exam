@@ -1,8 +1,10 @@
 package io.flaterlab.meshexam.domain.impl.mock
 
 import io.flaterlab.meshexam.domain.api.model.ExamInfoModel
+import io.flaterlab.meshexam.domain.exam.model.ExamStateModel
 import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -21,6 +23,14 @@ class MockExaminationInteractor @Inject constructor(
     }
 
     override suspend fun joinExam(examId: String) {
+        println("Joining exam")
+    }
 
+    override fun examState(examId: String): Flow<ExamStateModel> {
+        return emptyFlow()
+    }
+
+    override suspend fun leaveExam(examId: String) {
+        println("Leaving exam")
     }
 }

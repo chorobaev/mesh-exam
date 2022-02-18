@@ -27,7 +27,7 @@ internal class ClientDiscoveryMeshManager(
     private val nearby: ConnectionsClient,
     private val discoveryCallback: EndpointDiscoveryAdapterCallback,
     private val connectionsCallback: ConnectionsLifecycleAdapterCallback<AdvertiserInfo>,
-    private val payloadCallback: ClientPayloadAdapterCallback,
+    private val payloadCallback: BytesForwardingPayloadAdapter,
     private val jsonParserHelper: JsonParserHelper,
 ) : EndpointDiscoveryAdapterCallback.AdapterCallback,
     ConnectionsLifecycleAdapterCallback.AdapterCallback<AdvertiserInfo> {
@@ -127,6 +127,19 @@ internal class ClientDiscoveryMeshManager(
             .addOnFailureListener(::throwConnectionException)
     }
 
+    fun leaveExam(examId: String) {
+        val advertiserInfo = parentInfo?.second
+        if (advertiserInfo == null || examId != advertiserInfo.examId) {
+            throw IllegalArgumentException(
+                "Client is not joined to $examId. Joined ${parentInfo?.second}"
+            )
+        }
+        joinResult?.cancel()
+        stopDiscovery()
+        nearby.stopAllEndpoints()
+        advertiserInfoCache.clear()
+    }
+
     override fun onRequested(endpointId: String, info: AdvertiserInfo) {
         nearby.acceptConnection(endpointId, payloadCallback)
             .addOnFailureListener(::throwConnectionException)
@@ -205,6 +218,10 @@ internal class ClientDiscoveryMeshManager(
         nearby.sendPayload(parentInfo!!.first, Payload.fromBytes(bytes)).await()
     }
 
+    fun setOnBytesReceivedListener(listener: ((ByteArray) -> Unit)?) {
+        payloadCallback.onBytesReceivedListener = listener ?: {}
+    }
+
     companion object {
         fun getInstance(context: Context): ClientDiscoveryMeshManager =
             GsonBuilder()
@@ -218,7 +235,7 @@ internal class ClientDiscoveryMeshManager(
                         connectionsCallback = ConnectionsLifecycleAdapterCallback(
                             AdvertiserInfoJsonParser(gson)
                         ),
-                        payloadCallback = ClientPayloadAdapterCallback(gson),
+                        payloadCallback = BytesForwardingPayloadAdapter(),
                         jsonParserHelper = JsonParserHelper.getInstance(gson)
                     )
                 }

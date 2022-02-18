@@ -47,7 +47,7 @@ internal class QuestionDetailsFragment : ViewBindingFragment<FragmentQuestionDet
         registerChangeTextResultListeners()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.question.collectLatest { dvo ->
                         binding.tvQuestion.text = dvo.content

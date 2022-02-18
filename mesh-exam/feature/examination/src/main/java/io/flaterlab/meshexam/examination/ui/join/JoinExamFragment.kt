@@ -8,6 +8,8 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.flaterlab.meshexam.androidbase.ViewBindingFragment
 import io.flaterlab.meshexam.androidbase.ViewBindingProvider
+import io.flaterlab.meshexam.androidbase.toBundleArgs
+import io.flaterlab.meshexam.examination.ExamLauncher
 import io.flaterlab.meshexam.examination.R
 import io.flaterlab.meshexam.examination.databinding.FragmentJoinExamBinding
 
@@ -26,8 +28,14 @@ internal class JoinExamFragment : ViewBindingFragment<FragmentJoinExamBinding>()
         super.onViewCreated(view, savedInstanceState)
 
         initAnimation()
-        viewModel.commandConnected.observe(viewLifecycleOwner) {
-            findNavController().navigate(R.id.action_joinExamFragment_to_joinedFragment)
+        viewModel.commandConnected.observe(viewLifecycleOwner) { examId ->
+            findNavController().navigate(
+                R.id.action_joinExamFragment_to_joinedFragment,
+                ExamLauncher(examId).toBundleArgs()
+            )
+        }
+        viewModel.commandConnectionFailed.observe(viewLifecycleOwner) {
+            findNavController().popBackStack()
         }
     }
 
