@@ -23,7 +23,6 @@ internal class JoinExamFragment : ViewBindingFragment<FragmentJoinExamBinding>()
     override val viewBinder: ViewBindingProvider<FragmentJoinExamBinding>
         get() = FragmentJoinExamBinding::inflate
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

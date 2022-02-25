@@ -4,10 +4,10 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import io.flaterlab.meshexam.examination.ui.question.QuestionFragment
 import io.flaterlab.meshexam.examination.ui.question.QuestionLauncher
-import javax.inject.Inject
 
-internal class QuestionPagerAdapter @Inject constructor(
+internal class QuestionPagerAdapter(
     fragment: Fragment,
+    private val attemptId: String,
 ) : FragmentStateAdapter(fragment) {
 
     private val questionIds = ArrayList<String>()
@@ -23,7 +23,8 @@ internal class QuestionPagerAdapter @Inject constructor(
     override fun createFragment(position: Int): Fragment {
         return QuestionFragment(
             QuestionLauncher(
-                questionIds[position]
+                attemptId = attemptId,
+                questionId = questionIds[position],
             )
         )
     }

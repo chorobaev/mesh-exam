@@ -5,5 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 internal data class QuestionLauncher(
+    val attemptId: String,
     val questionId: String,
 ) : Parcelable

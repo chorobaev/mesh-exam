@@ -14,7 +14,7 @@ internal interface QuestionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertQuestions(vararg question: QuestionEntity)
 
-    @Query("SELECT questionId FROM questions WHERE hostExamId = :examId")
+    @Query("SELECT questionId FROM questions WHERE hostExamId = :examId ORDER BY orderNumber")
     suspend fun getQuestionIdsByExamId(examId: String): List<String>
 
     @Query("SELECT * FROM questions WHERE hostExamId = :examId")

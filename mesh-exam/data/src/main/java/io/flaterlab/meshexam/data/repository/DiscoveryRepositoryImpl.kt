@@ -3,6 +3,7 @@ package io.flaterlab.meshexam.data.repository
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.domain.create.model.ExamInfoModel
 import io.flaterlab.meshexam.domain.exam.model.ExamStateModel
+import io.flaterlab.meshexam.domain.repository.AttemptRepository
 import io.flaterlab.meshexam.domain.repository.DiscoveryRepository
 import io.flaterlab.meshexam.librariy.mesh.client.ClientMeshManager
 import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
@@ -14,6 +15,7 @@ import javax.inject.Inject
 internal class DiscoveryRepositoryImpl @Inject constructor(
     private val clientMeshManager: ClientMeshManager,
     private val profileDao: UserProfileDao,
+    private val attemptRepository: AttemptRepository,
 ) : DiscoveryRepository {
 
     override fun discoverExams(): Flow<List<ExamInfoModel>> {
@@ -40,7 +42,8 @@ internal class DiscoveryRepositoryImpl @Inject constructor(
         return clientMeshManager.examStarted
             .map { started ->
                 if (started) {
-                    ExamStateModel.Started(examId)
+                    val attemptId = attemptRepository.attempt(examId)
+                    ExamStateModel.Started(examId, attemptId)
                 } else {
                     ExamStateModel.Waiting(examId, "Agile Manifesto")
                 }

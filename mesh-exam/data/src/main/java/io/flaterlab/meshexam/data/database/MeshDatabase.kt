@@ -8,12 +8,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import io.flaterlab.meshexam.data.database.dao.AnswerDao
-import io.flaterlab.meshexam.data.database.dao.ExamDao
-import io.flaterlab.meshexam.data.database.dao.QuestionDao
-import io.flaterlab.meshexam.data.database.entity.AnswerEntity
-import io.flaterlab.meshexam.data.database.entity.ExamEntity
-import io.flaterlab.meshexam.data.database.entity.QuestionEntity
+import io.flaterlab.meshexam.data.database.dao.*
+import io.flaterlab.meshexam.data.database.entity.*
 import io.flaterlab.meshexam.data.worker.SeedDatabaseWorker
 import io.flaterlab.meshexam.data.worker.SeedDatabaseWorker.Companion.KEY_FILE_NAME
 
@@ -22,6 +18,8 @@ import io.flaterlab.meshexam.data.worker.SeedDatabaseWorker.Companion.KEY_FILE_N
         ExamEntity::class,
         QuestionEntity::class,
         AnswerEntity::class,
+        AttemptEntity::class,
+        AttemptAnswerEntity::class,
     ],
     version = 1,
     exportSchema = false,
@@ -33,6 +31,10 @@ internal abstract class MeshDatabase : RoomDatabase() {
     abstract fun questionsDao(): QuestionDao
 
     abstract fun answerDao(): AnswerDao
+
+    abstract fun attemptDao(): AttemptDao
+
+    abstract fun attemptAnswerDao(): AttemptAnswerDao
 
     companion object {
         @Volatile

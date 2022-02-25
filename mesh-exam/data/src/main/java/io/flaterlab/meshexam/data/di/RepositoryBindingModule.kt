@@ -25,4 +25,7 @@ internal interface RepositoryBindingModule {
 
     @Binds
     fun bindProfileRepository(impl: ProfileRepositoryImpl): ProfileRepository
+
+    @Binds
+    fun bindAttemptRepository(impl: AttemptRepositoryImpl): AttemptRepository
 }

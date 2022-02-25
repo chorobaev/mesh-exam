@@ -25,7 +25,7 @@ internal class JoinedViewModel @Inject constructor(
 
     val examName = MutableLiveData<String>()
 
-    val commandExamStarted = SingleLiveEvent<String>()
+    val commandExamStarted = SingleLiveEvent<Pair<String, String>>()
     val commandShowLeavePrompt = SingleLiveEvent<Unit>()
     val commandLeaveExam = SingleLiveEvent<Unit>()
 
@@ -33,8 +33,10 @@ internal class JoinedViewModel @Inject constructor(
         examInteractor.examState(launcher.examId)
             .onEach { examState ->
                 when (examState) {
-                    is ExamStateModel.Started -> commandExamStarted.value = examState.examId
-                    is ExamStateModel.Waiting -> examName.value = examState.examName
+                    is ExamStateModel.Started ->
+                        commandExamStarted.value = examState.examId to examState.attemptId
+                    is ExamStateModel.Waiting ->
+                        examName.value = examState.examName
                 }
             }
             .launchIn(viewModelScope)

@@ -6,23 +6,23 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.addCallback
 import androidx.core.view.children
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.flaterlab.meshexam.androidbase.ViewBindingFragment
 import io.flaterlab.meshexam.androidbase.ViewBindingProvider
 import io.flaterlab.meshexam.androidbase.ext.applyLayoutParams
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
+import io.flaterlab.meshexam.androidbase.ext.showAlert
+import io.flaterlab.meshexam.androidbase.toBundleArgs
 import io.flaterlab.meshexam.examination.R
 import io.flaterlab.meshexam.examination.databinding.FragmentExamBinding
 import io.flaterlab.meshexam.examination.ui.exam.adapter.QuestionPagerAdapter
-import javax.inject.Inject
-import javax.inject.Provider
+import io.flaterlab.meshexam.examination.ui.result.ResultLauncher
 
 @AndroidEntryPoint
 internal class ExamFragment : ViewBindingFragment<FragmentExamBinding>() {
 
-    @Inject
-    lateinit var pagerAdapterProvider: Provider<QuestionPagerAdapter>
     private val pagerAdapter get() = binding.viewPagerQuestions.adapter as QuestionPagerAdapter
 
     private val viewModel: ExamViewModel by vm()
@@ -41,11 +41,7 @@ internal class ExamFragment : ViewBindingFragment<FragmentExamBinding>() {
 
     private fun initBackPressHandle() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-
-            if (isEnabled) {
-                isEnabled = false
-                requireActivity().onBackPressed()
-            }
+            viewModel.onBackPressed()
         }
     }
 
@@ -58,10 +54,25 @@ internal class ExamFragment : ViewBindingFragment<FragmentExamBinding>() {
         }
         viewModel.timeLeft.observe(viewLifecycleOwner, binding.tvExamTimer::setText)
         viewModel.questionIds.observe(viewLifecycleOwner, pagerAdapter::submitList)
+
+        viewModel.commandShowFinishingConfirm.observe(viewLifecycleOwner) {
+            showAlert(
+                message = getString(R.string.exam_main_leaveConfirmMessage),
+                positive = getString(R.string.common_yes),
+                negative = getString(R.string.common_no),
+                positiveCallback = { viewModel.onFinishConfirmed() }
+            )
+        }
+        viewModel.commandFinishExam.observe(viewLifecycleOwner) { attemptId ->
+            findNavController().navigate(
+                R.id.action_examFragment_to_resultFragment,
+                ResultLauncher(attemptId).toBundleArgs()
+            )
+        }
     }
 
     private fun initViewPager() {
-        binding.viewPagerQuestions.adapter = pagerAdapterProvider.get()
+        binding.viewPagerQuestions.adapter = QuestionPagerAdapter(this, viewModel.attemptId)
 
         TabLayoutMediator(binding.tabLayoutNumbers, binding.viewPagerQuestions) { tab, position ->
             tab.text = position.plus(1).toString()

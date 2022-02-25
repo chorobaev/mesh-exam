@@ -24,7 +24,17 @@
         android:id="@+id/examFragment"
         android:name="io.flaterlab.meshexam.examination.ui.exam.ExamFragment"
         android:label="fragment_exam"
-        tools:layout="@layout/fragment_exam" />
+        tools:layout="@layout/fragment_exam">
+        <action
+            android:id="@+id/action_examFragment_to_resultFragment"
+            app:destination="@id/resultFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"
+            app:popUpTo="@id/examFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/joinedFragment"
         android:name="io.flaterlab.meshexam.examination.ui.joined.JoinedFragment"
@@ -41,4 +51,9 @@
             app:popUpTo="@id/joinedFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="io.flaterlab.meshexam.examination.ui.result.ResultFragment"
+        android:label="fragment_result"
+        tools:layout="@layout/fragment_result" />
 </navigation>

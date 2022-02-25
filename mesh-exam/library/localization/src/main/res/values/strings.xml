@@ -17,6 +17,7 @@
     <string name="common_cancel">Cancel</string>
     <string name="common_yes">Yes</string>
     <string name="common_no">No</string>
+    <string name="common_back_to_main">Back to main</string>
 
     <string name="common_appIconContentDesc">Icon of the application</string>
 
@@ -75,9 +76,12 @@
     <string name="exam_join_connecting">Connecting</string>
     <string name="exam_join_connectedTitle">Successfully connected!\nThe host will start the examination soon.</string>
     <string name="exam_join_leaveConfirmMessage">Do you really want to leave the exam?</string>
+    <string name="exam_join_createProfile">Create profile before joining</string>
     <string name="exam_main_buttonSubmit">Submit</string>
     <string name="exam_main_timerPlaceholder">--:--</string>
+    <string name="exam_main_leaveConfirmMessage">Do you really want to leave the exam? You won\'t be resume the exam!</string>
+    <string name="exam_result_successfullySubmitted">Successfully submitted!</string>
+    <string name="exam_result_timeTitle">Time:</string>
 
     <string name="permission_mesh_message">MeshExam uses the device\'s location to find nearby examinations. Please grand access to the camera in the application settings.</string>
-    <string name="exam_join_createProfile">Create profile before joining</string>
 </resources>

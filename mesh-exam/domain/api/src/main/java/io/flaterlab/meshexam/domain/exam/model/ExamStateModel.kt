@@ -4,6 +4,7 @@ sealed class ExamStateModel {
 
     data class Started(
         val examId: String,
+        val attemptId: String,
     ) : ExamStateModel()
 
     data class Waiting(
