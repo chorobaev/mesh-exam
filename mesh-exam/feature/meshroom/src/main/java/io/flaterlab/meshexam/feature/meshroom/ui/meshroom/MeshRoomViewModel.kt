@@ -13,6 +13,7 @@ import io.flaterlab.meshexam.domain.interactor.MeshInteractor
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.dvo.ClientDvo
 import io.flaterlab.meshexam.feature.meshroom.dvo.ExamInfoDvo
+import io.flaterlab.meshexam.uikit.view.StateRecyclerView
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
@@ -32,7 +33,8 @@ internal class MeshRoomViewModel @Inject constructor(
 
     val studentAmount = MutableLiveData(0)
     val exam = MutableLiveData<ExamInfoDvo>()
-    val clients = MutableLiveData<List<ClientDvo>>(emptyList())
+    val clients = MutableLiveData<List<ClientDvo>>()
+    val clientsListState = MutableLiveData(StateRecyclerView.State.EMPTY)
 
     val commandStartExam = SingleLiveEvent<String>()
 
@@ -79,9 +81,15 @@ internal class MeshRoomViewModel @Inject constructor(
     }
 
     private fun updateClientList() {
-        clients.value = searchText?.let { text ->
+        val newClientList = searchText?.let { text ->
             _clients.filter { it.fullName.contains(text) }
         } ?: _clients
+        clientsListState.value = if (newClientList.isEmpty()) {
+            StateRecyclerView.State.EMPTY
+        } else {
+            StateRecyclerView.State.NORMAL
+        }
+        clients.value = newClientList
     }
 
     fun onClientClicked(dvo: ClientDvo) {

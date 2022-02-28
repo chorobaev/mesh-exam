@@ -48,6 +48,10 @@ internal class MeshRoomFragment : ViewBindingFragment<FragmentMeshRoomBinding>()
             setExamName(exam.name)
         }
         viewModel.clients.observe(viewLifecycleOwner, clientListAdapter::submitList)
+        viewModel.clientsListState.observe(
+            viewLifecycleOwner,
+            binding.recyclerViewMeshClients::setState
+        )
         viewModel.commandStartExam.observe(viewLifecycleOwner) { examId ->
             findNavController().navigate(
                 R.id.action_meshRoomFragment_to_monitorFragment,
