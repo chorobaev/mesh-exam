@@ -10,8 +10,6 @@ import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.domain.create.usecase.GetExamUseCase
 import io.flaterlab.meshexam.domain.interactor.MeshInteractor
-import io.flaterlab.meshexam.domain.mesh.usecase.CreateMeshUseCase
-import io.flaterlab.meshexam.domain.mesh.usecase.RemoveClientUseCase
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.dvo.ClientDvo
 import io.flaterlab.meshexam.feature.meshroom.dvo.ExamInfoDvo
@@ -27,8 +25,6 @@ import kotlin.math.absoluteValue
 internal class MeshRoomViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getExamUseCase: GetExamUseCase,
-    private val createMeshUseCase: CreateMeshUseCase,
-    private val removeClientUseCase: RemoveClientUseCase,
     private val meshInteractor: MeshInteractor,
 ) : BaseViewModel() {
 
@@ -58,7 +54,7 @@ internal class MeshRoomViewModel @Inject constructor(
 
     private fun startMesh() {
         meshJob?.cancel()
-        meshJob = createMeshUseCase(launcher.examId)
+        meshJob = meshInteractor.creteMesh(launcher.examId)
             .onEach { meshModel ->
                 _clients = meshModel.clients.map { client ->
                     ClientDvo(
@@ -90,7 +86,7 @@ internal class MeshRoomViewModel @Inject constructor(
 
     fun onClientClicked(dvo: ClientDvo) {
         viewModelScope.launch {
-            removeClientUseCase(dvo.id)
+            meshInteractor.removeClient(dvo.id)
         }
     }
 

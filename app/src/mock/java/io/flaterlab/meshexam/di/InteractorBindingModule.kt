@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import io.flaterlab.meshexam.domain.impl.MeshInteractorImpl
 import io.flaterlab.meshexam.domain.impl.ProfileInteractorImpl
 import io.flaterlab.meshexam.domain.impl.mock.MockExaminationInteractor
+import io.flaterlab.meshexam.domain.impl.mock.MockMeshInteractor
 import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
 import io.flaterlab.meshexam.domain.interactor.MeshInteractor
 import io.flaterlab.meshexam.domain.interactor.ProfileInteractor
@@ -22,5 +23,5 @@ interface InteractorBindingModule {
     fun bindProfileInteractor(impl: ProfileInteractorImpl): ProfileInteractor
 
     @Binds
-    fun bindMeshInteractor(impl: MeshInteractorImpl): MeshInteractor
+    fun bindMeshInteractor(impl: MockMeshInteractor): MeshInteractor
 }
