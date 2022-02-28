@@ -4,17 +4,25 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.flaterlab.meshexam.androidbase.ViewBindingFragment
 import io.flaterlab.meshexam.androidbase.ViewBindingProvider
 import io.flaterlab.meshexam.androidbase.ext.showAlert
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.databinding.FragmentMonitorBinding
+import io.flaterlab.meshexam.feature.meshroom.ui.monitor.adapter.MonitorPageAdapter
+import javax.inject.Inject
+import javax.inject.Provider
 
 @AndroidEntryPoint
 internal class MonitorFragment : ViewBindingFragment<FragmentMonitorBinding>() {
 
     private val viewModel: MonitorViewModel by vm()
+
+    @Inject
+    lateinit var monitorPagerAdapterProvider: Provider<MonitorPageAdapter>
+    private val pagerAdapter get() = binding.viewPagerMonitor.adapter as MonitorPageAdapter
 
     override val viewBinder: ViewBindingProvider<FragmentMonitorBinding>
         get() = FragmentMonitorBinding::inflate
@@ -24,6 +32,8 @@ internal class MonitorFragment : ViewBindingFragment<FragmentMonitorBinding>() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             viewModel.onBackPressed()
         }
+
+        initViewPager()
 
         viewModel.exam.observe(viewLifecycleOwner) { exam ->
             binding.toolbarMonitor.run {
@@ -43,5 +53,13 @@ internal class MonitorFragment : ViewBindingFragment<FragmentMonitorBinding>() {
             // TODO: implement a navigation to result screen
             findNavController().popBackStack()
         }
+    }
+
+    private fun initViewPager() {
+        binding.viewPagerMonitor.adapter = monitorPagerAdapterProvider.get()
+
+        TabLayoutMediator(binding.tabLayoutMonitor, binding.viewPagerMonitor) { tab, positrion ->
+            tab.setText(pagerAdapter.items[positrion].first)
+        }.attach()
     }
 }

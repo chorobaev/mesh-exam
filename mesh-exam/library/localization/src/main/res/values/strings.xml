@@ -57,6 +57,8 @@
     <string name="mesh_start_createProfile">Create profile before starting</string>
 
     <string name="monitor_finishConfirmMessage">Do you really want to finish the exam?</string>
+    <string name="monitor_tab_events">Events</string>
+    <string name="monitor_tab_studentList">List of students</string>
 
     <string name="profile_edit_editProfileTitle">Edit</string>
     <string name="profile_edit_firstNameTitle">First name*</string>
