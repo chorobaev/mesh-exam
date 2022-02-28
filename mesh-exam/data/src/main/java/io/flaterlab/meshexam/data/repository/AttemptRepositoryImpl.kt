@@ -59,6 +59,21 @@ internal class AttemptRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun getActiveAttempts(): List<AttemptMetaModel> {
+        return attemptDao
+            .getActiveAttempts()
+            .map { attempt ->
+                val exam = examDao.getExamById(attempt.examId)
+                AttemptMetaModel(
+                    examId = exam.examId,
+                    attemptId = attempt.attemptId,
+                    examName = exam.name,
+                    examInfo = exam.type,
+                    leftTimeInMillis = exam.durationInMin * 60 * 1000 - (Date().time - attempt.createdAt)
+                )
+            }
+    }
+
     override suspend fun addAttemptAnswer(model: SelectAnswerModel) {
         val prevAnswer = attemptAnswerDao
             .attemptAnswerByQuestionId(model.questionId)

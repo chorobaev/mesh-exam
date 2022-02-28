@@ -11,6 +11,8 @@ interface AttemptRepository {
 
     suspend fun getAttemptMetaById(attemptId: String): AttemptMetaModel
 
+    suspend fun getActiveAttempts(): List<AttemptMetaModel>
+
     suspend fun addAttemptAnswer(model: SelectAnswerModel)
 
     suspend fun finishAttempt(attemptId: String)

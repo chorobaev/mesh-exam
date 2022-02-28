@@ -13,6 +13,9 @@ internal interface AttemptDao {
     @Query("SELECT * FROM attempts WHERE attemptId = :attemptId")
     suspend fun getAttemptById(attemptId: String): AttemptEntity
 
+    @Query("SELECT * FROM attempts WHERE submittedAt is null")
+    suspend fun getActiveAttempts(): List<AttemptEntity>
+
     @Update(entity = AttemptEntity::class)
     suspend fun updateToFinishAttempt(vararg attemptFinishing: AttemptFinishing)
 }
