@@ -41,6 +41,7 @@ internal class MonitorFragment : ViewBindingFragment<FragmentMonitorBinding>() {
                 setSubtitle(exam.type)
             }
         }
+        viewModel.timer.observe(viewLifecycleOwner, binding.tvExamTimer::setText)
         viewModel.commandShowFinishPrompt.observe(viewLifecycleOwner) {
             showAlert(
                 message = getString(R.string.monitor_finishConfirmMessage),

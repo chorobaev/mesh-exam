@@ -23,6 +23,7 @@ internal class MonitorViewModel @Inject constructor(
     private val launcher: MonitorLauncher = savedStateHandle.getLauncher()
 
     val exam = MutableLiveData<ExamInfoDvo>()
+    val timer = MutableLiveData<String>()
 
     val commandShowFinishPrompt = SingleLiveEvent<Unit>()
     val commandFinishExam = SingleLiveEvent<Unit>()

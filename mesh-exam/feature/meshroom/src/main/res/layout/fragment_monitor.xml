@@ -56,6 +56,7 @@
             android:id="@+id/tab_layout_monitor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="0dp"
             app:tabBackground="@drawable/selector_monitor_tab_background"
             app:tabIndicatorHeight="0dp"
             app:tabRippleColor="@android:color/transparent"

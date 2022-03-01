@@ -59,6 +59,7 @@
     <string name="monitor_finishConfirmMessage">Do you really want to finish the exam?</string>
     <string name="monitor_tab_events">Events</string>
     <string name="monitor_tab_studentList">List of students</string>
+    <string name="monitor_studentList_searchHint">Search here</string>
 
     <string name="profile_edit_editProfileTitle">Edit</string>
     <string name="profile_edit_firstNameTitle">First name*</string>
