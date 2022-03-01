@@ -44,6 +44,10 @@ internal class MonitorViewModel @Inject constructor(
     }
 
     fun onFinishClicked() {
+        commandShowFinishPrompt.call()
+    }
+
+    fun onFinishConfirmed() {
         meshInteractor.stopMesh()
         commandFinishExam.call()
     }

@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import io.flaterlab.meshexam.androidbase.ext.applyLayoutParams
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.databinding.ItemMonitorEventBinding
 import io.flaterlab.meshexam.feature.meshroom.dvo.EventDvo
@@ -23,6 +24,13 @@ internal class EventListAdapter @Inject constructor(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bindTo(getItem(position))
+        holder.itemView.applyLayoutParams<RecyclerView.LayoutParams> {
+            bottomMargin = if (position == itemCount - 1) {
+                holder.itemView.resources.getDimension(R.dimen.margin_bottom_with_button).toInt()
+            } else {
+                0
+            }
+        }
     }
 
     class ViewHolder(
@@ -37,9 +45,13 @@ internal class EventListAdapter @Inject constructor(
             tvMonitorEventTitle.text = item.title
             tvMonitorEventOwner.text = item.owner
             tvMonitorEventTime.text = Date(item.timeInMillis).let {
-                SimpleDateFormat("hh:mm", Locale.ROOT).format(it)
+                timeFormatter.format(it)
             }
             ivMonitorEventActiveness.isVisible = item.isActive
+        }
+
+        companion object {
+            private val timeFormatter = SimpleDateFormat("hh:mm", Locale.ROOT)
         }
     }
 
