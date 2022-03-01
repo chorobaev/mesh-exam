@@ -4,6 +4,7 @@
     <dimen name="margin_large">32dp</dimen>
     <dimen name="margin_medium">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_extra_small">4dp</dimen>
     <dimen name="margin_between">24dp</dimen>
     <dimen name="margin_bottom_with_button">100dp</dimen>
 
@@ -11,6 +12,7 @@
     <dimen name="bottom_sheet_dialog_handler_padding">14dp</dimen>
 
     <!-- Radius -->
+    <dimen name="radius_extra_small">4dp</dimen>
     <dimen name="radius_small">6dp</dimen>
     <dimen name="radius_medium">8dp</dimen>
     <dimen name="radius_large">16dp</dimen>
