@@ -80,5 +80,6 @@ ext {
             create     : project(':mesh-exam:feature:create'),
             meshroom   : project(':mesh-exam:feature:meshroom'),
             examination: project(':mesh-exam:feature:examination'),
+            result     : project(':mesh-exam:feature:result'),
     ]
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_result"
+    app:startDestination="@id/proxyFragment">
+
+    <fragment
+        android:id="@+id/proxyFragment"
+        android:name="io.flaterlab.meshexam.result.ProxyFragment"
+        android:label="ProxyFragment" >
+        <action
+            android:id="@+id/action_proxyFragment_to_resultListFragment"
+            app:destination="@id/resultListFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"
+            app:popUpTo="@id/proxyFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_proxyFragment_to_individualResultFragment"
+            app:destination="@id/individualResultFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"
+            app:popUpTo="@id/proxyFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/resultListFragment"
+        android:name="io.flaterlab.meshexam.result.ui.list.ResultListFragment"
+        android:label="fragment_result_list"
+        tools:layout="@layout/fragment_result_list" >
+        <action
+            android:id="@+id/action_resultListFragment_to_individualResultFragment"
+            app:destination="@id/individualResultFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:launchSingleTop="false"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/individualResultFragment"
+        android:name="io.flaterlab.meshexam.result.ui.result.IndividualResultFragment"
+        android:label="fragment_individual_result"
+        tools:layout="@layout/fragment_individual_result" />
+</navigation>

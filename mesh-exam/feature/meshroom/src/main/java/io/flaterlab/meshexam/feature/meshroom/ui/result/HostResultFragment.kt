@@ -9,11 +9,16 @@ import io.flaterlab.meshexam.androidbase.ViewBindingProvider
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.databinding.FragmentHostResultBinding
+import io.flaterlab.meshexam.feature.meshroom.router.MeshroomRouter
+import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class HostResultFragment : ViewBindingFragment<FragmentHostResultBinding>() {
 
     private val viewModel: HostResultViewModel by vm()
+
+    @Inject
+    lateinit var meshroomRouter: MeshroomRouter
 
     override val viewBinder: ViewBindingProvider<FragmentHostResultBinding>
         get() = FragmentHostResultBinding::inflate
@@ -28,7 +33,7 @@ internal class HostResultFragment : ViewBindingFragment<FragmentHostResultBindin
             }
         }
         viewModel.commandOpenResults.observe(viewLifecycleOwner) { attemptId ->
-            // TODO: implement opening results screen
+            meshroomRouter.openResultsScreen(attemptId)
         }
         viewModel.commandGoToMain.observe(viewLifecycleOwner) {
             findNavController().popBackStack(R.id.nav_mesh, true)

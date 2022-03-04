@@ -10,6 +10,7 @@
     <include app:graph="@navigation/nav_profile" />
     <include app:graph="@navigation/nav_create_exam" />
     <include app:graph="@navigation/nav_examination" />
+    <include app:graph="@navigation/nav_result" />
 
     <fragment
         android:id="@+id/homeFragment"
@@ -54,6 +55,14 @@
         android:id="@+id/action_global_nav_examination"
         app:destination="@id/nav_examination"
         app:enterAnim="@anim/enter_from_right"
+        app:exitAnim="@anim/exit_to_left"
+        app:popEnterAnim="@anim/enter_from_left"
+        app:popExitAnim="@anim/exit_to_right" />
+    <action
+        android:id="@+id/action_global_nav_result"
+        app:destination="@id/nav_result"
+        app:enterAnim="@anim/enter_from_right"
+        app:launchSingleTop="true"
         app:exitAnim="@anim/exit_to_left"
         app:popEnterAnim="@anim/enter_from_left"
         app:popExitAnim="@anim/exit_to_right" />
