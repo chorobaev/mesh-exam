@@ -9,6 +9,7 @@ import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.dvo.SubmissionDvo
+import io.flaterlab.meshexam.feature.meshroom.ui.result.HostResultLauncher
 import io.flaterlab.meshexam.uikit.view.StateRecyclerView
 import javax.inject.Inject
 
@@ -24,7 +25,7 @@ internal class FinishingViewModel @Inject constructor(
     val submissionListStat = MutableLiveData(StateRecyclerView.State.NORMAL)
 
     val commandConfirmFinish = SingleLiveEvent<Unit>()
-    val commandOpenResult = SingleLiveEvent<String>()
+    val commandOpenResult = SingleLiveEvent<HostResultLauncher>()
 
     init {
         // TODO: add actual implementation
@@ -45,7 +46,7 @@ internal class FinishingViewModel @Inject constructor(
     }
 
     fun onFinishImmediatelyConfirmed() {
-        commandOpenResult.value = launcher.attemptId
+        commandOpenResult.value = HostResultLauncher(launcher.attemptId)
     }
 
     fun onBackPressed() {

@@ -6,6 +6,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.activity.addCallback
 import androidx.core.text.toSpannable
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.flaterlab.meshexam.androidbase.ViewBindingFragment
@@ -13,6 +14,7 @@ import io.flaterlab.meshexam.androidbase.ViewBindingProvider
 import io.flaterlab.meshexam.androidbase.common.adapter.ClientListAdapter
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
 import io.flaterlab.meshexam.androidbase.ext.showAlert
+import io.flaterlab.meshexam.androidbase.toBundleArgs
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.databinding.FragmentFinishingBinding
 import io.flaterlab.meshexam.uikit.ext.getColorAttr
@@ -50,8 +52,11 @@ internal class FinishingFragment : ViewBindingFragment<FragmentFinishingBinding>
                 positiveCallback = { viewModel.onFinishImmediatelyConfirmed() }
             )
         }
-        viewModel.commandOpenResult.observe(viewLifecycleOwner) { attempId ->
-            // TODO: implement navigation
+        viewModel.commandOpenResult.observe(viewLifecycleOwner) { launcher ->
+            findNavController().navigate(
+                R.id.action_finishingFragment_to_hostResultFragment,
+                launcher.toBundleArgs()
+            )
         }
 
         binding.btnForceFinish.clickWithDebounce(action = viewModel::onFinishImmediatelyClicked)

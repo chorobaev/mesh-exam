@@ -40,5 +40,21 @@
         android:id="@+id/finishingFragment"
         android:name="io.flaterlab.meshexam.feature.meshroom.ui.finishing.FinishingFragment"
         android:label="fragment_finishing"
-        tools:layout="@layout/fragment_finishing" />
+        tools:layout="@layout/fragment_finishing" >
+        <action
+            android:id="@+id/action_finishingFragment_to_hostResultFragment"
+            app:destination="@id/hostResultFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:launchSingleTop="true"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right"
+            app:popUpTo="@id/finishingFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/hostResultFragment"
+        android:name="io.flaterlab.meshexam.feature.meshroom.ui.result.HostResultFragment"
+        android:label="fragment_host_result"
+        tools:layout="@layout/fragment_host_result" />
 </navigation>
