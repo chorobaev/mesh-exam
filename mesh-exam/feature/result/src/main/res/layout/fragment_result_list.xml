@@ -1,14 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.list.ResultListFragment">
 
-    <TextView
-        android:text="Host results"
+    <io.flaterlab.meshexam.uikit.view.MeshToolbar
+        android:id="@+id/toolbar_host_result"
         android:layout_width="match_parent"
-        android:gravity="center"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_host_result_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_between"
+        android:paddingHorizontal="@dimen/margin_medium"
+        android:textAppearance="@style/TextAppearance.MeshExam.Large.Medium"
+        android:textColor="?attr/colorOnBackgroundLight"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_host_result"
+        tools:text="@string/result_list_time" />
+
+    <TextView
+        android:id="@+id/tv_host_result_submitted"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_small"
+        android:paddingHorizontal="@dimen/margin_medium"
+        android:textAppearance="@style/TextAppearance.MeshExam.Large.Medium"
+        android:textColor="?attr/colorOnBackgroundLight"
+        app:layout_constraintTop_toBottomOf="@id/tv_host_result_time"
+        tools:text="@string/result_list_submitted" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/et_frame_host_result_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_between"
+        app:layout_constraintTop_toBottomOf="@id/tv_host_result_submitted">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_host_result_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/mesh_search_hint" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <io.flaterlab.meshexam.uikit.view.StateRecyclerView
+        android:id="@+id/recycler_view_results"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_frame_host_result_search" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

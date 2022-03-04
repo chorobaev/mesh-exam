@@ -36,11 +36,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:layout_marginEnd="@dimen/margin_small"
         android:layout_marginBottom="@dimen/margin_medium"
         android:textAppearance="@style/TextAppearance.MeshExam.Small.Regular"
         android:textColor="?attr/colorOnBackgroundLight"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/tv_client_name"
+        app:layout_constraintEnd_toStartOf="@id/tv_client_status_info"
         app:layout_constraintStart_toStartOf="@id/tv_client_name"
         app:layout_constraintTop_toBottomOf="@id/tv_client_name"
         tools:text="COM-18" />
@@ -54,6 +55,18 @@
         android:textAppearance="@style/TextAppearance.MeshExam.Small.Regular"
         android:textColor="?attr/colorOnBackgroundLight"
         app:layout_constraintBaseline_toBaselineOf="@id/tv_client_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="@tools:sample/lorem/random" />
+
+    <TextView
+        android:id="@+id/tv_client_status_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_medium"
+        android:maxLength="25"
+        android:textAppearance="@style/TextAppearance.MeshExam.Small.Regular"
+        android:textColor="?attr/colorOnBackground"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_client_info"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="@tools:sample/lorem/random" />
 

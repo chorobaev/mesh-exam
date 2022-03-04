@@ -94,5 +94,11 @@
     <string name="exam_result_successfullySubmitted">Successfully submitted!</string>
     <string name="exam_result_timeTitle">Time:</string>
 
+
+    <string name="result_list_time">Time: %s</string>
+    <string name="result_list_submitted">Submitted: %d in %d</string>
+    <string name="result_list_item_grade">Grade: %d in %d</string>
+
+
     <string name="permission_mesh_message">MeshExam uses the device\'s location to find nearby examinations. Please grand access to the camera in the application settings.</string>
 </resources>

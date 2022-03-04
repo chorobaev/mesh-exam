@@ -55,6 +55,7 @@ class ClientListAdapter @Inject constructor(
             tvClientInfo.text = item.info.resolve(itemView.context, default = "").ifBlank { "-" }
             tvClientStatus.setText(item.status)
             tvClientStatus.setTextColor(item.provideStatusTextColor(tvClientStatus.context))
+            tvClientStatusInfo.text = item.statusInfoProvider(itemView.context)
         }
     }
 
@@ -63,6 +64,7 @@ class ClientListAdapter @Inject constructor(
         val fullName: String
         val info: Text
         val status: Text
+        val statusInfoProvider: (Context) -> String get() = { "" }
 
         @ColorInt
         fun provideStatusTextColor(context: Context): Int
