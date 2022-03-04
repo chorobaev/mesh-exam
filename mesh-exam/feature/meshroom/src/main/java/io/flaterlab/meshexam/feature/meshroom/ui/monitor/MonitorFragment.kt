@@ -10,6 +10,7 @@ import io.flaterlab.meshexam.androidbase.ViewBindingFragment
 import io.flaterlab.meshexam.androidbase.ViewBindingProvider
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
 import io.flaterlab.meshexam.androidbase.ext.showAlert
+import io.flaterlab.meshexam.androidbase.toBundleArgs
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.databinding.FragmentMonitorBinding
 import io.flaterlab.meshexam.feature.meshroom.ui.monitor.adapter.MonitorPageAdapter
@@ -51,9 +52,11 @@ internal class MonitorFragment : ViewBindingFragment<FragmentMonitorBinding>() {
                 positiveCallback = { viewModel.onFinishConfirmed() }
             )
         }
-        viewModel.commandFinishExam.observe(viewLifecycleOwner) {
-            // TODO: implement a navigation to result screen
-            findNavController().popBackStack()
+        viewModel.commandFinishExam.observe(viewLifecycleOwner) { launcher ->
+            findNavController().navigate(
+                R.id.action_monitorFragment_to_finishingFragment,
+                launcher.toBundleArgs(),
+            )
         }
 
         binding.btnFinish.clickWithDebounce(action = viewModel::onFinishClicked)

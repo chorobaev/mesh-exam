@@ -14,7 +14,6 @@ import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.databinding.FragmentMeshRoomBinding
 import io.flaterlab.meshexam.feature.meshroom.dvo.ClientDvo
-import io.flaterlab.meshexam.feature.meshroom.ui.monitor.MonitorLauncher
 import io.flaterlab.meshexam.uikit.ext.getColorAttr
 import javax.inject.Inject
 
@@ -52,10 +51,10 @@ internal class MeshRoomFragment : ViewBindingFragment<FragmentMeshRoomBinding>()
             viewLifecycleOwner,
             binding.recyclerViewMeshClients::setState
         )
-        viewModel.commandStartExam.observe(viewLifecycleOwner) { examId ->
+        viewModel.commandStartExam.observe(viewLifecycleOwner) { launcher ->
             findNavController().navigate(
                 R.id.action_meshRoomFragment_to_monitorFragment,
-                MonitorLauncher(examId).toBundleArgs(),
+                launcher.toBundleArgs(),
             )
         }
 

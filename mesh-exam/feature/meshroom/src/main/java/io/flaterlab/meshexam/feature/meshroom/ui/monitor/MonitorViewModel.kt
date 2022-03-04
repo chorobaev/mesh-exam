@@ -10,6 +10,7 @@ import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.domain.create.usecase.GetExamUseCase
 import io.flaterlab.meshexam.domain.interactor.MeshInteractor
 import io.flaterlab.meshexam.feature.meshroom.dvo.ExamInfoDvo
+import io.flaterlab.meshexam.feature.meshroom.ui.finishing.FinishingLauncher
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,7 +27,7 @@ internal class MonitorViewModel @Inject constructor(
     val timer = MutableLiveData<String>()
 
     val commandShowFinishPrompt = SingleLiveEvent<Unit>()
-    val commandFinishExam = SingleLiveEvent<Unit>()
+    val commandFinishExam = SingleLiveEvent<FinishingLauncher>()
 
     init {
         loadExam()
@@ -49,6 +50,6 @@ internal class MonitorViewModel @Inject constructor(
 
     fun onFinishConfirmed() {
         meshInteractor.stopMesh()
-        commandFinishExam.call()
+        commandFinishExam.value = FinishingLauncher(launcher.attemptId)
     }
 }

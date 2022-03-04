@@ -1,6 +1,7 @@
 package io.flaterlab.meshexam.domain.interactor
 
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
+import io.flaterlab.meshexam.domain.mesh.model.StartExamResultModel
 import kotlinx.coroutines.flow.Flow
 
 interface MeshInteractor {
@@ -11,5 +12,5 @@ interface MeshInteractor {
 
     fun stopMesh()
 
-    suspend fun startExam(examId: String)
+    suspend fun startExam(examId: String): StartExamResultModel
 }

@@ -2,6 +2,7 @@ package io.flaterlab.meshexam.domain.impl
 
 import io.flaterlab.meshexam.domain.interactor.MeshInteractor
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
+import io.flaterlab.meshexam.domain.mesh.model.StartExamResultModel
 import io.flaterlab.meshexam.domain.repository.MeshRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -16,7 +17,7 @@ class MeshInteractorImpl @Inject constructor(
 
     override fun stopMesh() = meshRepository.stopMesh()
 
-    override suspend fun startExam(examId: String) {
-        meshRepository.startExam(examId)
+    override suspend fun startExam(examId: String): StartExamResultModel {
+        return meshRepository.startExam(examId)
     }
 }

@@ -4,6 +4,7 @@ import io.flaterlab.meshexam.data.database.MeshDatabase
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.domain.mesh.model.ClientModel
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
+import io.flaterlab.meshexam.domain.mesh.model.StartExamResultModel
 import io.flaterlab.meshexam.domain.repository.MeshRepository
 import io.flaterlab.meshexam.librariy.mesh.common.dto.AdvertiserInfo
 import io.flaterlab.meshexam.librariy.mesh.common.dto.FromHostPayload
@@ -50,12 +51,14 @@ internal class MeshRepositoryImpl @Inject constructor(
         TODO("implement removal when reconnect logic is ready")
     }
 
-    override suspend fun startExam(examId: String) {
+    override suspend fun startExam(examId: String): StartExamResultModel {
         hostMeshManager.sendPayload(
             FromHostPayload(
                 type = StartExamPayload.TYPE_KEY,
                 data = ""
             )
         )
+        // TODO: implement attempt creation logic
+        return StartExamResultModel(examId, "")
     }
 }

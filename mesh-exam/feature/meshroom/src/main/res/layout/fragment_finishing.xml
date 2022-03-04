@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.finishing.FinishingFragment">
+
+    <io.flaterlab.meshexam.uikit.view.MeshToolbar
+        android:id="@+id/toolbar_finishing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:toolbarTitle="@string/mesh_create_mesh" />
+
+    <TextView
+        android:id="@+id/tv_submitted_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_between"
+        android:paddingHorizontal="@dimen/margin_medium"
+        android:textAppearance="@style/TextAppearance.MeshExam.Large.Medium"
+        android:textColor="?attr/colorOnBackgroundLight"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_finishing"
+        tools:text="@string/mesh_students_amount_title" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/et_frame_finishing_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_between"
+        app:layout_constraintTop_toBottomOf="@id/tv_submitted_amount">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_finishing_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/mesh_search_hint" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <io.flaterlab.meshexam.uikit.view.StateRecyclerView
+        android:id="@+id/recycler_view_students"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/margin_small"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_frame_finishing_search"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_client" />
+
+    <Button
+        android:id="@+id/btn_force_finish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginBottom="@dimen/margin_medium"
+        android:text="@string/monitor_forceFinishButtonText"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

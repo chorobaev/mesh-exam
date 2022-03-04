@@ -5,5 +5,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class MonitorLauncher(
-    val examId: String
+    val examId: String,
+    val attemptId: String,
 ) : Parcelable

@@ -13,6 +13,7 @@ import io.flaterlab.meshexam.domain.interactor.MeshInteractor
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.dvo.ClientDvo
 import io.flaterlab.meshexam.feature.meshroom.dvo.ExamInfoDvo
+import io.flaterlab.meshexam.feature.meshroom.ui.monitor.MonitorLauncher
 import io.flaterlab.meshexam.uikit.view.StateRecyclerView
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
@@ -36,7 +37,7 @@ internal class MeshRoomViewModel @Inject constructor(
     val clients = MutableLiveData<List<ClientDvo>>()
     val clientsListState = MutableLiveData(StateRecyclerView.State.EMPTY)
 
-    val commandStartExam = SingleLiveEvent<String>()
+    val commandStartExam = SingleLiveEvent<MonitorLauncher>()
 
     private var _clients: List<ClientDvo> = emptyList()
     private var searchText: String? = null
@@ -110,8 +111,8 @@ internal class MeshRoomViewModel @Inject constructor(
     fun onStartClicked() {
         viewModelScope.launch {
             try {
-                meshInteractor.startExam(launcher.examId)
-                commandStartExam.value = launcher.examId
+                val result = meshInteractor.startExam(launcher.examId)
+                commandStartExam.value = MonitorLauncher(result.examId, result.attemptId)
             } catch (ex: Exception) {
                 ex.showLocalizedMessage()
             }

@@ -1,6 +1,7 @@
 package io.flaterlab.meshexam.domain.repository
 
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
+import io.flaterlab.meshexam.domain.mesh.model.StartExamResultModel
 import kotlinx.coroutines.flow.Flow
 
 interface MeshRepository {
@@ -11,5 +12,5 @@ interface MeshRepository {
 
     suspend fun removeClient(clientId: String)
 
-    suspend fun startExam(examId: String)
+    suspend fun startExam(examId: String): StartExamResultModel
 }
