@@ -8,9 +8,11 @@ import io.flaterlab.meshexam.androidbase.GlobalNavControllerProvider
 import io.flaterlab.meshexam.feature.meshroom.router.MeshroomRouter
 import io.flaterlab.meshexam.presentation.discover.router.DiscoverRouter
 import io.flaterlab.meshexam.presentation.exams.router.ExamsRouter
+import io.flaterlab.meshexam.presentation.profile.router.ProfileRouter
 import io.flaterlab.meshexam.presentation.router.DiscoverRouterImpl
 import io.flaterlab.meshexam.presentation.router.ExamsRouterImpl
 import io.flaterlab.meshexam.presentation.router.MeshroomRouterImpl
+import io.flaterlab.meshexam.presentation.router.ProfileRouterImpl
 
 @Module
 @InstallIn(FragmentComponent::class)
@@ -27,4 +29,7 @@ internal interface RouterBindingModule {
 
     @Binds
     fun bindMeshroomRouter(impl: MeshroomRouterImpl): MeshroomRouter
+
+    @Binds
+    fun bindProfileRouter(impl: ProfileRouterImpl): ProfileRouter
 }

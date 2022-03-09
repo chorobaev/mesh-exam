@@ -28,16 +28,29 @@ internal class ProfileViewModel @Inject constructor(
             it.showLocalizedMessage()
         }
         .asLiveData()
-    val historyItems = MutableLiveData<List<HistoryDvo>>(emptyList())
-    val historyListState = MutableLiveData(StateRecyclerView.State.EMPTY)
+    val historyItems = MutableLiveData<List<HistoryDvo>>()
+    val historyListState = MutableLiveData(StateRecyclerView.State.NORMAL)
 
     val commandEditName = SingleLiveEvent<Unit>()
+    val commandOpenAttemptedResults = SingleLiveEvent<String>()
+    val commandOpenHostedResults = SingleLiveEvent<String>()
+
+    init {
+        // TODO: implement with actual data
+        historyItems.value = (1..10).map {
+            HistoryDvo(it.toString(), "Exam #$it", 30, listOf(true, false).random())
+        }
+    }
 
     fun onEditProfileClicked() {
         commandEditName.call()
     }
 
     fun onHistoryItemClicked(item: HistoryDvo) {
-        // TODO: add implementation
+        if (item.isHosted) {
+            commandOpenHostedResults.value = item.id
+        } else {
+            commandOpenAttemptedResults.value = item.id
+        }
     }
 }

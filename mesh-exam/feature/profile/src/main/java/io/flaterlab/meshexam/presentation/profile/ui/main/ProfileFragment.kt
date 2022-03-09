@@ -6,8 +6,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.flaterlab.meshexam.androidbase.ViewBindingFragment
 import io.flaterlab.meshexam.androidbase.ViewBindingProvider
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
-import io.flaterlab.meshexam.presentation.profile.ui.adapter.HistoryListAdapter
 import io.flaterlab.meshexam.presentation.profile.databinding.FragmentProfileBinding
+import io.flaterlab.meshexam.presentation.profile.router.ProfileRouter
+import io.flaterlab.meshexam.presentation.profile.ui.adapter.HistoryListAdapter
 import io.flaterlab.meshexam.presentation.profile.ui.edit.EditProfileDialogFragment
 import javax.inject.Inject
 
@@ -15,6 +16,9 @@ import javax.inject.Inject
 internal class ProfileFragment : ViewBindingFragment<FragmentProfileBinding>() {
 
     private val viewModel: ProfileViewModel by vm()
+
+    @Inject
+    lateinit var profileRouter: ProfileRouter
 
     @Inject
     lateinit var historyAdapter: HistoryListAdapter
@@ -41,6 +45,12 @@ internal class ProfileFragment : ViewBindingFragment<FragmentProfileBinding>() {
         )
         viewModel.commandEditName.observe(viewLifecycleOwner) {
             EditProfileDialogFragment.show(childFragmentManager)
+        }
+        viewModel.commandOpenHostedResults.observe(viewLifecycleOwner) { attemptId ->
+            profileRouter.openHostedExamResult(attemptId)
+        }
+        viewModel.commandOpenAttemptedResults.observe(viewLifecycleOwner) { attemptId ->
+            profileRouter.openAttemptedExamResult(attemptId)
         }
 
         binding.btnEditProfile.clickWithDebounce(action = viewModel::onEditProfileClicked)
