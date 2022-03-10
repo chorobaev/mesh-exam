@@ -6,7 +6,7 @@ import io.flaterlab.meshexam.create.ui.details.QuestionDetailsFragment
 import io.flaterlab.meshexam.create.ui.details.QuestionDetailsLauncher
 import javax.inject.Inject
 
-class QuestionPagerAdapter @Inject constructor(
+internal class QuestionPagerAdapter @Inject constructor(
     fragment: Fragment,
 ) : FragmentStateAdapter(fragment) {
 

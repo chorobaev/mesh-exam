@@ -1,14 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.result.IndividualResultFragment">
 
+    <io.flaterlab.meshexam.uikit.view.MeshToolbar
+        android:id="@+id/toolbar_examination"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:toolbarTitle="Human and computer interactions" />
+
     <TextView
+        android:id="@+id/tv_general_info_toggle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Individual result" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_between"
+        android:drawablePadding="@dimen/margin_small"
+        android:paddingHorizontal="@dimen/margin_medium"
+        android:paddingVertical="@dimen/margin_small"
+        android:text="@string/result_details_generalInfo"
+        android:textAppearance="@style/TextAppearance.MeshExam.Headline3"
+        app:drawableEndCompat="@drawable/ic_chevron_up"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_examination" />
+
+    <LinearLayout
+        android:id="@+id/container_general_info_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/tv_general_info_toggle" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout_numbers"
+        style="@style/Widget.MeshExam.TabLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/tab_side"
+        android:layout_marginTop="@dimen/margin_between"
+        android:background="@android:color/transparent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_general_info_list"
+        app:tabGravity="start"
+        app:tabMode="scrollable"
+        app:tabPaddingEnd="0dp"
+        app:tabPaddingStart="0dp" />
+
+    <io.flaterlab.meshexam.uikit.view.Divider
+        android:id="@+id/divider_examination_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_medium"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout_numbers" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager_questions"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider_examination_question" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

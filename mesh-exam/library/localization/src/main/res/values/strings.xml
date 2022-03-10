@@ -98,6 +98,8 @@
     <string name="result_list_time">Time: %s</string>
     <string name="result_list_submitted">Submitted: %d in %d</string>
     <string name="result_list_item_grade">Grade: %d in %d</string>
+    <string name="result_details_generalInfo">General information</string>
+    <string name="result_details_contentDesc_correctnessIcon">Correctness icon</string>
 
 
     <string name="permission_mesh_message">MeshExam uses the device\'s location to find nearby examinations. Please grand access to the camera in the application settings.</string>
