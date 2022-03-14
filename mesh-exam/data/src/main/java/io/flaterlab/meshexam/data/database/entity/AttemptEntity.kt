@@ -16,6 +16,7 @@ internal data class AttemptEntity(
     val createdAt: Long,
     val updatedAt: Long,
     val submittedAt: Long?,
+    val hostedExamId: String? = null,
 ) {
 
     val isFinished get() = submittedAt != null

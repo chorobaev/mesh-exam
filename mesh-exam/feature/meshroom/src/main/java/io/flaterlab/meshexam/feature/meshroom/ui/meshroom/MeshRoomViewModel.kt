@@ -112,7 +112,7 @@ internal class MeshRoomViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val result = meshInteractor.startExam(launcher.examId)
-                commandStartExam.value = MonitorLauncher(result.examId, result.attemptId)
+                commandStartExam.value = MonitorLauncher(result.examId, result.hostingId)
             } catch (ex: Exception) {
                 ex.showLocalizedMessage()
             }

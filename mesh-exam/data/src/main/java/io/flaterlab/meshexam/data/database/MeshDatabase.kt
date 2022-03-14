@@ -20,6 +20,7 @@ import io.flaterlab.meshexam.data.worker.SeedDatabaseWorker.Companion.KEY_FILE_N
         AnswerEntity::class,
         AttemptEntity::class,
         AttemptAnswerEntity::class,
+        HostingEntity::class,
     ],
     version = 1,
     exportSchema = false,
@@ -35,6 +36,8 @@ internal abstract class MeshDatabase : RoomDatabase() {
     abstract fun attemptDao(): AttemptDao
 
     abstract fun attemptAnswerDao(): AttemptAnswerDao
+
+    abstract fun hostingDao(): HostingDao
 
     companion object {
         @Volatile
