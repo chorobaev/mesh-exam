@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:toolbarTitle="@string/mesh_create_mesh" />
+        app:toolbarTitle="@string/monitor_finishing_title" />
 
     <TextView
         android:id="@+id/tv_submitted_amount"

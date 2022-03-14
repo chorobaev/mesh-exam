@@ -50,6 +50,6 @@ internal class FinishingViewModel @Inject constructor(
     }
 
     fun onBackPressed() {
-
+        commandConfirmFinish.call()
     }
 }

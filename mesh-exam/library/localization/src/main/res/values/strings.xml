@@ -64,6 +64,7 @@
     <string name="monitor_finishButtonText">Finish</string>
     <string name="monitor_forceFinishButtonText">Finish immediately</string>
     <string name="monitor_finishing_amountTitle">Submitted: %d in %d</string>
+    <string name="monitor_finishing_title">Finishing exam</string>
     <string name="monitor_result_successfullyFinished">Successfully finished!</string>
     <string name="monitor_result_timeTitle">Time:</string>
     <string name="monitor_result_submittedTitle">Submitted:</string>
