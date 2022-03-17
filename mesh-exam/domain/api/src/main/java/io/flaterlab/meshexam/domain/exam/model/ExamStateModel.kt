@@ -2,6 +2,8 @@ package io.flaterlab.meshexam.domain.exam.model
 
 sealed class ExamStateModel {
 
+    object None : ExamStateModel()
+
     data class Started(
         val examId: String,
         val attemptId: String,

@@ -88,7 +88,7 @@ class HostMeshManager internal constructor(
                 Timber.d("Advertising has stared successfully...")
             }
             .addOnFailureListener { e ->
-                onClientSetChangeListener!!(MeshResult.Error(e))
+                onClientSetChangeListener?.invoke(MeshResult.Error(e))
             }
     }
 
@@ -100,7 +100,7 @@ class HostMeshManager internal constructor(
         if (left.isEmpty() || right.isEmpty()) {
             nearby.acceptConnection(endpointId, payloadCallback)
                 .addOnFailureListener { e ->
-                    onClientSetChangeListener!!(MeshResult.Error(e))
+                    onClientSetChangeListener?.invoke(MeshResult.Error(e))
                 }
         } else {
             nearby.rejectConnection(endpointId)
@@ -155,7 +155,7 @@ class HostMeshManager internal constructor(
     }
 
     private fun emmitClients() {
-        onClientSetChangeListener!!(
+        onClientSetChangeListener?.invoke(
             MeshResult.Success(
                 HostMesh(
                     left.mergeByClosest(right).also { Timber.d("Emitting: $it") }

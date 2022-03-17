@@ -27,7 +27,7 @@ internal class ExamRepositoryImpl @Inject constructor(
 ) : ExamRepository {
 
     private val examDao = database.examDao()
-    private val questionDao = database.questionsDao()
+    private val questionDao = database.questionDao()
     private val answerDao = database.answerDao()
 
     @OptIn(ExperimentalCoroutinesApi::class)

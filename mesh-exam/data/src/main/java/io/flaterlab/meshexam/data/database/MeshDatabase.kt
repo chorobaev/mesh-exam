@@ -29,7 +29,7 @@ internal abstract class MeshDatabase : RoomDatabase() {
 
     abstract fun examDao(): ExamDao
 
-    abstract fun questionsDao(): QuestionDao
+    abstract fun questionDao(): QuestionDao
 
     abstract fun answerDao(): AnswerDao
 

@@ -32,7 +32,7 @@ internal class SeedDatabaseWorker(
     private val userProfileDao = entryPoint.userProfileDao
     private val database = entryPoint.meshDatabase
     private val examDao get() = database.examDao()
-    private val questionDao get() = database.questionsDao()
+    private val questionDao get() = database.questionDao()
     private val answerDao get() = database.answerDao()
     private val idGenerator = IdGeneratorStrategy()
 
