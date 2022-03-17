@@ -22,7 +22,7 @@ import io.flaterlab.meshexam.data.worker.SeedDatabaseWorker.Companion.KEY_FILE_N
         AttemptAnswerEntity::class,
         HostingEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = false,
 )
 internal abstract class MeshDatabase : RoomDatabase() {
@@ -53,6 +53,7 @@ internal abstract class MeshDatabase : RoomDatabase() {
         private fun buildDatabase(context: Context): MeshDatabase {
             return Room
                 .databaseBuilder(context, MeshDatabase::class.java, "mesh_db")
+                .fallbackToDestructiveMigration()
                 .addCallback(
                     object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {

@@ -18,6 +18,7 @@ import io.flaterlab.meshexam.librariy.mesh.common.dto.FromHostPayload
 import io.flaterlab.meshexam.librariy.mesh.host.HostMeshManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -72,6 +73,7 @@ internal class MeshRepositoryImpl @Inject constructor(
                 hostingId = idGenerator.generate(),
                 userId = user.id,
                 examId = examId,
+                startedAt = Date().time,
             )
             hostingDao.insert(hosting)
             sendExamContent(examId)
@@ -116,6 +118,24 @@ internal class MeshRepositoryImpl @Inject constructor(
                 type = examEntity.type
             )
             hostMeshManager.sendPayload(hostMessageMapper(exam))
+        }
+    }
+
+    override fun hostingTimeLeftInSec(hostingId: String): Flow<Int> {
+        return flow {
+            val hosting = hostingDao.getHostingById(hostingId)
+            val exam = examDao.getExamById(hosting.examId)
+            val millisPassed = Date().time - hosting.startedAt
+            val secondsPassed = (millisPassed / 1000).toInt()
+            delay(millisPassed % 1000)
+
+            var secondsLeft: Int = exam.durationInMin * 60 - secondsPassed
+
+            while (secondsLeft >= 0) {
+                emit(secondsLeft)
+                delay(1000)
+                secondsLeft--
+            }
         }
     }
 }

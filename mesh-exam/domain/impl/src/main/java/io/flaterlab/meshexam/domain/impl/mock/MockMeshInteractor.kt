@@ -35,4 +35,8 @@ class MockMeshInteractor @Inject constructor(
     override fun stopMesh() {
         println("Stopping the mesh")
     }
+
+    override fun hostingTimeLeftInSec(hostingId: String): Flow<Int> {
+        TODO("Implement according to logic")
+    }
 }

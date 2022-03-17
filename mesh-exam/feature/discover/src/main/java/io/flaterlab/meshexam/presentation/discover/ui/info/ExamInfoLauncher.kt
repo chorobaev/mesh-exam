@@ -7,6 +7,6 @@ import kotlinx.parcelize.Parcelize
 internal data class ExamInfoLauncher(
     val examId: String,
     val examName: String,
-    val examDurationInMin: Long,
+    val examDurationInMin: Int,
     val examHostName: String,
 ) : Parcelable

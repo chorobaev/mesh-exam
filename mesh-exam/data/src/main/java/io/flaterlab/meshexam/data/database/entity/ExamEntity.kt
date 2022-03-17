@@ -9,5 +9,5 @@ internal data class ExamEntity(
     val hostUserId: String,
     val name: String,
     val type: String,
-    val durationInMin: Long,
+    val durationInMin: Int,
 )

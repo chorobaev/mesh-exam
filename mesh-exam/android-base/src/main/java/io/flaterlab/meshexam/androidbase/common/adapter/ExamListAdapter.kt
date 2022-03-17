@@ -57,7 +57,7 @@ class ExamListAdapter @Inject constructor(
     interface ExamItem {
         val id: String
         val name: String
-        val durationInMin: Long
+        val durationInMin: Int
     }
 
     companion object {

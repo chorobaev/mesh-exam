@@ -8,4 +8,5 @@ internal data class HostingEntity(
     @PrimaryKey val hostingId: String,
     val userId: String,
     val examId: String,
+    val startedAt: Long,
 )

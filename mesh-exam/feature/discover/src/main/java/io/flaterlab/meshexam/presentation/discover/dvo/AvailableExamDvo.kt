@@ -6,5 +6,5 @@ data class AvailableExamDvo(
     override val id: String,
     override val name: String,
     val hostName: String,
-    override val durationInMin: Long,
+    override val durationInMin: Int,
 ) : ExamListAdapter.ExamItem

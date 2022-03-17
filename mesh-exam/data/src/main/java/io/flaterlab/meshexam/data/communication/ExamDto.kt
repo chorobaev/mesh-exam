@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose
 internal data class ExamDto(
     @Expose val id: String,
     @Expose val hostUserId: String,
-    @Expose val durationInMin: Long,
+    @Expose val durationInMin: Int,
     @Expose val name: String,
     @Expose val questions: List<QuestionDto>,
     @Expose val type: String,

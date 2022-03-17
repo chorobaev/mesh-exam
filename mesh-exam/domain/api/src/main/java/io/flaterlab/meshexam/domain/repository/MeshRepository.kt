@@ -13,4 +13,6 @@ interface MeshRepository {
     suspend fun removeClient(clientId: String)
 
     suspend fun startExam(examId: String): StartExamResultModel
+
+    fun hostingTimeLeftInSec(hostingId: String): Flow<Int>
 }

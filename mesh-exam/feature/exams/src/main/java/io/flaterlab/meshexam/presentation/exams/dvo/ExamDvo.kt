@@ -5,5 +5,5 @@ import io.flaterlab.meshexam.androidbase.common.adapter.ExamListAdapter
 internal data class ExamDvo(
     override val id: String,
     override val name: String,
-    override val durationInMin: Long
+    override val durationInMin: Int
 ) : ExamListAdapter.ExamItem

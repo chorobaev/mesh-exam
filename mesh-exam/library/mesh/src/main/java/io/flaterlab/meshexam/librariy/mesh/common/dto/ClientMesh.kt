@@ -10,7 +10,7 @@ data class AdvertiserInfo(
     @Expose val hostName: String,
     @Expose val examId: String,
     @Expose val examName: String,
-    @Expose val examDuration: Long,
+    @Expose val examDuration: Int,
 )
 
 internal typealias ParentInfo = Pair<String, AdvertiserInfo>

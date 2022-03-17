@@ -20,4 +20,8 @@ class MeshInteractorImpl @Inject constructor(
     override suspend fun startExam(examId: String): StartExamResultModel {
         return meshRepository.startExam(examId)
     }
+
+    override fun hostingTimeLeftInSec(hostingId: String): Flow<Int> {
+        return meshRepository.hostingTimeLeftInSec(hostingId)
+    }
 }

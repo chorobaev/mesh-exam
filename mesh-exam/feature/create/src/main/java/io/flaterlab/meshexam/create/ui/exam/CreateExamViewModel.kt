@@ -71,7 +71,7 @@ internal class CreateExamViewModel @Inject constructor(
     fun onNextClicked() {
         viewModelScope.launch {
             val examId: String = createExamUseCase(
-                CreateExamModel(name!!, type, duration!!.toLong())
+                CreateExamModel(name!!, type, duration!!.toInt())
             )
             openQuestionScreenCommand.value = examId
         }

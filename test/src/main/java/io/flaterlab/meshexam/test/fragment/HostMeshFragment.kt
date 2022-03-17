@@ -55,7 +55,7 @@ class HostMeshFragment : Fragment() {
                             "Nurbol Chorobaev",
                             "exam id",
                             "History",
-                            30L
+                            30
                         )
                     )
                         .flowWithLifecycle(viewLifecycleOwner.lifecycle)

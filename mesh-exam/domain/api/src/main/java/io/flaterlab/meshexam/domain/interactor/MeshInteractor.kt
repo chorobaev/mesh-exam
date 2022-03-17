@@ -13,4 +13,6 @@ interface MeshInteractor {
     fun stopMesh()
 
     suspend fun startExam(examId: String): StartExamResultModel
+
+    fun hostingTimeLeftInSec(hostingId: String): Flow<Int>
 }
