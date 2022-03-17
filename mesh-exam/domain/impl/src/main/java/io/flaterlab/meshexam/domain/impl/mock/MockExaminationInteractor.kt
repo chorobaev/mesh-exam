@@ -59,6 +59,10 @@ class MockExaminationInteractor @Inject constructor(
         return attemptRepository.getAttemptMetaById(attemptId)
     }
 
+    override fun attemptTimeLeftInSec(attemptId: String): Flow<Int> {
+        TODO("Implement according to need")
+    }
+
     override fun questionIdsByExamId(examId: String): Flow<List<String>> {
         return flow {
             emit(

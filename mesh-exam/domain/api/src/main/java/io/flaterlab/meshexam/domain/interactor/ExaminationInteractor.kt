@@ -22,6 +22,8 @@ interface ExaminationInteractor {
 
     suspend fun getAttemptById(attemptId: String): AttemptMetaModel
 
+    fun attemptTimeLeftInSec(attemptId: String): Flow<Int>
+
     fun questionIdsByExamId(examId: String): Flow<List<String>>
 
     fun questionById(questionId: String): Flow<QuestionModel>

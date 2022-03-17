@@ -46,6 +46,10 @@ class ExaminationInteractorImpl @Inject constructor(
         return attemptRepository.getAttemptMetaById(attemptId)
     }
 
+    override fun attemptTimeLeftInSec(attemptId: String): Flow<Int> {
+        return attemptRepository.attemptTimeLeftInSec(attemptId)
+    }
+
     override fun questionIdsByExamId(examId: String): Flow<List<String>> {
         return flow {
             emit(

@@ -11,12 +11,11 @@ import io.flaterlab.meshexam.domain.exam.model.AttemptMetaModel
 import io.flaterlab.meshexam.domain.exam.model.SelectAnswerModel
 import io.flaterlab.meshexam.domain.exam.model.SelectedAnswerModel
 import io.flaterlab.meshexam.domain.repository.AttemptRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.max
 
 internal class AttemptRepositoryImpl @Inject constructor(
     private val userProfileDao: UserProfileDao,
@@ -107,5 +106,23 @@ internal class AttemptRepositoryImpl @Inject constructor(
                     answerId = entity?.answerId
                 )
             }
+    }
+
+    override fun attemptTimeLeftInSec(attemptId: String): Flow<Int> {
+        return flow {
+            val attempt = attemptDao.getAttemptById(attemptId)
+            val exam = examDao.getExamById(attempt.examId)
+            val millisPassed = Date().time - attempt.createdAt
+            val secondsPassed = (millisPassed / 1000).toInt()
+            delay(millisPassed % 1000)
+
+            var secondsLeft: Int = exam.durationInMin * 60 - secondsPassed
+
+            do {
+                emit(max(secondsLeft, 0))
+                delay(1000)
+                secondsLeft--
+            } while (secondsLeft >= 0)
+        }
     }
 }

@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.*
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.max
 
 @Singleton
 internal class MeshRepositoryImpl @Inject constructor(
@@ -131,11 +132,11 @@ internal class MeshRepositoryImpl @Inject constructor(
 
             var secondsLeft: Int = exam.durationInMin * 60 - secondsPassed
 
-            while (secondsLeft >= 0) {
-                emit(secondsLeft)
+            do {
+                emit(max(secondsLeft, 0))
                 delay(1000)
                 secondsLeft--
-            }
+            } while (secondsLeft >= 0)
         }
     }
 }

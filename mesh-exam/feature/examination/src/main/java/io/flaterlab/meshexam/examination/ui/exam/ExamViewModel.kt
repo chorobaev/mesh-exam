@@ -11,8 +11,7 @@ import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
 import io.flaterlab.meshexam.examination.dvo.ExaminationDvo
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -26,9 +25,16 @@ internal class ExamViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     private val launcher: ExamAttemptLauncher = savedStateHandle.getLauncher()
+    private val dateFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
+    private val datePrototype = Date()
 
     val examMeta = MutableLiveData<ExaminationDvo>()
-    val timeLeft = MutableLiveData<String>()
+    val timeLeft = examInteractor.attemptTimeLeftInSec(launcher.attemptId)
+        .map { sec ->
+            datePrototype.time = sec * 1000L
+            dateFormatter.format(datePrototype)
+        }
+        .asLiveData(viewModelScope.coroutineContext)
     val questionIds = examInteractor
         .questionIdsByExamId(launcher.examId)
         .asLiveData(viewModelScope.coroutineContext)
@@ -37,8 +43,6 @@ internal class ExamViewModel @Inject constructor(
     val commandFinishExam = SingleLiveEvent<String>()
 
     val attemptId get() = launcher.attemptId
-
-    private var timerJob: Job? = null
 
     init {
         loadAttemptMeta()
@@ -50,22 +54,8 @@ internal class ExamViewModel @Inject constructor(
                 val attemptModel = examInteractor.getAttemptById(launcher.attemptId)
                 Timber.d("Attempt: $attemptModel")
                 examMeta.value = ExaminationDvo(attemptModel.examName, attemptModel.examInfo)
-                setTimer(attemptModel.leftTimeInMillis)
             } catch (ex: Exception) {
                 ex.showLocalizedMessage()
-            }
-        }
-    }
-
-    private fun setTimer(leftMillis: Long) {
-        timerJob?.cancel()
-        timerJob = viewModelScope.launch {
-            var sec = leftMillis / 1000
-            while (isActive && sec > 0) {
-                delay(1000)
-                timeLeft.value =
-                    SimpleDateFormat("mm:ss", Locale.getDefault()).format(Date(sec * 1000))
-                sec--
             }
         }
     }
