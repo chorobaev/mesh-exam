@@ -1,10 +1,7 @@
 package io.flaterlab.meshexam.librariy.mesh.common.parser
 
 import com.google.gson.Gson
-import io.flaterlab.meshexam.librariy.mesh.common.dto.AdvertiserInfo
-import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
-import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshData
-import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshPayload
+import io.flaterlab.meshexam.librariy.mesh.common.dto.*
 
 internal class JsonParserHelper(
     val advertiserInfoJsonParser: JsonParser<AdvertiserInfo>,
@@ -12,6 +9,7 @@ internal class JsonParserHelper(
     val meshPayloadJsonParser: JsonParser<MeshPayload>,
     val clientConnectedJsonParser: JsonParser<MeshData.ClientConnected>,
     val clientDisconnectedJsonParser: JsonParser<MeshData.ClientDisconnected>,
+    val fromClientPayloadParser: JsonParser<FromClientPayload>,
 ) {
 
     companion object {
@@ -20,7 +18,8 @@ internal class JsonParserHelper(
             ClientInfoJsonParser(gson),
             MeshPayloadJsonParser(gson),
             ClientConnectedJsonParser(gson),
-            ClientDisconnectedJsonParser(gson)
+            ClientDisconnectedJsonParser(gson),
+            FromClientPayloadParser(gson),
         )
     }
 }

@@ -24,6 +24,8 @@ data class MeshPayload(
         val classType: KClass<out MeshData>,
     ) {
         CLIENT_CONNECTED(MeshData.ClientConnected::class),
-        CLIENT_DISCONNECTED(MeshData.ClientDisconnected::class)
+        CLIENT_DISCONNECTED(MeshData.ClientDisconnected::class),
+        CLIENT_PAYLOAD(FromClientPayload::class),
+        ;
     }
 }

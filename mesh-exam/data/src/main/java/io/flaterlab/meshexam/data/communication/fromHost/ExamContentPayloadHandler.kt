@@ -1,11 +1,13 @@
-package io.flaterlab.meshexam.data.communication
+package io.flaterlab.meshexam.data.communication.fromHost
 
 import androidx.room.withTransaction
 import com.google.gson.Gson
+import io.flaterlab.meshexam.data.communication.PayloadHandler
 import io.flaterlab.meshexam.data.database.MeshDatabase
 import io.flaterlab.meshexam.data.database.entity.AnswerEntity
 import io.flaterlab.meshexam.data.database.entity.ExamEntity
 import io.flaterlab.meshexam.data.database.entity.QuestionEntity
+import io.flaterlab.meshexam.data.database.entity.client.ExamToHostingMapperEntity
 import io.flaterlab.meshexam.librariy.mesh.common.dto.FromHostPayload
 import timber.log.Timber
 import java.util.*
@@ -14,7 +16,7 @@ import javax.inject.Inject
 internal class ExamContentPayloadHandler @Inject constructor(
     private val database: MeshDatabase,
     private val gson: Gson,
-) : FromHostPayloadHandler.Handler {
+) : PayloadHandler.Handler<FromHostPayload> {
 
     private val examDao = database.examDao()
     private val questionDao = database.questionDao()
@@ -37,6 +39,11 @@ internal class ExamContentPayloadHandler @Inject constructor(
                 type = exam.type,
                 durationInMin = exam.durationInMin
             ).also { examDao.insertExams(it) }
+
+            ExamToHostingMapperEntity(
+                examId = exam.id,
+                hostingId = exam.hostingId,
+            ).also { examDao.insertExamToHostingMapper(it) }
 
             saveQuestionList(exam.id, exam.questions)
         }

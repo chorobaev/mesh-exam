@@ -1,15 +1,18 @@
-package io.flaterlab.meshexam.data.communication
+package io.flaterlab.meshexam.data.communication.fromHost
 
 import com.google.gson.annotations.Expose
+import io.flaterlab.meshexam.data.communication.MeshMessageCompanion
+import io.flaterlab.meshexam.data.communication.Message
 
 internal data class ExamDto(
     @Expose val id: String,
     @Expose val hostUserId: String,
+    @Expose val hostingId: String,
     @Expose val durationInMin: Int,
     @Expose val name: String,
     @Expose val questions: List<QuestionDto>,
     @Expose val type: String,
-) : HostMessage {
+) : Message {
 
     override val companionObject: MeshMessageCompanion get() = Companion
 

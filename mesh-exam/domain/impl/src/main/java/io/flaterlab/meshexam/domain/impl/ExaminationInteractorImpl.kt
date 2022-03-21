@@ -38,7 +38,6 @@ class ExaminationInteractorImpl @Inject constructor(
     }
 
     override suspend fun finishAttempt(attemptId: String) {
-        TODO("Not yet implemented")
         attemptRepository.finishAttempt(attemptId)
     }
 

@@ -10,7 +10,6 @@ import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
 import io.flaterlab.meshexam.examination.dvo.ExaminationDvo
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -70,7 +69,7 @@ internal class ExamViewModel @Inject constructor(
 
     fun onFinishConfirmed() {
         viewModelScope.launch {
-            examInteractor.finishAttempt(launcher.examId)
+            examInteractor.finishAttempt(launcher.attemptId)
             commandFinishExam.value = launcher.attemptId
         }
     }

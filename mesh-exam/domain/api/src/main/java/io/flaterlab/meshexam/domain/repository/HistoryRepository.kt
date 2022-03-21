@@ -1,15 +1,10 @@
-package io.flaterlab.meshexam.domain.interactor
+package io.flaterlab.meshexam.domain.repository
 
 import io.flaterlab.meshexam.domain.profile.model.ExamHistoryModel
 import io.flaterlab.meshexam.domain.profile.model.HostingResultModel
-import io.flaterlab.meshexam.domain.profile.model.UserProfileModel
 import kotlinx.coroutines.flow.Flow
 
-interface ProfileInteractor {
-
-    suspend fun isProfileSetUp(): Boolean
-
-    fun userProfile(): Flow<UserProfileModel>
+interface HistoryRepository {
 
     fun examHistory(): Flow<List<ExamHistoryModel>>
 

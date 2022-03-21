@@ -15,4 +15,7 @@ internal interface AttemptAnswerDao {
 
     @Query("SELECT * FROM attempt_answers WHERE questionId = :questionId")
     fun attemptAnswerByQuestionId(questionId: String): Flow<AttemptAnswerEntity?>
+
+    @Query("SELECT * FROM attempt_answers WHERE attemptId = :attemptId")
+    suspend fun getAnswersByAttemptId(attemptId: String): List<AttemptAnswerEntity>
 }

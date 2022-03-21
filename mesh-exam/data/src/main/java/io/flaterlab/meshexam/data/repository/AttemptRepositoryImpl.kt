@@ -1,6 +1,10 @@
 package io.flaterlab.meshexam.data.repository
 
 import androidx.room.withTransaction
+import io.flaterlab.meshexam.core.Mapper
+import io.flaterlab.meshexam.data.communication.Message
+import io.flaterlab.meshexam.data.communication.fromClient.AttemptAnswerDto
+import io.flaterlab.meshexam.data.communication.fromClient.AttemptDto
 import io.flaterlab.meshexam.data.database.MeshDatabase
 import io.flaterlab.meshexam.data.database.entity.AttemptAnswerEntity
 import io.flaterlab.meshexam.data.database.entity.AttemptEntity
@@ -11,8 +15,12 @@ import io.flaterlab.meshexam.domain.exam.model.AttemptMetaModel
 import io.flaterlab.meshexam.domain.exam.model.SelectAnswerModel
 import io.flaterlab.meshexam.domain.exam.model.SelectedAnswerModel
 import io.flaterlab.meshexam.domain.repository.AttemptRepository
+import io.flaterlab.meshexam.librariy.mesh.client.ClientMeshManager
+import io.flaterlab.meshexam.librariy.mesh.common.dto.FromClientPayload
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.max
@@ -21,6 +29,8 @@ internal class AttemptRepositoryImpl @Inject constructor(
     private val userProfileDao: UserProfileDao,
     private val database: MeshDatabase,
     private val idGenerator: IdGeneratorStrategy,
+    private val clientMeshManager: ClientMeshManager,
+    private val clientMessageMapper: Mapper<Message, FromClientPayload>,
 ) : AttemptRepository {
 
     private val examDao = database.examDao()
@@ -96,6 +106,33 @@ internal class AttemptRepositoryImpl @Inject constructor(
             submittedAt = Date().time
         )
         attemptDao.updateToFinishAttempt(attemptFinishing)
+        sendAttempt(attemptId)
+    }
+
+    private suspend fun sendAttempt(attemptId: String) = withContext(Dispatchers.IO) {
+        val attemptDto = database.withTransaction {
+            val attemptEntity = attemptDao.getAttemptById(attemptId)
+            val answersEntity = attemptAnswerDao.getAnswersByAttemptId(attemptId)
+            val hostingId = examDao.getHostingIdByExamId(attemptEntity.examId)
+            AttemptDto(
+                id = attemptEntity.attemptId,
+                userId = attemptEntity.userId,
+                examId = attemptEntity.examId,
+                hostingId = hostingId,
+                startedAt = attemptEntity.createdAt,
+                finishedAt = attemptEntity.submittedAt
+                    ?: throw IllegalArgumentException("Exam must be submitted before sending"),
+                answers = answersEntity.map { entity ->
+                    AttemptAnswerDto(
+                        id = entity.attemptAnswerId,
+                        questionId = entity.questionId,
+                        answerId = entity.answerId,
+                        createdAt = entity.createdAt,
+                    )
+                }
+            )
+        }
+        clientMeshManager.sendPayloadToHost(clientMessageMapper(attemptDto))
     }
 
     override fun selectedAnswerByQuestionId(questionId: String): Flow<SelectedAnswerModel> {

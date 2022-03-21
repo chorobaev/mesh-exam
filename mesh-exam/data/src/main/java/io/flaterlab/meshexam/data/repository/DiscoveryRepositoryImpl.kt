@@ -1,7 +1,7 @@
 package io.flaterlab.meshexam.data.repository
 
-import io.flaterlab.meshexam.data.communication.ExamDto
-import io.flaterlab.meshexam.data.communication.FromHostPayloadHandler
+import io.flaterlab.meshexam.data.communication.PayloadHandler
+import io.flaterlab.meshexam.data.communication.fromHost.ExamDto
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.domain.create.model.ExamInfoModel
 import io.flaterlab.meshexam.domain.exam.model.ExamStateModel
@@ -9,6 +9,7 @@ import io.flaterlab.meshexam.domain.repository.AttemptRepository
 import io.flaterlab.meshexam.domain.repository.DiscoveryRepository
 import io.flaterlab.meshexam.librariy.mesh.client.ClientMeshManager
 import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
+import io.flaterlab.meshexam.librariy.mesh.common.dto.FromHostPayload
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -22,7 +23,7 @@ internal class DiscoveryRepositoryImpl @Inject constructor(
     private val clientMeshManager: ClientMeshManager,
     private val profileDao: UserProfileDao,
     private val attemptRepository: AttemptRepository,
-    private val fromHostPayloadHandler: FromHostPayloadHandler,
+    private val fromHostPayloadHandler: PayloadHandler<FromHostPayload>,
 ) : DiscoveryRepository {
 
     private val _examState = MutableStateFlow<ExamStateModel>(ExamStateModel.None)

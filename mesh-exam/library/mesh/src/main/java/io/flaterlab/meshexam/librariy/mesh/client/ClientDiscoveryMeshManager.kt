@@ -222,6 +222,21 @@ internal class ClientDiscoveryMeshManager(
         payloadCallback.onBytesReceivedListener = listener ?: {}
     }
 
+    suspend fun sendPayloadToHost(payload: FromClientPayload) {
+        val dataJson = jsonParserHelper
+            .fromClientPayloadParser
+            .toJson(payload)
+        val meshPayload = MeshPayload(
+            type = MeshPayload.ContentType.CLIENT_PAYLOAD,
+            data = dataJson,
+        )
+        val bytes = jsonParserHelper
+            .meshPayloadJsonParser
+            .toJson(meshPayload)
+            .toByteArray()
+        nearby.sendPayload(parentInfo!!.first, Payload.fromBytes(bytes)).await()
+    }
+
     companion object {
         fun getInstance(context: Context): ClientDiscoveryMeshManager =
             GsonBuilder()

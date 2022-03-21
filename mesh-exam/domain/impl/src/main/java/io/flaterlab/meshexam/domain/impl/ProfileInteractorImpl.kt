@@ -1,7 +1,10 @@
 package io.flaterlab.meshexam.domain.impl
 
 import io.flaterlab.meshexam.domain.interactor.ProfileInteractor
+import io.flaterlab.meshexam.domain.profile.model.ExamHistoryModel
+import io.flaterlab.meshexam.domain.profile.model.HostingResultModel
 import io.flaterlab.meshexam.domain.profile.model.UserProfileModel
+import io.flaterlab.meshexam.domain.repository.HistoryRepository
 import io.flaterlab.meshexam.domain.repository.ProfileRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
@@ -9,6 +12,7 @@ import javax.inject.Inject
 
 class ProfileInteractorImpl @Inject constructor(
     private val profileRepository: ProfileRepository,
+    private val historyRepository: HistoryRepository,
 ) : ProfileInteractor {
 
     override suspend fun isProfileSetUp(): Boolean {
@@ -17,4 +21,12 @@ class ProfileInteractorImpl @Inject constructor(
     }
 
     override fun userProfile(): Flow<UserProfileModel> = profileRepository.userProfile()
+
+    override fun examHistory(): Flow<List<ExamHistoryModel>> {
+        return historyRepository.examHistory()
+    }
+
+    override fun hostingResults(hostingId: String): Flow<List<HostingResultModel>> {
+        return historyRepository.hostingResults(hostingId)
+    }
 }

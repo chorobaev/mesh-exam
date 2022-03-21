@@ -5,8 +5,11 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
-import io.flaterlab.meshexam.data.communication.ExamContentPayloadHandler
-import io.flaterlab.meshexam.data.communication.FromHostPayloadHandler
+import io.flaterlab.meshexam.data.communication.PayloadHandler
+import io.flaterlab.meshexam.data.communication.fromClient.AttemptPayloadHandler
+import io.flaterlab.meshexam.data.communication.fromHost.ExamContentPayloadHandler
+import io.flaterlab.meshexam.librariy.mesh.common.dto.FromClientPayload
+import io.flaterlab.meshexam.librariy.mesh.common.dto.FromHostPayload
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -14,5 +17,9 @@ internal interface PayloadHandlerBinding {
 
     @Binds
     @IntoSet
-    fun bindExamContentPayloadHandler(impl: ExamContentPayloadHandler): FromHostPayloadHandler.Handler
+    fun bindExamContentPayloadHandler(impl: ExamContentPayloadHandler): PayloadHandler.Handler<FromHostPayload>
+
+    @Binds
+    @IntoSet
+    fun bindAttemptPayloadHandler(impl: AttemptPayloadHandler): PayloadHandler.Handler<FromClientPayload>
 }

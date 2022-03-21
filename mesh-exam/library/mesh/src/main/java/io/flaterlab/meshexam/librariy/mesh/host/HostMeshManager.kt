@@ -41,6 +41,8 @@ class HostMeshManager internal constructor(
 
     private val children = MeshHand()
 
+    var onPayloadFromClientListener: ((FromClientPayload) -> Unit)? = null
+
     init {
         connectionsCallback.adapterCallback = this
         payloadCallback.adapterCallback = this
@@ -181,6 +183,10 @@ class HostMeshManager internal constructor(
                 async { nearby.sendPayload(endpointId, Payload.fromBytes(bytes)).await() }
             }.awaitAll()
         }
+    }
+
+    override fun onPayloadReceived(payload: FromClientPayload) {
+        onPayloadFromClientListener?.invoke(payload)
     }
 
     companion object {

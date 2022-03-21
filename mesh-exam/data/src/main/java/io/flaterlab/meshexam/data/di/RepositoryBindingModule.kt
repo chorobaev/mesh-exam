@@ -28,4 +28,7 @@ internal interface RepositoryBindingModule {
 
     @Binds
     fun bindAttemptRepository(impl: AttemptRepositoryImpl): AttemptRepository
+
+    @Binds
+    fun bindHistoryRepository(impl: HistoryRepositoryImpl): HistoryRepository
 }

@@ -5,10 +5,7 @@ import com.google.android.gms.nearby.connection.Payload
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.flaterlab.meshexam.librariy.mesh.client.exception.MeshConnectionException
-import io.flaterlab.meshexam.librariy.mesh.common.dto.AdvertiserInfo
-import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
-import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientMesh
-import io.flaterlab.meshexam.librariy.mesh.common.dto.FromHostPayload
+import io.flaterlab.meshexam.librariy.mesh.common.dto.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
@@ -85,6 +82,10 @@ class ClientMeshManager internal constructor(
     fun leaveExam(examId: String) {
         Timber.d("Leaving exam: examId = $examId")
         discoveryMesh.leaveExam(examId)
+    }
+
+    suspend fun sendPayloadToHost(payload: FromClientPayload) {
+        discoveryMesh.sendPayloadToHost(payload)
     }
 
     companion object {

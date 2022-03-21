@@ -5,6 +5,7 @@ import com.google.android.gms.nearby.connection.PayloadCallback
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import io.flaterlab.meshexam.librariy.mesh.common.dto.FromClientPayload
 import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshData
 import io.flaterlab.meshexam.librariy.mesh.common.dto.MeshPayload
 import timber.log.Timber
@@ -43,6 +44,7 @@ internal class HostPayloadAdapterCallback(
         when (data) {
             is MeshData.ClientConnected -> adapterCallback?.onClientConnected(data)
             is MeshData.ClientDisconnected -> adapterCallback?.onClientDisconnected(data)
+            is FromClientPayload -> adapterCallback?.onPayloadReceived(data)
         }
     }
 
@@ -51,5 +53,7 @@ internal class HostPayloadAdapterCallback(
         fun onClientConnected(data: MeshData.ClientConnected) = Unit
 
         fun onClientDisconnected(data: MeshData.ClientDisconnected) = Unit
+
+        fun onPayloadReceived(payload: FromClientPayload) = Unit
     }
 }
