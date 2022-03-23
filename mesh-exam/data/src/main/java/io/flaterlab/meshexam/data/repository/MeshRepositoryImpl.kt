@@ -1,5 +1,6 @@
 package io.flaterlab.meshexam.data.repository
 
+import androidx.room.withTransaction
 import io.flaterlab.meshexam.core.Mapper
 import io.flaterlab.meshexam.data.communication.Message
 import io.flaterlab.meshexam.data.communication.PayloadHandler
@@ -7,6 +8,9 @@ import io.flaterlab.meshexam.data.communication.fromHost.AnswerDto
 import io.flaterlab.meshexam.data.communication.fromHost.ExamDto
 import io.flaterlab.meshexam.data.communication.fromHost.QuestionDto
 import io.flaterlab.meshexam.data.database.MeshDatabase
+import io.flaterlab.meshexam.data.database.entity.AttemptEntity
+import io.flaterlab.meshexam.data.database.entity.UserEntity
+import io.flaterlab.meshexam.data.database.entity.host.AttemptToHostingMapperEntity
 import io.flaterlab.meshexam.data.database.entity.host.HostingEntity
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
@@ -39,7 +43,9 @@ internal class MeshRepositoryImpl @Inject constructor(
     private val examDao = database.examDao()
     private val questionDao = database.questionDao()
     private val answerDao = database.answerDao()
+    private val attemptDao = database.attemptDao()
     private val hostingDao = database.hostingDao()
+    private val userDao = database.userDao()
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
@@ -82,8 +88,45 @@ internal class MeshRepositoryImpl @Inject constructor(
                 startedAt = Date().time,
             )
             hostingDao.insert(hosting)
+            saveUsers(examId, hosting.hostingId)
             sendExamContent(examId, hosting.hostingId)
             StartExamResultModel(examId, hosting.hostingId)
+        }
+    }
+
+    private suspend fun saveUsers(examId: String, hostingId: String) {
+        database.withTransaction {
+            val userEntities = hostMeshManager
+                .getConnectedClients()
+                .map { client ->
+                    UserEntity(
+                        userId = client.id,
+                        fullName = client.name,
+                        info = client.info,
+                    )
+                }
+            userDao.insert(*userEntities.toTypedArray())
+            val emptyAttempts = userEntities
+                .map { user ->
+                    AttemptEntity(
+                        attemptId = idGenerator.generate(),
+                        userId = user.userId,
+                        examId = examId,
+                        status = AttemptEntity.Status.STARTED,
+                        score = null,
+                        createdAt = Date().time,
+                        updatedAt = Date().time,
+                        submittedAt = null,
+                    )
+                }
+            attemptDao.insert(*emptyAttempts.toTypedArray())
+            val hostingMappings = emptyAttempts.map { attempt ->
+                AttemptToHostingMapperEntity(
+                    attemptId = attempt.attemptId,
+                    hostingId = hostingId,
+                )
+            }
+            attemptDao.insertAttemptToHostingMapper(*hostingMappings.toTypedArray())
         }
     }
 

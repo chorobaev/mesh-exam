@@ -14,6 +14,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class HistoryRepositoryImpl @Inject constructor(
@@ -24,6 +25,7 @@ internal class HistoryRepositoryImpl @Inject constructor(
     private val examDao = database.examDao()
     private val attemptDao = database.attemptDao()
     private val hostingDao = database.hostingDao()
+    private val userDao = database.userDao()
 
     override fun examHistory(): Flow<List<ExamHistoryModel>> {
         return flow {
@@ -91,27 +93,29 @@ internal class HistoryRepositoryImpl @Inject constructor(
     }
 
     override fun hostingResults(hostingId: String): Flow<List<HostingResultModel>> {
-        return flow {
-            val result = database.withTransaction {
-                val attemptIds = attemptDao.getAttemptIdsByHostingId(hostingId)
-                attemptIds.map { attemptId ->
-                    coroutineScope {
+        return attemptDao
+            .attemptsByHostingId(hostingId)
+            .map { attempts ->
+                coroutineScope {
+                    attempts.map { attempt ->
                         async {
-                            attemptDao.getAttemptById(attemptId)
+                            val user = userDao.getUserById(attempt.userId)
+                            HostingResultModel(
+                                id = attempt.attemptId,
+                                studentFullName = user.fullName,
+                                studentInfo = user.info,
+                                status = if (attempt.submittedAt == null) {
+                                    HostingResultModel.Status.NOT_SUBMITTED
+                                } else {
+                                    HostingResultModel.Status.SUBMITTED
+                                },
+                                // TODO: add grade calculating logic
+                                grade = 0,
+                                totalGrade = 0,
+                            )
                         }
-                    }
-                }.awaitAll()
-            }.map { entity ->
-                HostingResultModel(
-                    id = entity.attemptId,
-                    studentFullName = entity.userId,
-                    studentInfo = "",
-                    status = "Status",
-                    grade = 0,
-                    totalGrade = 0,
-                )
+                    }.awaitAll()
+                }
             }
-            emit(result)
-        }
     }
 }

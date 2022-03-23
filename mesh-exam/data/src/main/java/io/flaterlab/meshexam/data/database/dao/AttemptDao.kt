@@ -4,6 +4,7 @@ import androidx.room.*
 import io.flaterlab.meshexam.data.database.entity.AttemptEntity
 import io.flaterlab.meshexam.data.database.entity.host.AttemptToHostingMapperEntity
 import io.flaterlab.meshexam.data.database.entity.update.AttemptFinishing
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 internal interface AttemptDao {
@@ -29,6 +30,22 @@ internal interface AttemptDao {
     @Query("SELECT attemptId FROM attempt_to_hosting_mapper WHERE hostingId = :hostingId")
     suspend fun getAttemptIdsByHostingId(hostingId: String): List<String>
 
+    @Query(
+        "SELECT * FROM attempts WHERE " +
+                "attemptId IN (SELECT attemptId FROM attempt_to_hosting_mapper WHERE hostingId = :hostingId)"
+    )
+    fun attemptsByHostingId(hostingId: String): Flow<List<AttemptEntity>>
+
+    @Query(
+        "SELECT * FROM attempts WHERE " +
+                "attemptId = (SELECT attemptId FROM attempt_to_hosting_mapper WHERE hostingId = :hostingId) " +
+                "AND userId = :userId"
+    )
+    suspend fun getAttemptByUserAndHostingId(userId: String, hostingId: String): AttemptEntity?
+
     @Update(entity = AttemptEntity::class)
     suspend fun updateToFinishAttempt(vararg attemptFinishing: AttemptFinishing)
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun update(vararg attempt: AttemptEntity)
 }

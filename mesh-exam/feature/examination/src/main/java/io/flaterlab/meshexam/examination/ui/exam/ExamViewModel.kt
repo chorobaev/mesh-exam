@@ -69,7 +69,12 @@ internal class ExamViewModel @Inject constructor(
 
     fun onFinishConfirmed() {
         viewModelScope.launch {
-            examInteractor.finishAttempt(launcher.attemptId)
+            try {
+                examInteractor.finishAttempt(launcher.attemptId)
+            } catch (ex: Exception) {
+                Timber.e(ex)
+                // TODO: handle mesh destroyed case
+            }
             commandFinishExam.value = launcher.attemptId
         }
     }

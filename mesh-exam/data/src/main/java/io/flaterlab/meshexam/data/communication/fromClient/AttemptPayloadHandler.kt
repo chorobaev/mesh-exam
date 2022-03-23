@@ -6,7 +6,6 @@ import io.flaterlab.meshexam.data.communication.PayloadHandler
 import io.flaterlab.meshexam.data.database.MeshDatabase
 import io.flaterlab.meshexam.data.database.entity.AttemptAnswerEntity
 import io.flaterlab.meshexam.data.database.entity.AttemptEntity
-import io.flaterlab.meshexam.data.database.entity.host.AttemptToHostingMapperEntity
 import io.flaterlab.meshexam.librariy.mesh.common.dto.FromClientPayload
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -32,8 +31,10 @@ internal class AttemptPayloadHandler @Inject constructor(
     private suspend fun saveAttempt(attempt: AttemptDto) {
         Timber.d("Attempt to save: $attempt")
         database.withTransaction {
+            val savedAttempt =
+                attemptDao.getAttemptByUserAndHostingId(attempt.userId, attempt.hostingId)
             AttemptEntity(
-                attemptId = attempt.id,
+                attemptId = savedAttempt?.attemptId ?: return@withTransaction,
                 userId = attempt.userId,
                 examId = attempt.examId,
                 status = AttemptEntity.Status.FINISHED,
@@ -41,12 +42,7 @@ internal class AttemptPayloadHandler @Inject constructor(
                 createdAt = attempt.startedAt,
                 updatedAt = attempt.startedAt,
                 submittedAt = attempt.finishedAt,
-            ).also { attemptDao.insert(it) }
-
-            AttemptToHostingMapperEntity(
-                attemptId = attempt.id,
-                hostingId = attempt.hostingId,
-            ).also { attemptDao.insertAttemptToHostingMapper(it) }
+            ).also { attemptDao.update(it) }
 
             saveAttemptAnswers(attempt.id, attempt.answers)
         }

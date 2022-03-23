@@ -159,11 +159,13 @@ class HostMeshManager internal constructor(
     private fun emmitClients() {
         onClientSetChangeListener?.invoke(
             MeshResult.Success(
-                HostMesh(
-                    left.mergeByClosest(right).also { Timber.d("Emitting: $it") }
-                )
+                HostMesh(getConnectedClients())
             )
         )
+    }
+
+    fun getConnectedClients(): List<ClientInfo> {
+        return left.mergeByClosest(right).also { Timber.d("Emitting: $it") }
     }
 
     override fun onClientConnected(data: MeshData.ClientConnected) {

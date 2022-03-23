@@ -33,7 +33,7 @@ internal class ResultListViewModel @Inject constructor(
                         id = model.id,
                         fullName = model.studentFullName,
                         info = Text.from(model.studentInfo),
-                        status = Text.from(model.status),
+                        status = Text.from(model.status.toString()),
                         grade = model.grade,
                         totalGrade = model.totalGrade,
                     )
