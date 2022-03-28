@@ -85,7 +85,7 @@ internal class AttemptRepositoryImpl @Inject constructor(
 
     override suspend fun addAttemptAnswer(model: SelectAnswerModel) {
         val prevAnswer = attemptAnswerDao
-            .attemptAnswerByQuestionId(model.questionId)
+            .attemptAnswerByAttemptAndQuestionId(model.questionId, model.attemptId)
             .firstOrNull()
         if (prevAnswer == null || prevAnswer.answerId != model.answerId) {
             val newAnswer = AttemptAnswerEntity(
@@ -135,9 +135,12 @@ internal class AttemptRepositoryImpl @Inject constructor(
         clientMeshManager.sendPayloadToHost(clientMessageMapper(attemptDto))
     }
 
-    override fun selectedAnswerByQuestionId(questionId: String): Flow<SelectedAnswerModel> {
+    override fun selectedAnswerByAttemptAndQuestionId(
+        attemptId: String,
+        questionId: String
+    ): Flow<SelectedAnswerModel> {
         return attemptAnswerDao
-            .attemptAnswerByQuestionId(questionId)
+            .attemptAnswerByAttemptAndQuestionId(attemptId, questionId)
             .map { entity ->
                 SelectedAnswerModel(
                     answerId = entity?.answerId

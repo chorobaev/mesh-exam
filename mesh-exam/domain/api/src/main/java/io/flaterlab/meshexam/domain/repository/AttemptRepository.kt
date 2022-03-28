@@ -17,7 +17,10 @@ interface AttemptRepository {
 
     suspend fun finishAttempt(attemptId: String)
 
-    fun selectedAnswerByQuestionId(questionId: String): Flow<SelectedAnswerModel>
+    fun selectedAnswerByAttemptAndQuestionId(
+        attemptId: String,
+        questionId: String
+    ): Flow<SelectedAnswerModel>
 
     fun attemptTimeLeftInSec(attemptId: String): Flow<Int>
 }

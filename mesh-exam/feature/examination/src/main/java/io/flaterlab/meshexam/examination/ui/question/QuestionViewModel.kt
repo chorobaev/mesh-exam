@@ -26,7 +26,7 @@ internal class QuestionViewModel @Inject constructor(
         .map { it.content }
         .asLiveData(viewModelScope.coroutineContext)
     val answers = examInteractor
-        .answersByQuestionId(launcher.questionId)
+        .answersByAttemptAndQuestionId(launcher.attemptId, launcher.questionId)
         .map { list ->
             list.map { model ->
                 AnswerDvo(model.id, model.content, model.isSelected)

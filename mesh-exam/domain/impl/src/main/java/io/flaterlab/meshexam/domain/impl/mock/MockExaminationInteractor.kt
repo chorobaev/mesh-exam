@@ -77,10 +77,13 @@ class MockExaminationInteractor @Inject constructor(
         return examRepository.questionById(questionId)
     }
 
-    override fun answersByQuestionId(questionId: String): Flow<List<ExamAnswerModel>> {
+    override fun answersByAttemptAndQuestionId(
+        attemptId: String,
+        questionId: String
+    ): Flow<List<ExamAnswerModel>> {
         return combine(
             examRepository.answersByQuestionId(questionId),
-            attemptRepository.selectedAnswerByQuestionId(questionId),
+            attemptRepository.selectedAnswerByAttemptAndQuestionId(attemptId, questionId),
         ) { answers, selected ->
             answers.map { answer ->
                 ExamAnswerModel(
