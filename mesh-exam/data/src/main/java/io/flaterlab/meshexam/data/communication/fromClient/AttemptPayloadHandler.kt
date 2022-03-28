@@ -10,6 +10,7 @@ import io.flaterlab.meshexam.librariy.mesh.common.dto.FromClientPayload
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.first
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -20,6 +21,8 @@ internal class AttemptPayloadHandler @Inject constructor(
 
     private val attemptDao = database.attemptDao()
     private val attemptAnswerDto = database.attemptAnswerDao()
+    private val answerDao = database.answerDao()
+    private val questionDao = database.questionDao()
 
     override suspend fun handle(payload: FromClientPayload): Boolean {
         if (payload.contentType != AttemptDto.contentType) return false
@@ -38,7 +41,7 @@ internal class AttemptPayloadHandler @Inject constructor(
                 userId = attempt.userId,
                 examId = attempt.examId,
                 status = AttemptEntity.Status.FINISHED,
-                score = calculateScore(),
+                score = calculateScore(attempt),
                 createdAt = attempt.startedAt,
                 updatedAt = attempt.startedAt,
                 submittedAt = attempt.finishedAt,
@@ -48,9 +51,19 @@ internal class AttemptPayloadHandler @Inject constructor(
         }
     }
 
-    private suspend fun calculateScore(): Int? {
-        // TODO: implement score calculation
-        return 0
+    private suspend fun calculateScore(attempt: AttemptDto): Float {
+        return coroutineScope {
+            val answerIds = attempt.answers.map(AttemptAnswerDto::answerId)
+            val answers = answerDao.getAnswersByAnswerIds(* answerIds.toTypedArray())
+            answers
+                .filter { it.isCorrect }
+                .map { answerEntity ->
+                    async { questionDao.questionById(answerEntity.hostQuestionId).first() }
+                }
+                .awaitAll()
+                .sumOf { it.score.toDouble() }
+                .toFloat()
+        }
     }
 
     private suspend fun saveAttemptAnswers(attemptId: String, answers: List<AttemptAnswerDto>) {

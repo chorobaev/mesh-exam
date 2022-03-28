@@ -18,6 +18,9 @@ internal interface AnswerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAnswers(vararg answers: AnswerEntity)
 
+    @Query("SELECT * FROM answers WHERE answerId IN (:answerIds)")
+    suspend fun getAnswersByAnswerIds(vararg answerIds: String): List<AnswerEntity>
+
     @Query("DELETE FROM answers WHERE answerId IN (:answerIds)")
     suspend fun deleteAnswers(vararg answerIds: String)
 

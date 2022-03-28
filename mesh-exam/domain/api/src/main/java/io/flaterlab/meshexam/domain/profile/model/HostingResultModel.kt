@@ -5,7 +5,7 @@ data class HostingResultModel(
     val studentFullName: String,
     val studentInfo: String,
     val status: Status,
-    val grade: Int,
+    val grade: Float,
     val totalGrade: Int,
 ) {
     enum class Status {

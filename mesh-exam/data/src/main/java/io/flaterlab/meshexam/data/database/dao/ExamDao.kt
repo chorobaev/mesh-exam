@@ -28,4 +28,7 @@ internal interface ExamDao {
 
     @Query("SELECT hostingId FROM exam_to_hosting_mapper WHERE examId = :examId")
     suspend fun getHostingIdByExamId(examId: String): String
+
+    @Query("SELECT SUM(score) FROM questions WHERE hostExamId = :examId")
+    suspend fun getTotalScoreByExamId(examId: String): Float
 }

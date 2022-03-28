@@ -14,6 +14,7 @@ import io.flaterlab.meshexam.uikit.view.StateRecyclerView
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @HiltViewModel
 internal class ResultListViewModel @Inject constructor(
@@ -34,7 +35,7 @@ internal class ResultListViewModel @Inject constructor(
                         fullName = model.studentFullName,
                         info = Text.from(model.studentInfo),
                         status = Text.from(model.status.toString()),
-                        grade = model.grade,
+                        grade = model.grade.roundToInt(),
                         totalGrade = model.totalGrade,
                     )
                 }

@@ -12,7 +12,7 @@ internal data class AttemptEntity(
     val userId: String,
     val examId: String,
     val status: Status,
-    val score: Int?,
+    val score: Float?,
     val createdAt: Long,
     val updatedAt: Long,
     val submittedAt: Long?,

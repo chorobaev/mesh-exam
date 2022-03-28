@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 internal class HistoryRepositoryImpl @Inject constructor(
     private val database: MeshDatabase,
@@ -100,6 +101,8 @@ internal class HistoryRepositoryImpl @Inject constructor(
                     attempts.map { attempt ->
                         async {
                             val user = userDao.getUserById(attempt.userId)
+                            val totalScore = examDao.getTotalScoreByExamId(attempt.examId)
+                                .roundToInt()
                             HostingResultModel(
                                 id = attempt.attemptId,
                                 studentFullName = user.fullName,
@@ -109,9 +112,8 @@ internal class HistoryRepositoryImpl @Inject constructor(
                                 } else {
                                     HostingResultModel.Status.SUBMITTED
                                 },
-                                // TODO: add grade calculating logic
-                                grade = 0,
-                                totalGrade = 0,
+                                grade = attempt.score?.coerceAtMost(totalScore.toFloat()) ?: 0F,
+                                totalGrade = totalScore,
                             )
                         }
                     }.awaitAll()
