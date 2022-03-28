@@ -22,6 +22,12 @@ internal class ResultFragment : ViewBindingFragment<FragmentResultBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.attemptResult.observe(viewLifecycleOwner) { result ->
+            with(binding) {
+                tvExamResultName.text = result.examName
+                tvExamResultTime.text = result.duration
+            }
+        }
         viewModel.commandGoToMain.observe(viewLifecycleOwner) {
             findNavController().popBackStack(R.id.nav_examination, true)
         }

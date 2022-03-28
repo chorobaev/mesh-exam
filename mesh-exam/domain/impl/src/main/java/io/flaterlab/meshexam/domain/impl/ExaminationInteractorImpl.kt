@@ -2,10 +2,7 @@ package io.flaterlab.meshexam.domain.impl
 
 import io.flaterlab.meshexam.domain.create.model.ExamInfoModel
 import io.flaterlab.meshexam.domain.create.model.QuestionModel
-import io.flaterlab.meshexam.domain.exam.model.AttemptMetaModel
-import io.flaterlab.meshexam.domain.exam.model.ExamAnswerModel
-import io.flaterlab.meshexam.domain.exam.model.ExamStateModel
-import io.flaterlab.meshexam.domain.exam.model.SelectAnswerModel
+import io.flaterlab.meshexam.domain.exam.model.*
 import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
 import io.flaterlab.meshexam.domain.repository.AttemptRepository
 import io.flaterlab.meshexam.domain.repository.DiscoveryRepository
@@ -83,5 +80,9 @@ class ExaminationInteractorImpl @Inject constructor(
 
     override suspend fun selectAnswer(model: SelectAnswerModel) {
         attemptRepository.addAttemptAnswer(model)
+    }
+
+    override fun attemptResult(attemptId: String): Flow<AttemptResultModel> {
+        return attemptRepository.attemptResult(attemptId)
     }
 }

@@ -12,6 +12,7 @@ import io.flaterlab.meshexam.data.database.entity.update.AttemptFinishing
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
 import io.flaterlab.meshexam.domain.exam.model.AttemptMetaModel
+import io.flaterlab.meshexam.domain.exam.model.AttemptResultModel
 import io.flaterlab.meshexam.domain.exam.model.SelectAnswerModel
 import io.flaterlab.meshexam.domain.exam.model.SelectedAnswerModel
 import io.flaterlab.meshexam.domain.repository.AttemptRepository
@@ -163,6 +164,22 @@ internal class AttemptRepositoryImpl @Inject constructor(
                 delay(1000)
                 secondsLeft--
             } while (secondsLeft >= 0)
+        }
+    }
+
+    override fun attemptResult(attemptId: String): Flow<AttemptResultModel> {
+        return flow {
+            val result = database.withTransaction {
+                val attempt = attemptDao.getAttemptById(attemptId)
+                val exam = examDao.getExamById(attempt.examId)
+                AttemptResultModel(
+                    examId = attempt.examId,
+                    attemptId = attemptId,
+                    examName = exam.name,
+                    durationInMillis = max(attempt.submittedAt?.minus(attempt.createdAt) ?: 0, 0)
+                )
+            }
+            emit(result)
         }
     }
 }

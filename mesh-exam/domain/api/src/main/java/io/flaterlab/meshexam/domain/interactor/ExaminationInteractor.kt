@@ -2,10 +2,7 @@ package io.flaterlab.meshexam.domain.interactor
 
 import io.flaterlab.meshexam.domain.create.model.ExamInfoModel
 import io.flaterlab.meshexam.domain.create.model.QuestionModel
-import io.flaterlab.meshexam.domain.exam.model.AttemptMetaModel
-import io.flaterlab.meshexam.domain.exam.model.ExamAnswerModel
-import io.flaterlab.meshexam.domain.exam.model.ExamStateModel
-import io.flaterlab.meshexam.domain.exam.model.SelectAnswerModel
+import io.flaterlab.meshexam.domain.exam.model.*
 import kotlinx.coroutines.flow.Flow
 
 interface ExaminationInteractor {
@@ -34,4 +31,6 @@ interface ExaminationInteractor {
     ): Flow<List<ExamAnswerModel>>
 
     suspend fun selectAnswer(model: SelectAnswerModel)
+
+    fun attemptResult(attemptId: String): Flow<AttemptResultModel>
 }
