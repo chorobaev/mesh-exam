@@ -8,6 +8,7 @@ import dagger.multibindings.IntoSet
 import io.flaterlab.meshexam.data.communication.PayloadHandler
 import io.flaterlab.meshexam.data.communication.fromClient.AttemptPayloadHandler
 import io.flaterlab.meshexam.data.communication.fromHost.ExamContentPayloadHandler
+import io.flaterlab.meshexam.data.communication.fromHost.FinishExamEventPayloadHandler
 import io.flaterlab.meshexam.librariy.mesh.common.dto.FromClientPayload
 import io.flaterlab.meshexam.librariy.mesh.common.dto.FromHostPayload
 
@@ -18,6 +19,10 @@ internal interface PayloadHandlerBinding {
     @Binds
     @IntoSet
     fun bindExamContentPayloadHandler(impl: ExamContentPayloadHandler): PayloadHandler.Handler<FromHostPayload>
+
+    @Binds
+    @IntoSet
+    fun bindFinishExamEventPayloadHandler(impl: FinishExamEventPayloadHandler): PayloadHandler.Handler<FromHostPayload>
 
     @Binds
     @IntoSet

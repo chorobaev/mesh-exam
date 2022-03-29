@@ -6,11 +6,11 @@ import io.flaterlab.meshexam.data.communication.Message
 import io.flaterlab.meshexam.data.communication.PayloadHandler
 import io.flaterlab.meshexam.data.communication.fromHost.AnswerDto
 import io.flaterlab.meshexam.data.communication.fromHost.ExamDto
+import io.flaterlab.meshexam.data.communication.fromHost.FinishExamEventDto
 import io.flaterlab.meshexam.data.communication.fromHost.QuestionDto
 import io.flaterlab.meshexam.data.database.MeshDatabase
 import io.flaterlab.meshexam.data.database.entity.AttemptEntity
 import io.flaterlab.meshexam.data.database.entity.UserEntity
-import io.flaterlab.meshexam.data.database.entity.host.AttemptToHostingMapperEntity
 import io.flaterlab.meshexam.data.database.entity.host.HostingEntity
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
@@ -72,7 +72,7 @@ internal class MeshRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun stopMesh() = hostMeshManager.stop()
+    override suspend fun destroyMesh(examId: String) = hostMeshManager.stop()
 
     override suspend fun removeClient(clientId: String) {
         TODO("implement removal when reconnect logic is ready")
@@ -86,6 +86,7 @@ internal class MeshRepositoryImpl @Inject constructor(
                 userId = user.id,
                 examId = examId,
                 startedAt = Date().time,
+                finishedAt = null,
             )
             hostingDao.insert(hosting)
             saveUsers(examId, hosting.hostingId)
@@ -112,6 +113,7 @@ internal class MeshRepositoryImpl @Inject constructor(
                         attemptId = idGenerator.generate(),
                         userId = user.userId,
                         examId = examId,
+                        hostingId = hostingId,
                         status = AttemptEntity.Status.STARTED,
                         score = null,
                         createdAt = Date().time,
@@ -120,13 +122,6 @@ internal class MeshRepositoryImpl @Inject constructor(
                     )
                 }
             attemptDao.insert(*emptyAttempts.toTypedArray())
-            val hostingMappings = emptyAttempts.map { attempt ->
-                AttemptToHostingMapperEntity(
-                    attemptId = attempt.attemptId,
-                    hostingId = hostingId,
-                )
-            }
-            attemptDao.insertAttemptToHostingMapper(*hostingMappings.toTypedArray())
         }
     }
 
@@ -176,6 +171,19 @@ internal class MeshRepositoryImpl @Inject constructor(
                 fromClientPayloadHandler.handle(payload)
             }
         }
+    }
+
+    override suspend fun finishExam(hostingId: String) {
+        sendFinishNotification(hostingId)
+        database.withTransaction {
+            val hosting = hostingDao.getHostingById(hostingId)
+            hostingDao.insert(hosting.copy(finishedAt = Date().time))
+        }
+    }
+
+    private suspend fun sendFinishNotification(hostingId: String) {
+        val finishExamAction = FinishExamEventDto(hostingId)
+        hostMeshManager.sendPayload(hostMessageMapper(finishExamAction))
     }
 
     override fun hostingTimeLeftInSec(hostingId: String): Flow<Int> {

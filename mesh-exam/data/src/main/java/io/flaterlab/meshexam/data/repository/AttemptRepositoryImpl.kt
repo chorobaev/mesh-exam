@@ -19,6 +19,7 @@ import io.flaterlab.meshexam.domain.repository.AttemptRepository
 import io.flaterlab.meshexam.librariy.mesh.client.ClientMeshManager
 import io.flaterlab.meshexam.librariy.mesh.common.dto.FromClientPayload
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
@@ -42,10 +43,12 @@ internal class AttemptRepositoryImpl @Inject constructor(
         val profile = userProfileDao.userProfile().first()
         return database.withTransaction {
             val exam = examDao.getExamById(examId)
+            val hostingId = examDao.getHostingIdByExamId(examId)
             val attempt = AttemptEntity(
                 attemptId = idGenerator.generate(),
                 userId = profile.id,
                 examId = exam.examId,
+                hostingId = hostingId,
                 status = AttemptEntity.Status.STARTED,
                 score = null,
                 createdAt = Date().time,
@@ -57,17 +60,27 @@ internal class AttemptRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAttemptMetaById(attemptId: String): AttemptMetaModel {
-        val attempt = attemptDao.getAttemptById(attemptId)
-        val exam = examDao.getExamById(attempt.examId)
-        return AttemptMetaModel(
-            examId = exam.examId,
-            attemptId = attemptId,
-            examName = exam.name,
-            examInfo = exam.type,
-            leftTimeInMillis = exam.durationInMin * 60 * 1000 - (Date().time - attempt.createdAt)
-        )
+    override fun attemptMetaById(attemptId: String): Flow<AttemptMetaModel> {
+        return attemptDao.attemptById(attemptId)
+            .map { attempt ->
+                val exam = examDao.getExamById(attempt.examId)
+                AttemptMetaModel(
+                    examId = exam.examId,
+                    attemptId = attemptId,
+                    examName = exam.name,
+                    examInfo = exam.type,
+                    examStatus = resolveAttemptMetaStatus(attempt),
+                    leftTimeInMillis = exam.durationInMin * 60 * 1000 - (Date().time - attempt.createdAt)
+                )
+            }
     }
+
+    private fun resolveAttemptMetaStatus(attempt: AttemptEntity) =
+        if (attempt.isFinished) {
+            AttemptMetaModel.ExamStatus.FINISHED
+        } else {
+            AttemptMetaModel.ExamStatus.STARTED
+        }
 
     override suspend fun getActiveAttempts(): List<AttemptMetaModel> {
         return attemptDao
@@ -79,6 +92,7 @@ internal class AttemptRepositoryImpl @Inject constructor(
                     attemptId = attempt.attemptId,
                     examName = exam.name,
                     examInfo = exam.type,
+                    examStatus = resolveAttemptMetaStatus(attempt),
                     leftTimeInMillis = exam.durationInMin * 60 * 1000 - (Date().time - attempt.createdAt)
                 )
             }

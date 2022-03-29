@@ -8,9 +8,11 @@ interface MeshInteractor {
 
     fun creteMesh(examId: String): Flow<MeshModel>
 
+    suspend fun destroyMesh(examId: String)
+
     suspend fun removeClient(clientId: String)
 
-    fun stopMesh()
+    suspend fun finishExam(hostingId: String)
 
     suspend fun startExam(examId: String): StartExamResultModel
 

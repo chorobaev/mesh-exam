@@ -60,7 +60,9 @@ internal class MonitorViewModel @Inject constructor(
     }
 
     fun onFinishConfirmed() {
-        meshInteractor.stopMesh()
-        commandFinishExam.value = FinishingLauncher(launcher.hostingId)
+        viewModelScope.launch {
+            meshInteractor.finishExam(launcher.hostingId)
+            commandFinishExam.value = FinishingLauncher(launcher.hostingId)
+        }
     }
 }

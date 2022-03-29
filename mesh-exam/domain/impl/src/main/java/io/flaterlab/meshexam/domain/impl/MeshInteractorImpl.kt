@@ -13,9 +13,11 @@ class MeshInteractorImpl @Inject constructor(
 
     override fun creteMesh(examId: String): Flow<MeshModel> = meshRepository.createMesh(examId)
 
+    override suspend fun destroyMesh(examId: String) = meshRepository.destroyMesh(examId)
+
     override suspend fun removeClient(clientId: String) = meshRepository.removeClient(clientId)
 
-    override fun stopMesh() = meshRepository.stopMesh()
+    override suspend fun finishExam(hostingId: String) = meshRepository.finishExam(hostingId)
 
     override suspend fun startExam(examId: String): StartExamResultModel {
         return meshRepository.startExam(examId)

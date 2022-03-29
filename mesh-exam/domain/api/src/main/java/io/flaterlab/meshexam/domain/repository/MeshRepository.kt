@@ -8,11 +8,13 @@ interface MeshRepository {
 
     fun createMesh(examId: String): Flow<MeshModel>
 
-    fun stopMesh()
+    suspend fun destroyMesh(examId: String)
 
     suspend fun removeClient(clientId: String)
 
     suspend fun startExam(examId: String): StartExamResultModel
+
+    suspend fun finishExam(hostingId: String)
 
     fun hostingTimeLeftInSec(hostingId: String): Flow<Int>
 }

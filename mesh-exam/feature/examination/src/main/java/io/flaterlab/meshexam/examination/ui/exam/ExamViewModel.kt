@@ -1,6 +1,5 @@
 package io.flaterlab.meshexam.examination.ui.exam
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -8,9 +7,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.androidbase.getLauncher
+import io.flaterlab.meshexam.domain.exam.model.AttemptMetaModel
 import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
 import io.flaterlab.meshexam.examination.dvo.ExaminationDvo
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -27,13 +29,26 @@ internal class ExamViewModel @Inject constructor(
     private val dateFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
     private val datePrototype = Date()
 
-    val examMeta = MutableLiveData<ExaminationDvo>()
+    val examMeta = examInteractor.attemptMetaById(launcher.attemptId)
+        .onEach { attemptModel ->
+            Timber.d("Attempt meta changed: $attemptModel")
+            if (attemptModel.examStatus == AttemptMetaModel.ExamStatus.FINISHED) {
+                commandFinishExam.value = launcher.attemptId
+            }
+        }
+        .map { attemptModel ->
+            ExaminationDvo(attemptModel.examName, attemptModel.examInfo)
+        }
+        .catch { e -> e.showLocalizedMessage() }
+        .asLiveData(viewModelScope.coroutineContext)
+
     val timeLeft = examInteractor.attemptTimeLeftInSec(launcher.attemptId)
         .map { sec ->
             datePrototype.time = sec * 1000L
             dateFormatter.format(datePrototype)
         }
         .asLiveData(viewModelScope.coroutineContext)
+
     val questionIds = examInteractor
         .questionIdsByExamId(launcher.examId)
         .asLiveData(viewModelScope.coroutineContext)
@@ -42,22 +57,6 @@ internal class ExamViewModel @Inject constructor(
     val commandFinishExam = SingleLiveEvent<String>()
 
     val attemptId get() = launcher.attemptId
-
-    init {
-        loadAttemptMeta()
-    }
-
-    private fun loadAttemptMeta() {
-        viewModelScope.launch {
-            try {
-                val attemptModel = examInteractor.getAttemptById(launcher.attemptId)
-                Timber.d("Attempt: $attemptModel")
-                examMeta.value = ExaminationDvo(attemptModel.examName, attemptModel.examInfo)
-            } catch (ex: Exception) {
-                ex.showLocalizedMessage()
-            }
-        }
-    }
 
     fun onSubmitClicked() {
         commandShowFinishingConfirm.call()

@@ -11,7 +11,6 @@ import androidx.work.workDataOf
 import io.flaterlab.meshexam.data.database.dao.*
 import io.flaterlab.meshexam.data.database.entity.*
 import io.flaterlab.meshexam.data.database.entity.client.ExamToHostingMapperEntity
-import io.flaterlab.meshexam.data.database.entity.host.AttemptToHostingMapperEntity
 import io.flaterlab.meshexam.data.database.entity.host.HostingEntity
 import io.flaterlab.meshexam.data.worker.SeedDatabaseWorker
 import io.flaterlab.meshexam.data.worker.SeedDatabaseWorker.Companion.KEY_FILE_NAME
@@ -24,7 +23,6 @@ import io.flaterlab.meshexam.data.worker.SeedDatabaseWorker.Companion.KEY_FILE_N
         AttemptEntity::class,
         AttemptAnswerEntity::class,
         HostingEntity::class,
-        AttemptToHostingMapperEntity::class,
         ExamToHostingMapperEntity::class,
         UserEntity::class,
     ],

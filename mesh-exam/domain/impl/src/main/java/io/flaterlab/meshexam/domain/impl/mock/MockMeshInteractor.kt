@@ -23,6 +23,10 @@ class MockMeshInteractor @Inject constructor(
         )
     }
 
+    override suspend fun destroyMesh(examId: String) {
+        println("Destroying mesh")
+    }
+
     override suspend fun removeClient(clientId: String) {
         println("Removing the client $clientId")
     }
@@ -32,7 +36,7 @@ class MockMeshInteractor @Inject constructor(
         return meshRepository.startExam(examId)
     }
 
-    override fun stopMesh() {
+    override suspend fun finishExam(hostingId: String) {
         println("Stopping the mesh")
     }
 

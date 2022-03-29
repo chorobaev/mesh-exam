@@ -5,5 +5,13 @@ data class AttemptMetaModel(
     val attemptId: String,
     val examName: String,
     val examInfo: String,
+    val examStatus: ExamStatus,
     val leftTimeInMillis: Long,
-)
+) {
+
+    enum class ExamStatus {
+        STARTED,
+        FINISHED,
+        ;
+    }
+}

@@ -40,6 +40,7 @@ internal class AttemptPayloadHandler @Inject constructor(
                 attemptId = savedAttempt?.attemptId ?: return@withTransaction,
                 userId = attempt.userId,
                 examId = attempt.examId,
+                hostingId = attempt.hostingId,
                 status = AttemptEntity.Status.FINISHED,
                 score = calculateScore(attempt),
                 createdAt = attempt.startedAt,

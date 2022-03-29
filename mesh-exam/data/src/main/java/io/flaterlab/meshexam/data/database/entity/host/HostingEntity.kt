@@ -9,4 +9,5 @@ internal data class HostingEntity(
     val userId: String,
     val examId: String,
     val startedAt: Long,
+    val finishedAt: Long?,
 )

@@ -10,7 +10,7 @@ interface AttemptRepository {
 
     suspend fun attempt(examId: String): String
 
-    suspend fun getAttemptMetaById(attemptId: String): AttemptMetaModel
+    fun attemptMetaById(attemptId: String): Flow<AttemptMetaModel>
 
     suspend fun getActiveAttempts(): List<AttemptMetaModel>
 

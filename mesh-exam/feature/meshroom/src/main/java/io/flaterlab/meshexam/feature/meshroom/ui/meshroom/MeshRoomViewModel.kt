@@ -105,7 +105,13 @@ internal class MeshRoomViewModel @Inject constructor(
     }
 
     fun onBackPressed() {
-        meshInteractor.stopMesh()
+        viewModelScope.launch {
+            try {
+                meshInteractor.destroyMesh(launcher.examId)
+            } catch (ex: Exception) {
+                ex.showLocalizedMessage()
+            }
+        }
     }
 
     fun onStartClicked() {

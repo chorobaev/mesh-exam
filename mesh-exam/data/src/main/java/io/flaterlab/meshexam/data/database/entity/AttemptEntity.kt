@@ -11,6 +11,7 @@ internal data class AttemptEntity(
     @PrimaryKey val attemptId: String,
     val userId: String,
     val examId: String,
+    val hostingId: String,
     val status: Status,
     val score: Float?,
     val createdAt: Long,

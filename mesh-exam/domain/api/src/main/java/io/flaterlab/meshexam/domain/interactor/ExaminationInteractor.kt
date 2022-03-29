@@ -17,7 +17,7 @@ interface ExaminationInteractor {
 
     suspend fun finishAttempt(attemptId: String)
 
-    suspend fun getAttemptById(attemptId: String): AttemptMetaModel
+    fun attemptMetaById(attemptId: String): Flow<AttemptMetaModel>
 
     fun attemptTimeLeftInSec(attemptId: String): Flow<Int>
 

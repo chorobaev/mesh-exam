@@ -38,8 +38,8 @@ class ExaminationInteractorImpl @Inject constructor(
         attemptRepository.finishAttempt(attemptId)
     }
 
-    override suspend fun getAttemptById(attemptId: String): AttemptMetaModel {
-        return attemptRepository.getAttemptMetaById(attemptId)
+    override fun attemptMetaById(attemptId: String): Flow<AttemptMetaModel> {
+        return attemptRepository.attemptMetaById(attemptId)
     }
 
     override fun attemptTimeLeftInSec(attemptId: String): Flow<Int> {
