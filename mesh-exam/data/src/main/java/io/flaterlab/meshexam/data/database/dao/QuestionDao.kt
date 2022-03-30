@@ -17,11 +17,14 @@ internal interface QuestionDao {
     @Query("SELECT questionId FROM questions WHERE hostExamId = :examId ORDER BY orderNumber")
     suspend fun getQuestionIdsByExamId(examId: String): List<String>
 
-    @Query("SELECT * FROM questions WHERE hostExamId = :examId")
+    @Query("SELECT * FROM questions WHERE hostExamId = :examId ORDER BY orderNumber")
     suspend fun getQuestionsByExamId(examId: String): List<QuestionEntity>
 
     @Query("DELETE FROM questions WHERE questionId IN (:questionIds)")
     suspend fun deleteQuestions(vararg questionIds: String)
+
+    @Query("SELECT COUNT(*) FROM questions WHERE hostExamId = :examId")
+    suspend fun getQuestionCountByExamId(examId: String): Int
 
     @Update(entity = QuestionEntity::class)
     suspend fun updateQuestionContents(vararg contents: QuestionContent)

@@ -5,9 +5,7 @@ import io.flaterlab.meshexam.data.database.MeshDatabase
 import io.flaterlab.meshexam.data.database.entity.AttemptEntity
 import io.flaterlab.meshexam.data.database.entity.host.HostingEntity
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
-import io.flaterlab.meshexam.domain.profile.model.ExamHistoryModel
-import io.flaterlab.meshexam.domain.profile.model.HostingResultItemModel
-import io.flaterlab.meshexam.domain.profile.model.HostingResultMetaModel
+import io.flaterlab.meshexam.domain.profile.model.*
 import io.flaterlab.meshexam.domain.repository.HistoryRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -28,6 +26,9 @@ internal class HistoryRepositoryImpl @Inject constructor(
     private val attemptDao = database.attemptDao()
     private val hostingDao = database.hostingDao()
     private val userDao = database.userDao()
+    private val questionDao = database.questionDao()
+    private val answerDao = database.answerDao()
+    private val hostAttemptAnswerDao = database.hostAttemptAnswerDao()
 
     override fun userExamHistory(): Flow<List<ExamHistoryModel>> {
         return flow {
@@ -138,6 +139,66 @@ internal class HistoryRepositoryImpl @Inject constructor(
                         }
                     }.awaitAll()
                 }
+            }
+    }
+
+    override fun individualResultMeta(attemptId: String): Flow<IndividualResultModel> {
+        return attemptDao.attemptById(attemptId)
+            .map { attempt ->
+                database.withTransaction {
+                    val exam = examDao.getExamById(attempt.examId)
+                    IndividualResultModel(
+                        examId = exam.examId,
+                        examName = exam.name,
+                        examInfo = exam.type,
+                        durationInMillis = attempt.durationInMillis,
+                        totalQuestionsCount = questionDao.getQuestionCountByExamId(exam.examId),
+                        correctAnswers = calculateCorrectAnswers(attemptId),
+                        questionInfoList = provideQuestionInfoList(attempt)
+                    )
+                }
+            }
+    }
+
+    private suspend fun calculateCorrectAnswers(attemptId: String): Int {
+        return hostAttemptAnswerDao.getCorrectAnswerCountByAttemptId(attemptId)
+    }
+
+    private suspend fun provideQuestionInfoList(
+        attempt: AttemptEntity
+    ): List<QuestionResultInfoModel> {
+        return questionDao.getQuestionsByExamId(attempt.examId)
+            .map { question ->
+                coroutineScope {
+                    async {
+                        QuestionResultInfoModel(
+                            questionId = question.questionId,
+                            isCorrect = hostAttemptAnswerDao
+                                .isQuestionAnsweredCorrectly(question.questionId, attempt.attemptId)
+                        )
+                    }
+                }
+            }.awaitAll()
+    }
+
+    override fun questionResult(questionId: String, attemptId: String): Flow<QuestionResultModel> {
+        return questionDao.questionById(questionId)
+            .map { question ->
+                val answers = answerDao.answersByQuestionId(questionId).first()
+                QuestionResultModel(
+                    questionId = questionId,
+                    question = question.question,
+                    answerResultList = answers
+                        .map { answer ->
+                            AnswerResultModel(
+                                answerId = answer.answerId,
+                                answer = answer.answer,
+                                isCorrect = answer.isCorrect,
+                                isSelected = hostAttemptAnswerDao
+                                    .getAnswerSelectedTime(answer.answerId, attemptId) != null,
+                            )
+                        }
+                )
             }
     }
 }

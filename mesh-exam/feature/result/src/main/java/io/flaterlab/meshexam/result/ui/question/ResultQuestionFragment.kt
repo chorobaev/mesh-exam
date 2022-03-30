@@ -46,13 +46,13 @@ internal class ResultQuestionFragment : ViewBindingFragment<FragmentResultQuesti
                     tvAnswerVariant.text = 'a'.plus(index).toString()
                     tvAnswerContent.text = result.answer
                     containerResultAnswer.setBackgroundResource(
-                        if (result.isCorrect) {
+                        if (result.isSelected) {
                             R.drawable.background_result_answer_correct
                         } else {
                             R.drawable.background_result_answer
                         }
                     )
-                    if (result.isSelected) {
+                    if (result.isCorrect) {
                         ivAnswerCorrectness.setImageResource(R.drawable.ic_checkbox_checked)
                     }
                     if (index == questions.lastIndex) {

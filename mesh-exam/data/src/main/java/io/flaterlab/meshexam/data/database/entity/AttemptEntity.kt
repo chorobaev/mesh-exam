@@ -21,6 +21,10 @@ internal data class AttemptEntity(
 
     val isFinished get() = submittedAt != null
 
+    val durationInMillis
+        get() = (submittedAt ?: throw IllegalStateException("Attempt should be submitted")) -
+                createdAt
+
     enum class Status {
         STARTED,
         FINISHED,

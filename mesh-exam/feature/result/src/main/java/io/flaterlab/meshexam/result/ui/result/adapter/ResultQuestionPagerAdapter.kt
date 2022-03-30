@@ -22,8 +22,9 @@ internal class ResultQuestionPagerAdapter @Inject constructor(
     }
 
     override fun createFragment(position: Int): Fragment {
+        val dvo = list[position]
         return ResultQuestionFragment(
-            ResultQuestionLauncher(list[position].questionId)
+            ResultQuestionLauncher(dvo.questionId, dvo.attemptId)
         )
     }
 

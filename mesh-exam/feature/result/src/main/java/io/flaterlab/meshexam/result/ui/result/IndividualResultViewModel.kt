@@ -1,42 +1,60 @@
 package io.flaterlab.meshexam.result.ui.result
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.androidbase.text.Text
+import io.flaterlab.meshexam.core.DateUtils
+import io.flaterlab.meshexam.domain.interactor.ProfileInteractor
 import io.flaterlab.meshexam.result.ClientResultLauncher
+import io.flaterlab.meshexam.result.R
 import io.flaterlab.meshexam.result.dvo.IndividualExamInfoDvo
 import io.flaterlab.meshexam.result.dvo.ResultQuestionInfoDvo
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
 internal class IndividualResultViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    profileInteractor: ProfileInteractor,
 ) : BaseViewModel() {
 
     private val launcher: ClientResultLauncher = savedStateHandle.getLauncher()
 
-    val metaInfo = MutableLiveData<IndividualExamInfoDvo>()
-    val questionIdList = MutableLiveData<List<ResultQuestionInfoDvo>>()
-
-    init {
-        // TODO: add actual implementation
-        metaInfo.value = IndividualExamInfoDvo(
-            "lklkj",
-            name = "History",
-            "State exam",
-            listOf(
-                Text.from("Time:") to Text.from("10:00:00"),
-                Text.from("Total questions:") to Text.from("15"),
-            )
-        )
-        questionIdList.value = (1..5).map {
-            ResultQuestionInfoDvo(
-                it.toString(),
-                listOf(true, false).random()
+    val metaInfo = profileInteractor.individualResultMeta(launcher.id)
+        .map { resultModel ->
+            IndividualExamInfoDvo(
+                examId = resultModel.examId,
+                name = resultModel.examName,
+                info = resultModel.examInfo,
+                generalInfoList = listOf(
+                    Pair(
+                        Text.from(R.string.result_details_timeTitle),
+                        Text.from(DateUtils.formatTimeMmSs(resultModel.durationInMillis))
+                    ),
+                    Pair(
+                        Text.from(R.string.result_details_totalQuestionsTitle),
+                        Text.from(resultModel.totalQuestionsCount.toString())
+                    ),
+                    Pair(
+                        Text.from(R.string.result_details_correctAnswersTitle),
+                        Text.from(resultModel.correctAnswers.toString())
+                    )
+                ),
+                questionInfoList = resultModel.questionInfoList
+                    .map { questionInfoModel ->
+                        ResultQuestionInfoDvo(
+                            questionId = questionInfoModel.questionId,
+                            attemptId = launcher.id,
+                            isCorrect = questionInfoModel.isCorrect,
+                        )
+                    }
             )
         }
-    }
+        .catch { e -> e.showLocalizedMessage() }
+        .asLiveData(viewModelScope.coroutineContext)
 }

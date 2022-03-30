@@ -1,39 +1,42 @@
 package io.flaterlab.meshexam.result.ui.question
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.getLauncher
+import io.flaterlab.meshexam.domain.interactor.ProfileInteractor
 import io.flaterlab.meshexam.result.dvo.ResultAnswerDvo
 import io.flaterlab.meshexam.result.dvo.ResultQuestionDvo
-import java.util.*
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
 internal class ResultQuestionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    profileInteractor: ProfileInteractor,
 ) : BaseViewModel() {
 
     private val launcher: ResultQuestionLauncher = savedStateHandle.getLauncher()
 
-    val question = MutableLiveData<ResultQuestionDvo>()
-
-    init {
-        // TODO: Add actual implementation
-        val correctIndex = (1..3).random()
-        val selectedIndex = (1..3).random()
-        question.value = ResultQuestionDvo(
-            UUID.randomUUID().toString(),
-            "What is the mass of Mars?",
-            (1..15).map {
-                ResultAnswerDvo(
-                    UUID.randomUUID().toString(),
-                    "Answer ${'a' + it}",
-                    it == correctIndex,
-                    it == selectedIndex
-                )
-            }
-        )
-    }
+    val question = profileInteractor.questionResult(launcher.questionId, launcher.attemptId)
+        .map { questionModel ->
+            ResultQuestionDvo(
+                questionId = questionModel.questionId,
+                question = questionModel.question,
+                answers = questionModel.answerResultList
+                    .map { answerModel ->
+                        ResultAnswerDvo(
+                            answerId = answerModel.answerId,
+                            answer = answerModel.answer,
+                            isCorrect = answerModel.isCorrect,
+                            isSelected = answerModel.isSelected,
+                        )
+                    }
+            )
+        }
+        .catch { e -> e.showLocalizedMessage() }
+        .asLiveData(viewModelScope.coroutineContext)
 }

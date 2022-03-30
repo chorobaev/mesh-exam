@@ -45,9 +45,9 @@ internal class IndividualResultFragment : ViewBindingFragment<FragmentIndividual
                 toolbarExamination.setTitle(dvo.name)
                 toolbarExamination.setSubtitle(dvo.info)
                 onGeneralInfoReceived(dvo.generalInfoList)
+                pagerAdapter.submitList(dvo.questionInfoList)
             }
         }
-        viewModel.questionIdList.observe(viewLifecycleOwner, pagerAdapter::submitList)
     }
 
     private fun onGeneralInfoReceived(infoList: List<Pair<Text, Text>>) =

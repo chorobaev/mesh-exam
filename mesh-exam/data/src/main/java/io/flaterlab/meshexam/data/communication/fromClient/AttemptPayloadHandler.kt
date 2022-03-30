@@ -4,8 +4,8 @@ import androidx.room.withTransaction
 import com.google.gson.Gson
 import io.flaterlab.meshexam.data.communication.PayloadHandler
 import io.flaterlab.meshexam.data.database.MeshDatabase
-import io.flaterlab.meshexam.data.database.entity.AttemptAnswerEntity
 import io.flaterlab.meshexam.data.database.entity.AttemptEntity
+import io.flaterlab.meshexam.data.database.entity.host.HostAttemptAnswerEntity
 import io.flaterlab.meshexam.librariy.mesh.common.dto.FromClientPayload
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -20,7 +20,7 @@ internal class AttemptPayloadHandler @Inject constructor(
 ) : PayloadHandler.Handler<FromClientPayload> {
 
     private val attemptDao = database.attemptDao()
-    private val attemptAnswerDto = database.attemptAnswerDao()
+    private val hostAttemptAnswerDao = database.hostAttemptAnswerDao()
     private val answerDao = database.answerDao()
     private val questionDao = database.questionDao()
 
@@ -36,8 +36,9 @@ internal class AttemptPayloadHandler @Inject constructor(
         database.withTransaction {
             val savedAttempt =
                 attemptDao.getAttemptByUserAndHostingId(attempt.userId, attempt.hostingId)
+            val attemptId = savedAttempt?.attemptId ?: return@withTransaction
             AttemptEntity(
-                attemptId = savedAttempt?.attemptId ?: return@withTransaction,
+                attemptId = attemptId,
                 userId = attempt.userId,
                 examId = attempt.examId,
                 hostingId = attempt.hostingId,
@@ -48,7 +49,7 @@ internal class AttemptPayloadHandler @Inject constructor(
                 submittedAt = attempt.finishedAt,
             ).also { attemptDao.update(it) }
 
-            saveAttemptAnswers(attempt.id, attempt.answers)
+            saveAttemptAnswers(attemptId, attempt.answers)
         }
     }
 
@@ -71,13 +72,13 @@ internal class AttemptPayloadHandler @Inject constructor(
         coroutineScope {
             answers.map { answer ->
                 async {
-                    AttemptAnswerEntity(
+                    HostAttemptAnswerEntity(
                         attemptAnswerId = answer.id,
                         attemptId = attemptId,
                         questionId = answer.questionId,
                         answerId = answer.answerId,
                         createdAt = answer.createdAt,
-                    ).also { attemptAnswerDto.insert(it) }
+                    ).also { hostAttemptAnswerDao.insert(it) }
                 }
             }.awaitAll()
         }

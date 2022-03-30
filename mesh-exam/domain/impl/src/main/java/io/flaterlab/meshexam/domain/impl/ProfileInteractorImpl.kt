@@ -1,10 +1,7 @@
 package io.flaterlab.meshexam.domain.impl
 
 import io.flaterlab.meshexam.domain.interactor.ProfileInteractor
-import io.flaterlab.meshexam.domain.profile.model.ExamHistoryModel
-import io.flaterlab.meshexam.domain.profile.model.HostingResultItemModel
-import io.flaterlab.meshexam.domain.profile.model.HostingResultMetaModel
-import io.flaterlab.meshexam.domain.profile.model.UserProfileModel
+import io.flaterlab.meshexam.domain.profile.model.*
 import io.flaterlab.meshexam.domain.repository.HistoryRepository
 import io.flaterlab.meshexam.domain.repository.ProfileRepository
 import kotlinx.coroutines.flow.Flow
@@ -33,5 +30,13 @@ class ProfileInteractorImpl @Inject constructor(
 
     override fun hostingResults(hostingId: String): Flow<List<HostingResultItemModel>> {
         return historyRepository.hostingResults(hostingId)
+    }
+
+    override fun individualResultMeta(attemptId: String): Flow<IndividualResultModel> {
+        return historyRepository.individualResultMeta(attemptId)
+    }
+
+    override fun questionResult(questionId: String, attemptId: String): Flow<QuestionResultModel> {
+        return historyRepository.questionResult(questionId, attemptId)
     }
 }
