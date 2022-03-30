@@ -1,6 +1,6 @@
 package io.flaterlab.meshexam.domain.profile.model
 
-data class HostingResultModel(
+data class HostingResultItemModel(
     val id: String,
     val studentFullName: String,
     val studentInfo: String,

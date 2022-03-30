@@ -10,4 +10,10 @@ internal data class HostingEntity(
     val examId: String,
     val startedAt: Long,
     val finishedAt: Long?,
-)
+) {
+
+    val durationInMillis: Long
+        get() = (finishedAt
+            ?: throw IllegalStateException("Hosting must be finished. finishedAt == null")) -
+                startedAt
+}

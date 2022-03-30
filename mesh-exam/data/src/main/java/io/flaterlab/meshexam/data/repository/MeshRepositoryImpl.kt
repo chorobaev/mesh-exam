@@ -177,7 +177,7 @@ internal class MeshRepositoryImpl @Inject constructor(
         sendFinishNotification(hostingId)
         database.withTransaction {
             val hosting = hostingDao.getHostingById(hostingId)
-            hostingDao.insert(hosting.copy(finishedAt = Date().time))
+            hostingDao.update(hosting.copy(finishedAt = Date().time))
         }
     }
 

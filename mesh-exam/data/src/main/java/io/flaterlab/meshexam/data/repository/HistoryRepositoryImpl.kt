@@ -6,7 +6,8 @@ import io.flaterlab.meshexam.data.database.entity.AttemptEntity
 import io.flaterlab.meshexam.data.database.entity.host.HostingEntity
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.domain.profile.model.ExamHistoryModel
-import io.flaterlab.meshexam.domain.profile.model.HostingResultModel
+import io.flaterlab.meshexam.domain.profile.model.HostingResultItemModel
+import io.flaterlab.meshexam.domain.profile.model.HostingResultMetaModel
 import io.flaterlab.meshexam.domain.repository.HistoryRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -28,7 +29,7 @@ internal class HistoryRepositoryImpl @Inject constructor(
     private val hostingDao = database.hostingDao()
     private val userDao = database.userDao()
 
-    override fun examHistory(): Flow<List<ExamHistoryModel>> {
+    override fun userExamHistory(): Flow<List<ExamHistoryModel>> {
         return flow {
             val user = userProfileDao.userProfile().first()
             emit(createHistoryModelList(user.id))
@@ -93,7 +94,26 @@ internal class HistoryRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun hostingResults(hostingId: String): Flow<List<HostingResultModel>> {
+    override fun hostingResultMeta(hostingId: String): Flow<HostingResultMetaModel> {
+        return flow {
+            val result = database.withTransaction {
+                val hosting = hostingDao.getHostingById(hostingId)
+                val exam = examDao.getExamById(hosting.examId)
+                val attempts = attemptDao.attemptsByHostingId(hostingId).first()
+                HostingResultMetaModel(
+                    hostingId = hostingId,
+                    examName = exam.name,
+                    examInfo = exam.type,
+                    durationInMillis = hosting.durationInMillis,
+                    submissionCount = attempts.count { it.isFinished },
+                    expectedSubmissionCount = attempts.size,
+                )
+            }
+            emit(result)
+        }
+    }
+
+    override fun hostingResults(hostingId: String): Flow<List<HostingResultItemModel>> {
         return attemptDao
             .attemptsByHostingId(hostingId)
             .map { attempts ->
@@ -103,14 +123,14 @@ internal class HistoryRepositoryImpl @Inject constructor(
                             val user = userDao.getUserById(attempt.userId)
                             val totalScore = examDao.getTotalScoreByExamId(attempt.examId)
                                 .roundToInt()
-                            HostingResultModel(
+                            HostingResultItemModel(
                                 id = attempt.attemptId,
                                 studentFullName = user.fullName,
                                 studentInfo = user.info,
                                 status = if (attempt.submittedAt == null) {
-                                    HostingResultModel.Status.NOT_SUBMITTED
+                                    HostingResultItemModel.Status.NOT_SUBMITTED
                                 } else {
-                                    HostingResultModel.Status.SUBMITTED
+                                    HostingResultItemModel.Status.SUBMITTED
                                 },
                                 grade = attempt.score?.coerceAtMost(totalScore.toFloat()) ?: 0F,
                                 totalGrade = totalScore,

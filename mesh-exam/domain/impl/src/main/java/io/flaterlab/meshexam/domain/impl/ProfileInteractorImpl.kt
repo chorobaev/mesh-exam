@@ -2,7 +2,8 @@ package io.flaterlab.meshexam.domain.impl
 
 import io.flaterlab.meshexam.domain.interactor.ProfileInteractor
 import io.flaterlab.meshexam.domain.profile.model.ExamHistoryModel
-import io.flaterlab.meshexam.domain.profile.model.HostingResultModel
+import io.flaterlab.meshexam.domain.profile.model.HostingResultItemModel
+import io.flaterlab.meshexam.domain.profile.model.HostingResultMetaModel
 import io.flaterlab.meshexam.domain.profile.model.UserProfileModel
 import io.flaterlab.meshexam.domain.repository.HistoryRepository
 import io.flaterlab.meshexam.domain.repository.ProfileRepository
@@ -23,10 +24,14 @@ class ProfileInteractorImpl @Inject constructor(
     override fun userProfile(): Flow<UserProfileModel> = profileRepository.userProfile()
 
     override fun examHistory(): Flow<List<ExamHistoryModel>> {
-        return historyRepository.examHistory()
+        return historyRepository.userExamHistory()
     }
 
-    override fun hostingResults(hostingId: String): Flow<List<HostingResultModel>> {
+    override fun hostingResultMeta(hostingId: String): Flow<HostingResultMetaModel> {
+        return historyRepository.hostingResultMeta(hostingId)
+    }
+
+    override fun hostingResults(hostingId: String): Flow<List<HostingResultItemModel>> {
         return historyRepository.hostingResults(hostingId)
     }
 }
