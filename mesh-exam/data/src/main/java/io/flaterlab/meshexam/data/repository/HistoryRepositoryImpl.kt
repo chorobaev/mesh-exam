@@ -3,6 +3,7 @@ package io.flaterlab.meshexam.data.repository
 import androidx.room.withTransaction
 import io.flaterlab.meshexam.data.database.MeshDatabase
 import io.flaterlab.meshexam.data.database.entity.AttemptEntity
+import io.flaterlab.meshexam.data.database.entity.QuestionEntity
 import io.flaterlab.meshexam.data.database.entity.host.HostingEntity
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.domain.profile.model.*
@@ -28,6 +29,7 @@ internal class HistoryRepositoryImpl @Inject constructor(
     private val userDao = database.userDao()
     private val questionDao = database.questionDao()
     private val answerDao = database.answerDao()
+    private val attemptAnswerDao = database.attemptAnswerDao()
     private val hostAttemptAnswerDao = database.hostAttemptAnswerDao()
 
     override fun userExamHistory(): Flow<List<ExamHistoryModel>> {
@@ -173,32 +175,50 @@ internal class HistoryRepositoryImpl @Inject constructor(
                     async {
                         QuestionResultInfoModel(
                             questionId = question.questionId,
-                            isCorrect = hostAttemptAnswerDao
-                                .isQuestionAnsweredCorrectly(question.questionId, attempt.attemptId)
+                            isCorrect = isQuestionAnsweredCorrectly(question, attempt),
                         )
                     }
                 }
             }.awaitAll()
     }
 
+    private suspend fun isQuestionAnsweredCorrectly(
+        question: QuestionEntity,
+        attempt: AttemptEntity
+    ): Boolean {
+        return hostAttemptAnswerDao
+            .isQuestionAnsweredCorrectly(question.questionId, attempt.attemptId) == true
+    }
+
     override fun questionResult(questionId: String, attemptId: String): Flow<QuestionResultModel> {
         return questionDao.questionById(questionId)
             .map { question ->
-                val answers = answerDao.answersByQuestionId(questionId).first()
-                QuestionResultModel(
-                    questionId = questionId,
-                    question = question.question,
-                    answerResultList = answers
-                        .map { answer ->
-                            AnswerResultModel(
-                                answerId = answer.answerId,
-                                answer = answer.answer,
-                                isCorrect = answer.isCorrect,
-                                isSelected = hostAttemptAnswerDao
-                                    .getAnswerSelectedTime(answer.answerId, attemptId) != null,
-                            )
-                        }
-                )
+                database.withTransaction {
+                    val answers = answerDao.answersByQuestionId(questionId).first()
+                    QuestionResultModel(
+                        questionId = questionId,
+                        question = question.question,
+                        answerResultList = answers
+                            .map { answer ->
+                                AnswerResultModel(
+                                    answerId = answer.answerId,
+                                    answer = answer.answer,
+                                    isCorrect = answer.isCorrect,
+                                    isSelected = isSelected(answer.answerId, attemptId)
+                                )
+                            }
+                    )
+                }
             }
+    }
+
+    private suspend fun isSelected(answerId: String, attemptId: String): Boolean {
+        val hosting = hostingDao.getHostingByAttemptId(attemptId)
+        val selectedTime = if (hosting != null) {
+            hostAttemptAnswerDao.getAnswerSelectedTime(answerId, attemptId)
+        } else {
+            attemptAnswerDao.getAnswerSelectedTime(answerId, attemptId)
+        }
+        return selectedTime != null
     }
 }

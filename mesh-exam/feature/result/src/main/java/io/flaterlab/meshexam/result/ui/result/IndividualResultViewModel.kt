@@ -31,26 +31,35 @@ internal class IndividualResultViewModel @Inject constructor(
                 examId = resultModel.examId,
                 name = resultModel.examName,
                 info = resultModel.examInfo,
-                generalInfoList = listOf(
-                    Pair(
-                        Text.from(R.string.result_details_timeTitle),
-                        Text.from(DateUtils.formatTimeMmSs(resultModel.durationInMillis))
-                    ),
-                    Pair(
-                        Text.from(R.string.result_details_totalQuestionsTitle),
-                        Text.from(resultModel.totalQuestionsCount.toString())
-                    ),
-                    Pair(
-                        Text.from(R.string.result_details_correctAnswersTitle),
-                        Text.from(resultModel.correctAnswers.toString())
+                generalInfoList = buildList {
+                    add(
+                        Pair(
+                            Text.from(R.string.result_details_timeTitle),
+                            Text.from(DateUtils.formatTimeMmSs(resultModel.durationInMillis))
+                        )
                     )
-                ),
+                    add(
+                        Pair(
+                            Text.from(R.string.result_details_totalQuestionsTitle),
+                            Text.from(resultModel.totalQuestionsCount.toString())
+                        )
+                    )
+                    if (launcher.showCorrectness) {
+                        add(
+                            Pair(
+                                Text.from(R.string.result_details_correctAnswersTitle),
+                                Text.from(resultModel.correctAnswers.toString())
+                            )
+                        )
+                    }
+                },
                 questionInfoList = resultModel.questionInfoList
                     .map { questionInfoModel ->
                         ResultQuestionInfoDvo(
                             questionId = questionInfoModel.questionId,
                             attemptId = launcher.id,
-                            isCorrect = questionInfoModel.isCorrect,
+                            isCorrect = questionInfoModel.isCorrect || !launcher.showCorrectness,
+                            showCorrectness = launcher.showCorrectness,
                         )
                     }
             )

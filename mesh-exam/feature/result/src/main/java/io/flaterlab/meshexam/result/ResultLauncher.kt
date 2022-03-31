@@ -12,5 +12,6 @@ data class HostResultLauncher(
 
 @Parcelize
 data class ClientResultLauncher(
-    private val _attemptId: String
+    private val _attemptId: String,
+    val showCorrectness: Boolean,
 ) : ResultLauncher(_attemptId)

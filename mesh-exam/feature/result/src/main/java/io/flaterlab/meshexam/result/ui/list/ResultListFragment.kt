@@ -47,7 +47,7 @@ internal class ResultListFragment : ViewBindingFragment<FragmentResultListBindin
         viewModel.commandOpenResult.observe(viewLifecycleOwner) { attemptId ->
             findNavController().navigate(
                 R.id.action_resultListFragment_to_individualResultFragment,
-                ClientResultLauncher(attemptId).toBundleArgs()
+                ClientResultLauncher(attemptId, showCorrectness = true).toBundleArgs()
             )
         }
         binding.etHostResultSearch.bindTextWatcher(watcherManager) { editable ->

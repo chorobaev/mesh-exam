@@ -4,4 +4,5 @@ internal data class ResultQuestionInfoDvo(
     val questionId: String,
     val attemptId: String,
     val isCorrect: Boolean,
+    val showCorrectness: Boolean,
 )

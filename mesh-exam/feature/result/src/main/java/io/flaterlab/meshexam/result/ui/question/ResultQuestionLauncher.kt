@@ -7,4 +7,5 @@ import kotlinx.parcelize.Parcelize
 internal class ResultQuestionLauncher(
     val questionId: String,
     val attemptId: String,
+    val showCorrectness: Boolean,
 ): Parcelable

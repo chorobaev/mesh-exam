@@ -12,6 +12,12 @@ internal interface HostingDao {
     @Query("SELECT * FROM hostings WHERE hostingId = :id")
     suspend fun getHostingById(id: String): HostingEntity
 
+    @Query(
+        "SELECT * FROM hostings WHERE hostingId = " +
+                "(SELECT hostingId FROM attempts WHERE attemptId = :attemptId)"
+    )
+    suspend fun getHostingByAttemptId(attemptId: String): HostingEntity?
+
     @Query("SELECT * FROM hostings ORDER BY startedAt DESC")
     suspend fun getAll(): List<HostingEntity>
 

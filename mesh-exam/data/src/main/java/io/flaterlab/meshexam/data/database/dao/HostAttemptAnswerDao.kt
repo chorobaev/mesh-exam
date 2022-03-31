@@ -25,7 +25,7 @@ internal interface HostAttemptAnswerDao {
                 "host_attempt_answers.questionId = :questionId AND " +
                 "host_attempt_answers.attemptId = :attemptId"
     )
-    suspend fun isQuestionAnsweredCorrectly(questionId: String, attemptId: String): Boolean
+    suspend fun isQuestionAnsweredCorrectly(questionId: String, attemptId: String): Boolean?
 
     @Query(
         "SELECT host_attempt_answers.createdAt FROM answers JOIN host_attempt_answers ON " +

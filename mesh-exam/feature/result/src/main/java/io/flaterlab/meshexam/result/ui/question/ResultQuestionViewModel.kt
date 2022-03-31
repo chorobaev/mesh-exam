@@ -31,7 +31,7 @@ internal class ResultQuestionViewModel @Inject constructor(
                         ResultAnswerDvo(
                             answerId = answerModel.answerId,
                             answer = answerModel.answer,
-                            isCorrect = answerModel.isCorrect,
+                            isCorrect = answerModel.isCorrect && launcher.showCorrectness,
                             isSelected = answerModel.isSelected,
                         )
                     }

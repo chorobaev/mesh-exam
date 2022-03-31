@@ -21,4 +21,11 @@ internal interface AttemptAnswerDao {
 
     @Query("SELECT * FROM attempt_answers WHERE attemptId = :attemptId")
     suspend fun getAnswersByAttemptId(attemptId: String): List<AttemptAnswerEntity>
+
+    @Query(
+        "SELECT attempt_answers.createdAt FROM answers JOIN attempt_answers ON " +
+                "answers.answerId = attempt_answers.answerId WHERE " +
+                "answers.answerId = :answerId AND attempt_answers.attemptId = :attemptId"
+    )
+    suspend fun getAnswerSelectedTime(answerId: String, attemptId: String): Long?
 }

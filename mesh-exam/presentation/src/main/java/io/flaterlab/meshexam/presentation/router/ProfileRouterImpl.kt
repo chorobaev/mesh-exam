@@ -18,7 +18,7 @@ internal class ProfileRouterImpl @Inject constructor(
     }
 
     override fun openAttemptedExamResult(attemptId: String) {
-        openResults(ClientResultLauncher(attemptId))
+        openResults(ClientResultLauncher(attemptId, showCorrectness = false))
     }
 
     private fun openResults(launcher: ResultLauncher) {
