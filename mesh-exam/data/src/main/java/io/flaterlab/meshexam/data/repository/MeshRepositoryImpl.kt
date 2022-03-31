@@ -15,6 +15,7 @@ import io.flaterlab.meshexam.data.database.entity.host.HostingEntity
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
 import io.flaterlab.meshexam.domain.mesh.model.ClientModel
+import io.flaterlab.meshexam.domain.mesh.model.HostedStudentModel
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
 import io.flaterlab.meshexam.domain.mesh.model.StartExamResultModel
 import io.flaterlab.meshexam.domain.repository.MeshRepository
@@ -24,6 +25,7 @@ import io.flaterlab.meshexam.librariy.mesh.common.dto.FromHostPayload
 import io.flaterlab.meshexam.librariy.mesh.host.HostMeshManager
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -202,5 +204,28 @@ internal class MeshRepositoryImpl @Inject constructor(
                 secondsLeft--
             } while (secondsLeft >= 0)
         }
+    }
+
+    override fun hostedStudentList(
+        hostingId: String,
+        searchText: String?,
+    ): Flow<List<HostedStudentModel>> {
+        return userDao.searchUsersByHostingId(hostingId, searchText.orEmpty())
+            .map { userList ->
+                Timber.d("Users for hosting id: $hostingId, $userList")
+                userList.map { user ->
+                    val attempt = attemptDao.getAttemptByUserAndHostingId(user.userId, hostingId)
+                    HostedStudentModel(
+                        userId = user.userId,
+                        fullName = user.fullName,
+                        info = user.info,
+                        status = if (attempt?.isFinished == true) {
+                            HostedStudentModel.Status.SUBMITTED
+                        } else {
+                            HostedStudentModel.Status.ATTEMPTING
+                        }
+                    )
+                }
+            }
     }
 }

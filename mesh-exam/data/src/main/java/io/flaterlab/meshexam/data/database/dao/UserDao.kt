@@ -15,4 +15,11 @@ internal interface UserDao {
 
     @Query("SELECT * FROM users WHERE userId = :userId")
     suspend fun getUserById(userId: String): UserEntity
+
+    @Query(
+        "SELECT * FROM users WHERE " +
+                "userId IN (SELECT userId FROM attempts WHERE hostingId = :hostingId) AND " +
+                "fullName LIKE '%' || :searchText || '%'"
+    )
+    fun searchUsersByHostingId(hostingId: String, searchText: String): Flow<List<UserEntity>>
 }

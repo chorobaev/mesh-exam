@@ -1,6 +1,7 @@
 package io.flaterlab.meshexam.domain.impl
 
 import io.flaterlab.meshexam.domain.interactor.MeshInteractor
+import io.flaterlab.meshexam.domain.mesh.model.HostedStudentModel
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
 import io.flaterlab.meshexam.domain.mesh.model.StartExamResultModel
 import io.flaterlab.meshexam.domain.repository.MeshRepository
@@ -25,5 +26,12 @@ class MeshInteractorImpl @Inject constructor(
 
     override fun hostingTimeLeftInSec(hostingId: String): Flow<Int> {
         return meshRepository.hostingTimeLeftInSec(hostingId)
+    }
+
+    override fun hostedStudentList(
+        hostingId: String,
+        searchText: String?,
+    ): Flow<List<HostedStudentModel>> {
+        return meshRepository.hostedStudentList(hostingId, searchText)
     }
 }

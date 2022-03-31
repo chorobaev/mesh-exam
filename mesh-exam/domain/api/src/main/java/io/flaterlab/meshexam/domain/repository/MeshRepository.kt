@@ -1,5 +1,6 @@
 package io.flaterlab.meshexam.domain.repository
 
+import io.flaterlab.meshexam.domain.mesh.model.HostedStudentModel
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
 import io.flaterlab.meshexam.domain.mesh.model.StartExamResultModel
 import kotlinx.coroutines.flow.Flow
@@ -17,4 +18,9 @@ interface MeshRepository {
     suspend fun finishExam(hostingId: String)
 
     fun hostingTimeLeftInSec(hostingId: String): Flow<Int>
+
+    fun hostedStudentList(
+        hostingId: String,
+        searchText: String?,
+    ): Flow<List<HostedStudentModel>>
 }

@@ -19,16 +19,20 @@ class Text private constructor(
 
     companion object {
 
+        @JvmStatic
         fun from(text: String) = Text(rawText = text)
 
+        @JvmStatic
         fun from(@StringRes resId: Int) = Text(resourceText = resId)
 
         /**
          * Use only parcelable primitives as args
          */
+        @JvmStatic
         fun from(@StringRes resId: Int, vararg args: Any?) =
             Text(resourceText = resId, formatArgs = args)
 
+        @JvmStatic
         fun empty() = Text()
     }
 }

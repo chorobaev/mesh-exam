@@ -1,36 +1,69 @@
 package io.flaterlab.meshexam.feature.meshroom.ui.list
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
+import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.androidbase.text.Text
+import io.flaterlab.meshexam.domain.interactor.MeshInteractor
+import io.flaterlab.meshexam.domain.mesh.model.HostedStudentModel
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.dvo.StudentDvo
 import io.flaterlab.meshexam.uikit.view.StateRecyclerView
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
 internal class StudentListMonitorViewModel @Inject constructor(
-
+    savedStateHandle: SavedStateHandle,
+    private val meshInteractor: MeshInteractor,
 ) : BaseViewModel() {
 
-    val studentList = MutableLiveData<List<StudentDvo>>()
+    private val launcher: StudentListLauncher = savedStateHandle.getLauncher()
+
+    private val searchText = MutableStateFlow<String?>(null)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val studentList = searchText
+        .flatMapLatest { text ->
+            meshInteractor.hostedStudentList(launcher.hostingId, text)
+        }
+        .map { list ->
+            list.map { studentModel ->
+                StudentDvo(
+                    id = studentModel.userId,
+                    fullName = studentModel.fullName,
+                    info = Text.from(studentModel.info),
+                    status = when (studentModel.status) {
+                        HostedStudentModel.Status.ATTEMPTING ->
+                            Text.from(R.string.monitor_studentList_statusAttempting)
+                        HostedStudentModel.Status.SUBMITTED ->
+                            Text.from(R.string.monitor_studentList_statusSubmitted)
+                    },
+                    statusColor = when (studentModel.status) {
+                        HostedStudentModel.Status.ATTEMPTING -> R.color.purple_500
+                        HostedStudentModel.Status.SUBMITTED -> R.color.gray_2
+
+                    }
+                )
+            }
+        }
+        .onEach { list ->
+            studentListState.value = if (list.isEmpty()) {
+                StateRecyclerView.State.EMPTY
+            } else {
+                StateRecyclerView.State.NORMAL
+            }
+        }
+        .catch { e -> e.showLocalizedMessage() }
+        .asLiveData(viewModelScope.coroutineContext)
     val studentListState = MutableLiveData(StateRecyclerView.State.NORMAL)
 
-    init {
-        // TODO: add actual implementation
-        studentList.value = (1..10).map {
-            StudentDvo(
-                id = it.toString(),
-                fullName = "${listOf("Alan Turing", "Jan Hog", "Someone Else").random()} #$it",
-                info = Text.from("COM-18"),
-                status = Text.from("attempting"),
-                statusColor = R.color.red_500
-            )
-        }
-    }
-
     fun onSearchTextChanged(text: String?) {
-        // TODO: implement search logic
+        searchText.value = text
     }
 }

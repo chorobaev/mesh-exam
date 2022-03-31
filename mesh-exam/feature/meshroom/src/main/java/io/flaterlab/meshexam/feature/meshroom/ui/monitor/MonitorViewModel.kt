@@ -25,7 +25,7 @@ internal class MonitorViewModel @Inject constructor(
     private val meshInteractor: MeshInteractor,
 ) : BaseViewModel() {
 
-    private val launcher: MonitorLauncher = savedStateHandle.getLauncher()
+    val launcher: MonitorLauncher = savedStateHandle.getLauncher()
     private val dateFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
     private val datePrototype = Date()
 

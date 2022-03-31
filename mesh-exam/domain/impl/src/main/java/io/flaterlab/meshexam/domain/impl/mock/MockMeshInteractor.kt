@@ -2,10 +2,12 @@ package io.flaterlab.meshexam.domain.impl.mock
 
 import io.flaterlab.meshexam.domain.interactor.MeshInteractor
 import io.flaterlab.meshexam.domain.mesh.model.ClientModel
+import io.flaterlab.meshexam.domain.mesh.model.HostedStudentModel
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
 import io.flaterlab.meshexam.domain.mesh.model.StartExamResultModel
 import io.flaterlab.meshexam.domain.repository.MeshRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
@@ -42,5 +44,12 @@ class MockMeshInteractor @Inject constructor(
 
     override fun hostingTimeLeftInSec(hostingId: String): Flow<Int> {
         TODO("Implement according to logic")
+    }
+
+    override fun hostedStudentList(
+        hostingId: String,
+        searchText: String?
+    ): Flow<List<HostedStudentModel>> {
+        return emptyFlow()
     }
 }

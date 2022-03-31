@@ -4,17 +4,21 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import io.flaterlab.meshexam.androidbase.TextWatcherManager
-import io.flaterlab.meshexam.androidbase.ViewBindingFragment
-import io.flaterlab.meshexam.androidbase.ViewBindingProvider
-import io.flaterlab.meshexam.androidbase.bindTextWatcher
+import io.flaterlab.meshexam.androidbase.*
 import io.flaterlab.meshexam.androidbase.common.adapter.ClientListAdapter
 import io.flaterlab.meshexam.feature.meshroom.databinding.FragmentStudentListMonitorBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class StudentListMonitorFragment :
-    ViewBindingFragment<FragmentStudentListMonitorBinding>() {
+    ViewBindingFragment<FragmentStudentListMonitorBinding> {
+
+    @Deprecated(level = DeprecationLevel.ERROR, message = DEPRECATION_MESSAGE)
+    constructor()
+
+    constructor(launcher: StudentListLauncher) {
+        setLauncher(launcher)
+    }
 
     private val viewModel: StudentListMonitorViewModel by vm()
     private val watcherManager = TextWatcherManager(this)
