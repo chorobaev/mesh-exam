@@ -71,6 +71,8 @@
     <string name="monitor_result_timeTitle">Time:</string>
     <string name="monitor_result_submittedTitle">Submitted:</string>
     <string name="monitor_result_seeResults">See results</string>
+    <string name="monitor_event_screenHid">Screen is hidden</string>
+    <string name="monitor_event_screenOpened">Screen is opened again</string>
 
     <string name="profile_edit_editProfileTitle">Edit</string>
     <string name="profile_edit_firstNameTitle">First name*</string>

@@ -4,6 +4,7 @@ import androidx.room.withTransaction
 import io.flaterlab.meshexam.core.Mapper
 import io.flaterlab.meshexam.data.communication.Message
 import io.flaterlab.meshexam.data.communication.PayloadHandler
+import io.flaterlab.meshexam.data.communication.fromClient.ExamEventDto
 import io.flaterlab.meshexam.data.communication.fromHost.AnswerDto
 import io.flaterlab.meshexam.data.communication.fromHost.ExamDto
 import io.flaterlab.meshexam.data.communication.fromHost.FinishExamEventDto
@@ -14,6 +15,8 @@ import io.flaterlab.meshexam.data.database.entity.UserEntity
 import io.flaterlab.meshexam.data.database.entity.host.HostingEntity
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
+import io.flaterlab.meshexam.domain.exam.model.ExamEvent
+import io.flaterlab.meshexam.domain.exam.model.ExamEventModel
 import io.flaterlab.meshexam.domain.mesh.model.ClientModel
 import io.flaterlab.meshexam.domain.mesh.model.HostedStudentModel
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
@@ -48,6 +51,7 @@ internal class MeshRepositoryImpl @Inject constructor(
     private val attemptDao = database.attemptDao()
     private val hostingDao = database.hostingDao()
     private val userDao = database.userDao()
+    private val examEventDao = database.examEventDao()
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
@@ -227,5 +231,27 @@ internal class MeshRepositoryImpl @Inject constructor(
                     )
                 }
             }
+    }
+
+    override fun examEvents(hostingId: String): Flow<List<ExamEventModel>> {
+        return examEventDao.examEvents(hostingId)
+            .map { list ->
+                list.map { event ->
+                    ExamEventModel(
+                        userId = event.authorClientId,
+                        userFullName = userDao.getUserById(event.authorClientId).fullName,
+                        event = resolveEventType(ExamEventDto.EventType.fromInt(event.eventType)),
+                        time = Date(event.createdAt),
+                    )
+                }
+            }
+    }
+
+    private fun resolveEventType(type: ExamEventDto.EventType): ExamEvent {
+        return when (type) {
+            ExamEventDto.EventType.SCREEN_HID -> ExamEvent.SCREEN_HID
+            ExamEventDto.EventType.SCREEN_VISIBLE -> ExamEvent.SCREEN_VISIBLE
+            else -> throw IllegalArgumentException("No such event type: $type")
+        }
     }
 }

@@ -1,5 +1,6 @@
 package io.flaterlab.meshexam.domain.repository
 
+import io.flaterlab.meshexam.domain.exam.model.ExamEventModel
 import io.flaterlab.meshexam.domain.mesh.model.HostedStudentModel
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
 import io.flaterlab.meshexam.domain.mesh.model.StartExamResultModel
@@ -23,4 +24,6 @@ interface MeshRepository {
         hostingId: String,
         searchText: String?,
     ): Flow<List<HostedStudentModel>>
+
+    fun examEvents(hostingId: String): Flow<List<ExamEventModel>>
 }

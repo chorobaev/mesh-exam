@@ -1,9 +1,6 @@
 package io.flaterlab.meshexam.domain.repository
 
-import io.flaterlab.meshexam.domain.exam.model.AttemptMetaModel
-import io.flaterlab.meshexam.domain.exam.model.AttemptResultModel
-import io.flaterlab.meshexam.domain.exam.model.SelectAnswerModel
-import io.flaterlab.meshexam.domain.exam.model.SelectedAnswerModel
+import io.flaterlab.meshexam.domain.exam.model.*
 import kotlinx.coroutines.flow.Flow
 
 interface AttemptRepository {
@@ -26,4 +23,6 @@ interface AttemptRepository {
     fun attemptTimeLeftInSec(attemptId: String): Flow<Int>
 
     fun attemptResult(attemptId: String): Flow<AttemptResultModel>
+
+    suspend fun sendExamEvent(attemptId: String, event: ExamEvent)
 }

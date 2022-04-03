@@ -5,21 +5,18 @@ import io.flaterlab.meshexam.core.Mapper
 import io.flaterlab.meshexam.data.communication.Message
 import io.flaterlab.meshexam.data.communication.fromClient.AttemptAnswerDto
 import io.flaterlab.meshexam.data.communication.fromClient.AttemptDto
+import io.flaterlab.meshexam.data.communication.fromClient.ExamEventDto
 import io.flaterlab.meshexam.data.database.MeshDatabase
 import io.flaterlab.meshexam.data.database.entity.AttemptAnswerEntity
 import io.flaterlab.meshexam.data.database.entity.AttemptEntity
 import io.flaterlab.meshexam.data.database.entity.update.AttemptFinishing
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
-import io.flaterlab.meshexam.domain.exam.model.AttemptMetaModel
-import io.flaterlab.meshexam.domain.exam.model.AttemptResultModel
-import io.flaterlab.meshexam.domain.exam.model.SelectAnswerModel
-import io.flaterlab.meshexam.domain.exam.model.SelectedAnswerModel
+import io.flaterlab.meshexam.domain.exam.model.*
 import io.flaterlab.meshexam.domain.repository.AttemptRepository
 import io.flaterlab.meshexam.librariy.mesh.client.ClientMeshManager
 import io.flaterlab.meshexam.librariy.mesh.common.dto.FromClientPayload
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.withContext
@@ -195,5 +192,20 @@ internal class AttemptRepositoryImpl @Inject constructor(
             }
             emit(result)
         }
+    }
+
+    override suspend fun sendExamEvent(attemptId: String, event: ExamEvent) {
+        val userProfile = userProfileDao.userProfile().first()
+        val eventType = when (event) {
+            ExamEvent.SCREEN_HID -> ExamEventDto.EventType.SCREEN_HID
+            ExamEvent.SCREEN_VISIBLE -> ExamEventDto.EventType.SCREEN_VISIBLE
+            else -> throw IllegalArgumentException("No such event with int: ${event.typeInt}")
+        }
+        val examEventDto = ExamEventDto(
+            clientId = userProfile.id,
+            hostingId = attemptDao.getAttemptById(attemptId).hostingId,
+            eventType = eventType
+        )
+        clientMeshManager.sendPayloadToHost(clientMessageMapper(examEventDto))
     }
 }

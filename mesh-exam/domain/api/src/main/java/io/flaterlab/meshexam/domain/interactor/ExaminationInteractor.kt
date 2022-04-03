@@ -33,4 +33,6 @@ interface ExaminationInteractor {
     suspend fun selectAnswer(model: SelectAnswerModel)
 
     fun attemptResult(attemptId: String): Flow<AttemptResultModel>
+
+    suspend fun sendExamEvent(attemptId: String, event: ExamEvent)
 }

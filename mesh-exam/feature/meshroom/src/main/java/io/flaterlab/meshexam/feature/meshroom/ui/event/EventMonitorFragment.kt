@@ -9,13 +9,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.flaterlab.meshexam.androidbase.ViewBindingFragment
 import io.flaterlab.meshexam.androidbase.ViewBindingProvider
+import io.flaterlab.meshexam.androidbase.setLauncher
 import io.flaterlab.meshexam.feature.meshroom.databinding.FragmentEventMonitorBinding
 import io.flaterlab.meshexam.feature.meshroom.ui.event.adapter.EventListAdapter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-internal class EventMonitorFragment : ViewBindingFragment<FragmentEventMonitorBinding>() {
+internal class EventMonitorFragment : ViewBindingFragment<FragmentEventMonitorBinding> {
+
+    @Deprecated(level = DeprecationLevel.ERROR, message = DEPRECATION_MESSAGE)
+    constructor()
+
+    constructor(launcher: EventMonitorLauncher) {
+        setLauncher(launcher)
+    }
 
     private val viewModel: EventMonitorViewModel by vm()
 

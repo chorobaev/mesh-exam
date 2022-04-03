@@ -11,6 +11,7 @@ import androidx.work.workDataOf
 import io.flaterlab.meshexam.data.database.dao.*
 import io.flaterlab.meshexam.data.database.entity.*
 import io.flaterlab.meshexam.data.database.entity.client.ExamToHostingMapperEntity
+import io.flaterlab.meshexam.data.database.entity.host.ExamEventEntity
 import io.flaterlab.meshexam.data.database.entity.host.HostAttemptAnswerEntity
 import io.flaterlab.meshexam.data.database.entity.host.HostingEntity
 import io.flaterlab.meshexam.data.worker.SeedDatabaseWorker
@@ -27,6 +28,7 @@ import io.flaterlab.meshexam.data.worker.SeedDatabaseWorker.Companion.KEY_FILE_N
         ExamToHostingMapperEntity::class,
         UserEntity::class,
         HostAttemptAnswerEntity::class,
+        ExamEventEntity::class,
     ],
     version = 2,
     exportSchema = false,
@@ -48,6 +50,8 @@ internal abstract class MeshDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     abstract fun hostAttemptAnswerDao(): HostAttemptAnswerDao
+
+    abstract fun examEventDao(): ExamEventDao
 
     companion object {
         @Volatile

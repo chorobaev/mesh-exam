@@ -101,4 +101,14 @@ internal class ExamFragment : ViewBindingFragment<FragmentExamBinding>() {
     private fun initClickListeners() = with(binding) {
         btnSubmit.clickWithDebounce(action = viewModel::onSubmitClicked)
     }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.onScreenVisible()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.onScreenHid()
+    }
 }

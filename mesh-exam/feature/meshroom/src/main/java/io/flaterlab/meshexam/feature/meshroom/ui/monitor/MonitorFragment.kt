@@ -14,6 +14,7 @@ import io.flaterlab.meshexam.androidbase.toBundleArgs
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.databinding.FragmentMonitorBinding
 import io.flaterlab.meshexam.feature.meshroom.ui.event.EventMonitorFragment
+import io.flaterlab.meshexam.feature.meshroom.ui.event.EventMonitorLauncher
 import io.flaterlab.meshexam.feature.meshroom.ui.list.StudentListLauncher
 import io.flaterlab.meshexam.feature.meshroom.ui.list.StudentListMonitorFragment
 import io.flaterlab.meshexam.feature.meshroom.ui.monitor.adapter.MonitorPageAdapter
@@ -67,13 +68,18 @@ internal class MonitorFragment : ViewBindingFragment<FragmentMonitorBinding>() {
 
     private fun initViewPager() {
         binding.viewPagerMonitor.adapter = monitorPagerAdapterProvider.get()
+        val eventMonitorLauncher = EventMonitorLauncher(
+            viewModel.launcher.hostingId,
+        )
         val studentListLauncher = StudentListLauncher(
             viewModel.launcher.examId,
-            viewModel.launcher.hostingId
+            viewModel.launcher.hostingId,
         )
         pagerAdapter.submitList(
             listOf(
-                R.string.monitor_tab_events to Provider { EventMonitorFragment() },
+                R.string.monitor_tab_events to Provider {
+                    EventMonitorFragment(eventMonitorLauncher)
+                },
                 R.string.monitor_tab_studentList to Provider {
                     StudentListMonitorFragment(studentListLauncher)
                 }

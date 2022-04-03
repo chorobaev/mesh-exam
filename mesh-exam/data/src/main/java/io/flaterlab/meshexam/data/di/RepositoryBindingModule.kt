@@ -15,9 +15,6 @@ internal interface RepositoryBindingModule {
     fun bindDiscoveryRepository(impl: DiscoveryRepositoryImpl): DiscoveryRepository
 
     @Binds
-    fun bindAdvertisingRepository(impl: AdvertisingRepositoryImpl): AdvertisingRepository
-
-    @Binds
     fun bindExamRepository(impl: ExamRepositoryImpl): ExamRepository
 
     @Binds

@@ -85,4 +85,8 @@ class ExaminationInteractorImpl @Inject constructor(
     override fun attemptResult(attemptId: String): Flow<AttemptResultModel> {
         return attemptRepository.attemptResult(attemptId)
     }
+
+    override suspend fun sendExamEvent(attemptId: String, event: ExamEvent) {
+        attemptRepository.sendExamEvent(attemptId, event)
+    }
 }

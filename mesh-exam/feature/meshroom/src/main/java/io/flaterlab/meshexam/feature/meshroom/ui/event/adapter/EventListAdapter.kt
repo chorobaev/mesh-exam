@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.flaterlab.meshexam.androidbase.ext.applyLayoutParams
+import io.flaterlab.meshexam.androidbase.text.setText
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.databinding.ItemMonitorEventBinding
 import io.flaterlab.meshexam.feature.meshroom.dvo.EventDvo
@@ -42,7 +43,7 @@ internal class EventListAdapter @Inject constructor(
         val binding = ItemMonitorEventBinding.bind(itemView)
 
         fun bindTo(item: EventDvo) = with(binding) {
-            tvMonitorEventTitle.text = item.title
+            tvMonitorEventTitle.setText(item.title)
             tvMonitorEventOwner.text = item.owner
             tvMonitorEventTime.text = Date(item.timeInMillis).let {
                 timeFormatter.format(it)

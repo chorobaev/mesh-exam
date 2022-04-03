@@ -1,5 +1,6 @@
 package io.flaterlab.meshexam.domain.impl.mock
 
+import io.flaterlab.meshexam.domain.exam.model.ExamEventModel
 import io.flaterlab.meshexam.domain.interactor.MeshInteractor
 import io.flaterlab.meshexam.domain.mesh.model.ClientModel
 import io.flaterlab.meshexam.domain.mesh.model.HostedStudentModel
@@ -50,6 +51,10 @@ class MockMeshInteractor @Inject constructor(
         hostingId: String,
         searchText: String?
     ): Flow<List<HostedStudentModel>> {
+        return emptyFlow()
+    }
+
+    override fun examEventList(hostingId: String): Flow<List<ExamEventModel>> {
         return emptyFlow()
     }
 }

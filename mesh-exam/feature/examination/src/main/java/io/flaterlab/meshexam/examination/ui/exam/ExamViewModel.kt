@@ -8,6 +8,7 @@ import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.domain.exam.model.AttemptMetaModel
+import io.flaterlab.meshexam.domain.exam.model.ExamEvent
 import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
 import io.flaterlab.meshexam.examination.dvo.ExaminationDvo
 import kotlinx.coroutines.flow.catch
@@ -58,6 +59,8 @@ internal class ExamViewModel @Inject constructor(
 
     val attemptId get() = launcher.attemptId
 
+    private var isScreenFirstOpen: Boolean = true
+
     fun onSubmitClicked() {
         commandShowFinishingConfirm.call()
     }
@@ -75,6 +78,30 @@ internal class ExamViewModel @Inject constructor(
                 // TODO: handle mesh destroyed case
             }
             commandFinishExam.value = launcher.attemptId
+        }
+    }
+
+    fun onScreenHid() {
+        viewModelScope.launch {
+            try {
+                examInteractor.sendExamEvent(launcher.attemptId, ExamEvent.SCREEN_HID)
+            } catch (ex: Exception) {
+                ex.showLocalizedMessage()
+            }
+        }
+    }
+
+    fun onScreenVisible() {
+        if (isScreenFirstOpen) {
+            isScreenFirstOpen = false
+            return
+        }
+        viewModelScope.launch {
+            try {
+                examInteractor.sendExamEvent(launcher.attemptId, ExamEvent.SCREEN_VISIBLE)
+            } catch (ex: Exception) {
+                ex.showLocalizedMessage()
+            }
         }
     }
 }

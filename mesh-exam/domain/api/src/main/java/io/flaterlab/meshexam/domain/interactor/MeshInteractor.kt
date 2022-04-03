@@ -1,5 +1,6 @@
 package io.flaterlab.meshexam.domain.interactor
 
+import io.flaterlab.meshexam.domain.exam.model.ExamEventModel
 import io.flaterlab.meshexam.domain.mesh.model.HostedStudentModel
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
 import io.flaterlab.meshexam.domain.mesh.model.StartExamResultModel
@@ -23,4 +24,6 @@ interface MeshInteractor {
         hostingId: String,
         searchText: String? = null
     ): Flow<List<HostedStudentModel>>
+
+    fun examEventList(hostingId: String): Flow<List<ExamEventModel>>
 }
