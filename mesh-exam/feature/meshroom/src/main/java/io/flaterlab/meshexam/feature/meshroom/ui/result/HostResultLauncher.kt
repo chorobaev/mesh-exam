@@ -5,5 +5,5 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 internal data class HostResultLauncher(
-    val attemptId: String,
+    val hostingId: String,
 ) : Parcelable

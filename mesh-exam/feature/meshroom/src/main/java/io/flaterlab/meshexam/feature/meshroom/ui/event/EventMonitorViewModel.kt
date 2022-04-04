@@ -24,7 +24,7 @@ internal class EventMonitorViewModel @Inject constructor(
 
     private val launcher: EventMonitorLauncher = savedStateHandle.getLauncher()
 
-    val eventList = meshInteractor.examEventList(launcher.hostingId)
+    val eventList = meshInteractor.hostingEventList(launcher.hostingId)
         .map { list ->
             list.map(eventMapper::invoke)
         }

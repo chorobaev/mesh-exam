@@ -25,5 +25,5 @@ interface MeshInteractor {
         searchText: String? = null
     ): Flow<List<HostedStudentModel>>
 
-    fun examEventList(hostingId: String): Flow<List<ExamEventModel>>
+    fun hostingEventList(hostingId: String): Flow<List<ExamEventModel>>
 }

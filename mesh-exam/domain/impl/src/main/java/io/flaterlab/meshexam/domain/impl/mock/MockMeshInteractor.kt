@@ -54,7 +54,7 @@ class MockMeshInteractor @Inject constructor(
         return emptyFlow()
     }
 
-    override fun examEventList(hostingId: String): Flow<List<ExamEventModel>> {
+    override fun hostingEventList(hostingId: String): Flow<List<ExamEventModel>> {
         return emptyFlow()
     }
 }

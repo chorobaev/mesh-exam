@@ -36,7 +36,7 @@ class MeshInteractorImpl @Inject constructor(
         return meshRepository.hostedStudentList(hostingId, searchText)
     }
 
-    override fun examEventList(hostingId: String): Flow<List<ExamEventModel>> {
+    override fun hostingEventList(hostingId: String): Flow<List<ExamEventModel>> {
         return meshRepository.examEvents(hostingId)
     }
 }
