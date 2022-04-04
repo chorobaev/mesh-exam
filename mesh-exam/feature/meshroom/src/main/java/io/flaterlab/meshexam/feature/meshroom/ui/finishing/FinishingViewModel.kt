@@ -35,10 +35,10 @@ internal class FinishingViewModel @Inject constructor(
             meshInteractor.hostedStudentList(launcher.hostingId, name)
                 .onEach { list ->
                     if (name.isNullOrBlank()) {
-                        submissionAmount.value = Pair(
-                            list.count { it.status == HostedStudentModel.Status.SUBMITTED },
-                            list.size
-                        )
+                        val submitted =
+                            list.count { it.status == HostedStudentModel.Status.SUBMITTED }
+                        submissionAmount.value = submitted to list.size
+                        if (submitted == list.size) onFinishImmediatelyConfirmed()
                     }
                 }
         }
