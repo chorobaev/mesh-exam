@@ -9,12 +9,10 @@ import androidx.core.text.toSpannable
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import io.flaterlab.meshexam.androidbase.ViewBindingFragment
-import io.flaterlab.meshexam.androidbase.ViewBindingProvider
+import io.flaterlab.meshexam.androidbase.*
 import io.flaterlab.meshexam.androidbase.common.adapter.ClientListAdapter
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
 import io.flaterlab.meshexam.androidbase.ext.showAlert
-import io.flaterlab.meshexam.androidbase.toBundleArgs
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.databinding.FragmentFinishingBinding
 import io.flaterlab.meshexam.uikit.ext.getColorAttr
@@ -24,6 +22,7 @@ import javax.inject.Inject
 internal class FinishingFragment : ViewBindingFragment<FragmentFinishingBinding>() {
 
     private val viewModel: FinishingViewModel by vm()
+    private val watchManager = TextWatcherManager(this)
 
     @Inject
     lateinit var submissionListAdapter: ClientListAdapter
@@ -59,6 +58,9 @@ internal class FinishingFragment : ViewBindingFragment<FragmentFinishingBinding>
             )
         }
 
+        binding.etFinishingSearch.bindTextWatcher(watchManager) { editable ->
+            viewModel.onSearchTextChanged(editable?.toString())
+        }
         binding.btnForceFinish.clickWithDebounce(action = viewModel::onFinishImmediatelyClicked)
     }
 

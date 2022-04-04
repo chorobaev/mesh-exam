@@ -51,6 +51,9 @@
             app:popExitAnim="@anim/exit_to_right"
             app:popUpTo="@id/finishingFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="launcher"
+            app:argType="io.flaterlab.meshexam.feature.meshroom.ui.finishing.FinishingLauncher" />
     </fragment>
     <fragment
         android:id="@+id/hostResultFragment"

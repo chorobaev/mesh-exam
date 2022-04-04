@@ -5,5 +5,5 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 internal data class FinishingLauncher(
-    val attemptId: String,
+    val hostingId: String,
 ): Parcelable
