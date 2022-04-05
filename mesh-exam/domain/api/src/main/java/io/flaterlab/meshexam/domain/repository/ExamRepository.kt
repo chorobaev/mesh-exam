@@ -13,6 +13,8 @@ interface ExamRepository {
 
     suspend fun getExamWithQuestionIdsByExamId(examId: String): ExamWithQuestionIdsModel
 
+    suspend fun getExamByHostingId(hostingId: String): ExamModel
+
 
     fun questionById(questionId: String): Flow<QuestionModel>
 

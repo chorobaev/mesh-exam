@@ -14,7 +14,10 @@ import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
 import io.flaterlab.meshexam.domain.create.model.*
 import io.flaterlab.meshexam.domain.repository.ExamRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import java.util.*
 import javax.inject.Inject
 
@@ -29,6 +32,7 @@ internal class ExamRepositoryImpl @Inject constructor(
     private val examDao = database.examDao()
     private val questionDao = database.questionDao()
     private val answerDao = database.answerDao()
+    private val hostingDao = database.hostingDao()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun exams(): Flow<List<ExamModel>> {
@@ -59,6 +63,19 @@ internal class ExamRepositoryImpl @Inject constructor(
             ExamWithQuestionIdsModel(
                 exam = examEntityMapper(exam),
                 questionIds = questionIds
+            )
+        }
+    }
+
+    override suspend fun getExamByHostingId(hostingId: String): ExamModel {
+        return database.withTransaction {
+            val hosting = hostingDao.getHostingById(hostingId)
+            val exam = examDao.getExamById(hosting.examId)
+            ExamModel(
+                id = exam.examId,
+                name = exam.name,
+                type = exam.type,
+                durationInMin = exam.durationInMin,
             )
         }
     }

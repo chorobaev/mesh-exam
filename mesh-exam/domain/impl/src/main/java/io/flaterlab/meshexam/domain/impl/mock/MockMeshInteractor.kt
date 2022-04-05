@@ -57,4 +57,8 @@ class MockMeshInteractor @Inject constructor(
     override fun hostingEventList(hostingId: String): Flow<List<ExamEventModel>> {
         return emptyFlow()
     }
+
+    override suspend fun destroyMeshByHostingId(hostingId: String) {
+        println("Destroying mesh")
+    }
 }

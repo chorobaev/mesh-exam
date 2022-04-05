@@ -17,12 +17,13 @@ import io.flaterlab.meshexam.feature.meshroom.ui.result.HostResultLauncher
 import io.flaterlab.meshexam.uikit.view.StateRecyclerView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 internal class FinishingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    meshInteractor: MeshInteractor,
+    private val meshInteractor: MeshInteractor,
 ) : BaseViewModel() {
 
     private val launcher: FinishingLauncher = savedStateHandle.getLauncher()
@@ -84,7 +85,10 @@ internal class FinishingViewModel @Inject constructor(
     }
 
     fun onFinishImmediatelyConfirmed() {
-        commandOpenResult.value = HostResultLauncher(launcher.hostingId)
+        viewModelScope.launch {
+            meshInteractor.destroyMeshByHostingId(launcher.hostingId)
+            commandOpenResult.value = HostResultLauncher(launcher.hostingId)
+        }
     }
 
     fun onBackPressed() {

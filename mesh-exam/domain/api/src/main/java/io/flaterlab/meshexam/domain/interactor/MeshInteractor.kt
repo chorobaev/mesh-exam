@@ -12,6 +12,8 @@ interface MeshInteractor {
 
     suspend fun destroyMesh(examId: String)
 
+    suspend fun destroyMeshByHostingId(hostingId: String)
+
     suspend fun removeClient(clientId: String)
 
     suspend fun finishExam(hostingId: String)
