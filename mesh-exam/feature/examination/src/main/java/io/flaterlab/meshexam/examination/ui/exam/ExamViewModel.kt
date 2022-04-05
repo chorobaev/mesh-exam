@@ -60,6 +60,7 @@ internal class ExamViewModel @Inject constructor(
     val attemptId get() = launcher.attemptId
 
     private var isScreenFirstOpen: Boolean = true
+    private var isScreenMonitorEnabled: Boolean = true
 
     fun onSubmitClicked() {
         commandShowFinishingConfirm.call()
@@ -71,6 +72,7 @@ internal class ExamViewModel @Inject constructor(
 
     fun onFinishConfirmed() {
         viewModelScope.launch {
+            isScreenMonitorEnabled = false
             try {
                 examInteractor.finishAttempt(launcher.attemptId)
             } catch (ex: Exception) {
@@ -83,11 +85,7 @@ internal class ExamViewModel @Inject constructor(
 
     fun onScreenHid() {
         viewModelScope.launch {
-            try {
-                examInteractor.sendExamEvent(launcher.attemptId, ExamEvent.SCREEN_HID)
-            } catch (ex: Exception) {
-                ex.showLocalizedMessage()
-            }
+            sendExamEvent(ExamEvent.SCREEN_HID)
         }
     }
 
@@ -97,8 +95,14 @@ internal class ExamViewModel @Inject constructor(
             return
         }
         viewModelScope.launch {
+            sendExamEvent(ExamEvent.SCREEN_VISIBLE)
+        }
+    }
+
+    private suspend fun sendExamEvent(event: ExamEvent) {
+        if (isScreenMonitorEnabled) {
             try {
-                examInteractor.sendExamEvent(launcher.attemptId, ExamEvent.SCREEN_VISIBLE)
+                examInteractor.sendExamEvent(launcher.attemptId, event)
             } catch (ex: Exception) {
                 ex.showLocalizedMessage()
             }
