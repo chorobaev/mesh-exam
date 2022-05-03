@@ -11,6 +11,7 @@
     <include app:graph="@navigation/nav_create_exam" />
     <include app:graph="@navigation/nav_examination" />
     <include app:graph="@navigation/nav_result" />
+    <include app:graph="@navigation/nav_onboarding" />
 
     <fragment
         android:id="@+id/homeFragment"
@@ -26,6 +27,13 @@
         <action
             android:id="@+id/action_homeFragment_to_createQuestionFragment"
             app:destination="@id/createQuestionFragment"
+            app:enterAnim="@anim/enter_from_right"
+            app:exitAnim="@anim/exit_to_left"
+            app:popEnterAnim="@anim/enter_from_left"
+            app:popExitAnim="@anim/exit_to_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_nav_onboarding"
+            app:destination="@id/nav_onboarding"
             app:enterAnim="@anim/enter_from_right"
             app:exitAnim="@anim/exit_to_left"
             app:popEnterAnim="@anim/enter_from_left"
@@ -62,8 +70,8 @@
         android:id="@+id/action_global_nav_result"
         app:destination="@id/nav_result"
         app:enterAnim="@anim/enter_from_right"
-        app:launchSingleTop="true"
         app:exitAnim="@anim/exit_to_left"
+        app:launchSingleTop="true"
         app:popEnterAnim="@anim/enter_from_left"
         app:popExitAnim="@anim/exit_to_right" />
 

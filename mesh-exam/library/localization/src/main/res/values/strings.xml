@@ -113,4 +113,8 @@
 
 
     <string name="permission_mesh_message">MeshExam uses the device\'s location to find nearby examinations. Please grand access to the camera in the application settings.</string>
+
+    <string name="onboarding_welcome_title">Welcome!</string>
+    <string name="onboarding_welcome_message">Examinations without an Internet connection and payments!</string>
+    <string name="onboarding_getStarted">Let\'s start</string>
 </resources>

@@ -7,6 +7,8 @@ interface ProfileInteractor {
 
     suspend fun isProfileSetUp(): Boolean
 
+    suspend fun isFirstAppStartup(): Boolean
+
     fun userProfile(): Flow<UserProfileModel>
 
     fun examHistory(): Flow<List<ExamHistoryModel>>

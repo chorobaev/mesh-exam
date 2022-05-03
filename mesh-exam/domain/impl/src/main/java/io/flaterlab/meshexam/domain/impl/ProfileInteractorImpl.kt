@@ -18,6 +18,10 @@ class ProfileInteractorImpl @Inject constructor(
         return !userProfile?.fullName.isNullOrBlank()
     }
 
+    override suspend fun isFirstAppStartup(): Boolean {
+        return profileRepository.getAppInfo().isInitialStartUp
+    }
+
     override fun userProfile(): Flow<UserProfileModel> = profileRepository.userProfile()
 
     override fun examHistory(): Flow<List<ExamHistoryModel>> {
