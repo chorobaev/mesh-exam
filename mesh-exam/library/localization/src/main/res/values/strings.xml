@@ -22,6 +22,7 @@
     <string name="common_appIconContentDesc">Icon of the application</string>
 
     <string name="exams_my_exams">My examinations</string>
+    <string name="exams_examDeletion_confirmationMessage">Do you really want to delete the exam \"%s\"? It cannot be undone!</string>
 
     <string name="discover_available_exams">Available examinations</string>
     <string name="discover_main_permissionsNeeded">Location permissions needed.\n Tap to open system settings.</string>

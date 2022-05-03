@@ -6,17 +6,20 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.domain.create.usecase.GetMyExamsUseCase
+import io.flaterlab.meshexam.domain.interactor.ContentInteractor
 import io.flaterlab.meshexam.presentation.exams.dvo.ExamDvo
 import io.flaterlab.meshexam.uikit.view.StateRecyclerView
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 internal class ExamsViewModel @Inject constructor(
     private val getMyExamsUseCase: GetMyExamsUseCase,
+    private val contentInteractor: ContentInteractor,
 ) : BaseViewModel() {
 
     val exams = MutableLiveData<List<ExamDvo>>(emptyList())
@@ -24,6 +27,7 @@ internal class ExamsViewModel @Inject constructor(
 
     val openCreateCommand = SingleLiveEvent<Unit>()
     val openExamCommand = SingleLiveEvent<ExamDvo>()
+    val confirmExamDeletionCommand = SingleLiveEvent<ExamDvo>()
 
     init {
         loadExams()
@@ -47,6 +51,20 @@ internal class ExamsViewModel @Inject constructor(
 
     fun onExamPressed(exam: ExamDvo) {
         openExamCommand.value = exam
+    }
+
+    fun onExamLongPressed(exam: ExamDvo) {
+        confirmExamDeletionCommand.value = exam
+    }
+
+    fun onExamDeletionConfirmed(exam: ExamDvo) {
+        viewModelScope.launch {
+            try {
+                contentInteractor.deleteExamById(exam.id)
+            } catch (e: Exception) {
+                e.showLocalizedMessage()
+            }
+        }
     }
 
     fun onCreatePressed() {

@@ -11,6 +11,8 @@ interface ExamRepository {
 
     suspend fun createExam(model: CreateExamModel): String
 
+    suspend fun deleteExamById(examId: String)
+
     suspend fun getExamWithQuestionIdsByExamId(examId: String): ExamWithQuestionIdsModel
 
     suspend fun getExamByHostingId(hostingId: String): ExamModel

@@ -7,6 +7,7 @@ import io.flaterlab.meshexam.androidbase.ViewBindingFragment
 import io.flaterlab.meshexam.androidbase.ViewBindingProvider
 import io.flaterlab.meshexam.androidbase.common.adapter.ExamListAdapter
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
+import io.flaterlab.meshexam.androidbase.ext.showAlert
 import io.flaterlab.meshexam.presentation.exams.databinding.FragmentExamsBinding
 import io.flaterlab.meshexam.presentation.exams.dvo.ExamDvo
 import io.flaterlab.meshexam.presentation.exams.router.ExamsRouter
@@ -38,6 +39,13 @@ internal class ExamsFragment : ViewBindingFragment<FragmentExamsBinding>() {
         viewModel.openExamCommand.observe(viewLifecycleOwner) { exam ->
             examsRouter.openEditExam(exam.id)
         }
+        viewModel.confirmExamDeletionCommand.observe(viewLifecycleOwner) { exam ->
+            showAlert(
+                message = getString(R.string.exams_examDeletion_confirmationMessage, exam.name),
+                negative = getString(R.string.common_cancel),
+                positiveCallback = { viewModel.onExamDeletionConfirmed(exam) }
+            )
+        }
 
         binding.fabCreate.clickWithDebounce(action = viewModel::onCreatePressed)
     }
@@ -45,5 +53,6 @@ internal class ExamsFragment : ViewBindingFragment<FragmentExamsBinding>() {
     private fun initRecyclerView() = with(binding.recyclerViewExams) {
         adapter = examsAdapter
         examsAdapter.onExamClickListener = { viewModel.onExamPressed(it as ExamDvo) }
+        examsAdapter.onExamLongClickListener = { viewModel.onExamLongPressed(it as ExamDvo)}
     }
 }

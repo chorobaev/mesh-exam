@@ -56,6 +56,10 @@ internal class ExamRepositoryImpl @Inject constructor(
         return entity.examId
     }
 
+    override suspend fun deleteExamById(examId: String) {
+        examDao.deleteExam(examId)
+    }
+
     override suspend fun getExamWithQuestionIdsByExamId(examId: String): ExamWithQuestionIdsModel {
         return database.withTransaction {
             val exam = examDao.getExamById(examId)

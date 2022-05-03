@@ -14,6 +14,9 @@ internal interface ExamDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExams(vararg exams: ExamEntity)
 
+    @Query("DELETE FROM exams WHERE examId = :examId")
+    suspend fun deleteExam(examId: String)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExamToHostingMapper(vararg mapper: ExamToHostingMapperEntity)
 

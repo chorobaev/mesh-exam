@@ -15,12 +15,25 @@ class ExamListAdapter @Inject constructor(
 
 ) : ListAdapter<ExamListAdapter.ExamItem, ExamListAdapter.ViewHolder>(DIF_CALLBACK) {
 
-    var onExamClickListener: (ExamItem) -> Unit = {}
+    var onExamClickListener: ((ExamItem) -> Unit)? = null
+    var onExamLongClickListener: ((ExamItem) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(parent).apply {
             itemView.clickWithDebounce {
-                runCatching { getItem(adapterPosition) }.getOrNull()?.let(onExamClickListener)
+                runCatching {
+                    getItem(adapterPosition)
+                }.getOrNull()?.let { exam ->
+                    onExamClickListener?.invoke(exam)
+                }
+            }
+            itemView.setOnLongClickListener {
+                runCatching {
+                    getItem(adapterPosition)
+                }.getOrNull()?.let { exam ->
+                    onExamLongClickListener?.invoke(exam)
+                    true
+                } ?: false
             }
         }
     }
