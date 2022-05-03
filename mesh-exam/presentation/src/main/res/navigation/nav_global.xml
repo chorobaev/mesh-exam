@@ -12,25 +12,13 @@
     <include app:graph="@navigation/nav_examination" />
     <include app:graph="@navigation/nav_result" />
     <include app:graph="@navigation/nav_onboarding" />
+    <include app:graph="@navigation/nav_create_question" />
+    <include app:graph="@navigation/nav_mesh" />
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="io.flaterlab.meshexam.presentation.HomeFragment"
         tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_homeFragment_to_nav_create_exam"
-            app:destination="@id/nav_create_exam"
-            app:enterAnim="@anim/enter_from_right"
-            app:exitAnim="@anim/exit_to_left"
-            app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right" />
-        <action
-            android:id="@+id/action_homeFragment_to_createQuestionFragment"
-            app:destination="@id/createQuestionFragment"
-            app:enterAnim="@anim/enter_from_right"
-            app:exitAnim="@anim/exit_to_left"
-            app:popEnterAnim="@anim/enter_from_left"
-            app:popExitAnim="@anim/exit_to_right" />
         <action
             android:id="@+id/action_homeFragment_to_nav_onboarding"
             app:destination="@id/nav_onboarding"
@@ -42,11 +30,6 @@
             android:id="@+id/action_homeFragment_to_editProfileDialogFragment"
             app:destination="@id/editProfileDialogFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/createQuestionFragment"
-        android:name="io.flaterlab.meshexam.create.ui.question.CreateQuestionFragment"
-        android:label="CreateQuestionFragment" />
-    <include app:graph="@navigation/nav_mesh" />
     <action
         android:id="@+id/action_global_nav_mesh"
         app:destination="@id/nav_mesh"
@@ -69,6 +52,22 @@
     <action
         android:id="@+id/action_global_nav_result"
         app:destination="@id/nav_result"
+        app:enterAnim="@anim/enter_from_right"
+        app:exitAnim="@anim/exit_to_left"
+        app:launchSingleTop="true"
+        app:popEnterAnim="@anim/enter_from_left"
+        app:popExitAnim="@anim/exit_to_right" />
+    <action
+        android:id="@+id/action_global_nav_create_exam"
+        app:destination="@id/nav_create_exam"
+        app:enterAnim="@anim/enter_from_right"
+        app:exitAnim="@anim/exit_to_left"
+        app:launchSingleTop="true"
+        app:popEnterAnim="@anim/enter_from_left"
+        app:popExitAnim="@anim/exit_to_right" />
+    <action
+        android:id="@+id/action_global_nav_create_question"
+        app:destination="@id/nav_create_question"
         app:enterAnim="@anim/enter_from_right"
         app:exitAnim="@anim/exit_to_left"
         app:launchSingleTop="true"

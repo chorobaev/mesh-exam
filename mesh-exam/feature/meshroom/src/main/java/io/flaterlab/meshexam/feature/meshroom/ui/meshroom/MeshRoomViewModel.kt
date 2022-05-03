@@ -2,6 +2,7 @@ package io.flaterlab.meshexam.feature.meshroom.ui.meshroom
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
@@ -18,6 +19,7 @@ import io.flaterlab.meshexam.uikit.view.StateRecyclerView
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,7 +35,12 @@ internal class MeshRoomViewModel @Inject constructor(
     private val launcher = savedStateHandle.getLauncher<MeshRoomLauncher>()
 
     val studentAmount = MutableLiveData(0)
-    val exam = MutableLiveData<ExamInfoDvo>()
+    val exam = getExamUseCase(launcher.examId)
+        .map { it.exam }
+        .map { info ->
+            ExamInfoDvo(info.id, info.name, info.type)
+        }
+        .asLiveData(viewModelScope.coroutineContext)
     val clients = MutableLiveData<List<ClientDvo>>()
     val clientsListState = MutableLiveData(StateRecyclerView.State.EMPTY)
 
@@ -44,15 +51,7 @@ internal class MeshRoomViewModel @Inject constructor(
     private var meshJob: Job? = null
 
     init {
-        loadExam()
         startMesh()
-    }
-
-    private fun loadExam() {
-        viewModelScope.launch {
-            val info = getExamUseCase(launcher.examId).exam
-            exam.value = ExamInfoDvo(info.id, info.name, info.type)
-        }
     }
 
     private fun startMesh() {

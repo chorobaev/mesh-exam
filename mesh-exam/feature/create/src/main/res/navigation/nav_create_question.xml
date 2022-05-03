@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_create_question"
+    app:startDestination="@id/createQuestionFragment">
+
+    <fragment
+        android:id="@+id/createQuestionFragment"
+        android:name="io.flaterlab.meshexam.create.ui.question.CreateQuestionFragment"
+        android:label="fragment_create_question"
+        tools:layout="@layout/fragment_create_question" />
+
+</navigation>

@@ -56,19 +56,32 @@ internal class ExamRepositoryImpl @Inject constructor(
         return entity.examId
     }
 
+    override suspend fun updateExam(model: ExamModel) {
+        val profile = userProfileDao.userProfile().first()
+        examDao.updateExam(
+            ExamEntity(
+                examId = model.id,
+                hostUserId = profile.id,
+                name = model.name,
+                type = model.type,
+                durationInMin = model.durationInMin,
+            )
+        )
+    }
+
     override suspend fun deleteExamById(examId: String) {
         examDao.deleteExam(examId)
     }
 
-    override suspend fun getExamWithQuestionIdsByExamId(examId: String): ExamWithQuestionIdsModel {
-        return database.withTransaction {
-            val exam = examDao.getExamById(examId)
-            val questionIds = questionDao.getQuestionIdsByExamId(examId)
-            ExamWithQuestionIdsModel(
-                exam = examEntityMapper(exam),
-                questionIds = questionIds
-            )
-        }
+    override fun examWithQuestionIdsByExamId(examId: String): Flow<ExamWithQuestionIdsModel> {
+        return examDao.examById(examId)
+            .map { exam ->
+                val questionIds = questionDao.getQuestionIdsByExamId(examId)
+                ExamWithQuestionIdsModel(
+                    exam = examEntityMapper(exam),
+                    questionIds = questionIds
+                )
+            }
     }
 
     override suspend fun getExamByHostingId(hostingId: String): ExamModel {

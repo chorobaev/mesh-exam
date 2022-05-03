@@ -12,15 +12,18 @@ import io.flaterlab.meshexam.androidbase.TextWatcherManager
 import io.flaterlab.meshexam.androidbase.bindTextWatcher
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
 import io.flaterlab.meshexam.androidbase.text.setError
-import io.flaterlab.meshexam.androidbase.toBundleArgs
-import io.flaterlab.meshexam.create.R
 import io.flaterlab.meshexam.create.databinding.FragmentCreateExamBinding
-import io.flaterlab.meshexam.create.ui.question.CreateQuestionLauncher
+import io.flaterlab.meshexam.create.router.CreateExamRouter
+import javax.inject.Inject
 
 @AndroidEntryPoint
 internal class CreateExamFragment : BaseFragment() {
 
     private val viewModel: CreateExamViewModel by viewModels()
+
+    @Inject
+    lateinit var router: CreateExamRouter
+
     private var _binding: FragmentCreateExamBinding? = null
     private val binding get() = _binding!!
     private val watcherManager = TextWatcherManager(this)
@@ -37,11 +40,21 @@ internal class CreateExamFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.exam.observe(viewLifecycleOwner) { exam ->
+            with(binding) {
+                ttiExamName.editText.setText(exam.name)
+                ttiExamType.editText.setText(exam.type)
+                ttiExamDuration.editText.setText(exam.duration)
+            }
+        }
         viewModel.nameError.observe(viewLifecycleOwner, binding.ttiExamName::setError)
         viewModel.typeError.observe(viewLifecycleOwner, binding.ttiExamType::setError)
         viewModel.durationError.observe(viewLifecycleOwner, binding.ttiExamDuration::setError)
         viewModel.nextEnabled.observe(viewLifecycleOwner, binding.btnNext::setEnabled)
         viewModel.openQuestionScreenCommand.observe(viewLifecycleOwner, ::openEditScreen)
+        viewModel.popScreenCommand.observe(viewLifecycleOwner) {
+            findNavController().popBackStack()
+        }
 
         binding.ttiExamName.editText.bindTextWatcher(watcherManager) {
             viewModel.onNameChanged(it?.toString())
@@ -59,10 +72,7 @@ internal class CreateExamFragment : BaseFragment() {
     }
 
     private fun openEditScreen(examId: String) {
-        findNavController().navigate(
-            R.id.action_createExamFragment_to_createQuestionFragment,
-            CreateQuestionLauncher(examId).toBundleArgs()
-        )
+        router.openCreateQuestions(examId)
     }
 
     override fun onDestroyView() {

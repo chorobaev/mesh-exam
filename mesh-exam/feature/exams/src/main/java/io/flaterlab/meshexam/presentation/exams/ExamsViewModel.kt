@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.domain.create.usecase.GetMyExamsUseCase
-import io.flaterlab.meshexam.domain.interactor.ContentInteractor
+import io.flaterlab.meshexam.domain.interactor.ExamContentInteractor
 import io.flaterlab.meshexam.presentation.exams.dvo.ExamDvo
 import io.flaterlab.meshexam.uikit.view.StateRecyclerView
 import kotlinx.coroutines.flow.catch
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class ExamsViewModel @Inject constructor(
     private val getMyExamsUseCase: GetMyExamsUseCase,
-    private val contentInteractor: ContentInteractor,
+    private val examContentInteractor: ExamContentInteractor,
 ) : BaseViewModel() {
 
     val exams = MutableLiveData<List<ExamDvo>>(emptyList())
@@ -60,7 +60,7 @@ internal class ExamsViewModel @Inject constructor(
     fun onExamDeletionConfirmed(exam: ExamDvo) {
         viewModelScope.launch {
             try {
-                contentInteractor.deleteExamById(exam.id)
+                examContentInteractor.deleteExamById(exam.id)
             } catch (e: Exception) {
                 e.showLocalizedMessage()
             }

@@ -20,6 +20,7 @@
     <string name="common_back_to_main">Back to main</string>
 
     <string name="common_appIconContentDesc">Icon of the application</string>
+    <string name="common_dividerContentDesc">Content divider</string>
 
     <string name="exams_my_exams">My examinations</string>
     <string name="exams_examDeletion_confirmationMessage">Do you really want to delete the exam \"%s\"? It cannot be undone!</string>
@@ -47,6 +48,7 @@
     <string name="create_create_question_addAnswer">Add an answer</string>
     <string name="create_create_question_answerHint">Answer</string>
     <string name="create_create_question_answerStringDeleted">Answer variant \'%s\' is deleted!</string>
+    <string name="create_create_exam_questionsAmountTitle">Questions:</string>
 
     <string name="mesh_create_mesh">Create mesh</string>
     <string name="mesh_students_amount_title">Students in the mesh: %d</string>

@@ -61,13 +61,9 @@ class MockExaminationInteractor @Inject constructor(
     }
 
     override fun questionIdsByExamId(examId: String): Flow<List<String>> {
-        return flow {
-            emit(
-                examRepository
-                    .getExamWithQuestionIdsByExamId(examId)
-                    .questionIds
-            )
-        }
+        return examRepository
+            .examWithQuestionIdsByExamId(examId)
+            .map { it.questionIds }
     }
 
     override fun questionById(questionId: String): Flow<QuestionModel> {

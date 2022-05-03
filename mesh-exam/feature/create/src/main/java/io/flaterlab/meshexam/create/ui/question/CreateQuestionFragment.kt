@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.children
 import androidx.core.view.isVisible
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,6 +15,7 @@ import io.flaterlab.meshexam.androidbase.ext.applyLayoutParams
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
 import io.flaterlab.meshexam.create.R
 import io.flaterlab.meshexam.create.databinding.FragmentCreateQuestionBinding
+import io.flaterlab.meshexam.create.router.CreateQuestionRouter
 import io.flaterlab.meshexam.create.ui.question.adapter.QuestionPagerAdapter
 import javax.inject.Inject
 import javax.inject.Provider
@@ -24,6 +24,9 @@ import javax.inject.Provider
 internal class CreateQuestionFragment : ViewBindingFragment<FragmentCreateQuestionBinding>() {
 
     private val viewModel: CreateQuestionViewModel by vm()
+
+    @Inject
+    lateinit var router: CreateQuestionRouter
 
     @Inject
     lateinit var pagerAdapterProvider: Provider<QuestionPagerAdapter>
@@ -38,14 +41,16 @@ internal class CreateQuestionFragment : ViewBindingFragment<FragmentCreateQuesti
         initViewPager()
         initTabStyler()
 
-        viewModel.questionMetaInfo.observe(viewLifecycleOwner) { meta ->
+        viewModel.examMetaInfo.observe(viewLifecycleOwner) { meta ->
             binding.toolbarCreateQuestion.run {
                 setTitle(meta.name)
                 setSubtitle(meta.type)
                 showSubtitle()
             }
+            binding.tvExamDuration.text = meta.duration
         }
         viewModel.questionIds.observe(viewLifecycleOwner) { ids ->
+            binding.tvQuestionsNumberValue.text = ids.size.toString()
             pagerAdapter.submitList(ids)
         }
         viewModel.actionEnabled.observe(viewLifecycleOwner, binding.btnExamAction::isVisible::set)
@@ -61,9 +66,13 @@ internal class CreateQuestionFragment : ViewBindingFragment<FragmentCreateQuesti
         viewModel.applyNavActionCommand.observe(viewLifecycleOwner) { action ->
             action(this)
         }
+        viewModel.editGeneralInfoCommand.observe(viewLifecycleOwner) { examId ->
+            router.openEditExamGeneralInfo(examId)
+        }
 
         binding.tvAddQuestion.clickWithDebounce(action = viewModel::onAddQuestionClicked)
         binding.btnExamAction.clickWithDebounce(action = viewModel::onActionClicked)
+        binding.abtEditExamInfo.clickWithDebounce(action = viewModel::onEditGeneralInfoClicked)
     }
 
     private fun initViewPager() {

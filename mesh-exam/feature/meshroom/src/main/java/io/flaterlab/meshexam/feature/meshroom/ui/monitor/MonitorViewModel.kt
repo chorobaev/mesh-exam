@@ -1,6 +1,5 @@
 package io.flaterlab.meshexam.feature.meshroom.ui.monitor
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -29,7 +28,12 @@ internal class MonitorViewModel @Inject constructor(
     private val dateFormatter = SimpleDateFormat("mm:ss", Locale.getDefault())
     private val datePrototype = Date()
 
-    val exam = MutableLiveData<ExamInfoDvo>()
+    val exam = getExamUseCase(launcher.examId)
+        .map { it.exam }
+        .map { info ->
+            ExamInfoDvo(info.id, info.name, info.type)
+        }
+        .asLiveData(viewModelScope.coroutineContext)
     val timer = meshInteractor.hostingTimeLeftInSec(launcher.hostingId)
         .map { sec ->
             datePrototype.time = sec * 1000L
@@ -39,17 +43,6 @@ internal class MonitorViewModel @Inject constructor(
 
     val commandShowFinishPrompt = SingleLiveEvent<Unit>()
     val commandFinishExam = SingleLiveEvent<FinishingLauncher>()
-
-    init {
-        loadExam()
-    }
-
-    private fun loadExam() {
-        viewModelScope.launch {
-            val info = getExamUseCase(launcher.examId).exam
-            exam.value = ExamInfoDvo(info.id, info.name, info.type)
-        }
-    }
 
     fun onBackPressed() {
         commandShowFinishPrompt.call()

@@ -1,7 +1,7 @@
 package io.flaterlab.meshexam.create.dvo
 
-data class QuestionMetaDvo(
+data class ExamMetaDvo(
     val name: String,
     val type: String,
-    val durationInMin: Int,
+    val duration: String,
 )

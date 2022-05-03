@@ -1,9 +1,6 @@
 package io.flaterlab.meshexam.data.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import io.flaterlab.meshexam.data.database.entity.ExamEntity
 import io.flaterlab.meshexam.data.database.entity.client.ExamToHostingMapperEntity
 import kotlinx.coroutines.flow.Flow
@@ -13,6 +10,9 @@ internal interface ExamDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExams(vararg exams: ExamEntity)
+
+    @Update(entity = ExamEntity::class)
+    suspend fun updateExam(exam: ExamEntity)
 
     @Query("DELETE FROM exams WHERE examId = :examId")
     suspend fun deleteExam(examId: String)
@@ -34,4 +34,7 @@ internal interface ExamDao {
 
     @Query("SELECT SUM(score) FROM questions WHERE hostExamId = :examId")
     suspend fun getTotalScoreByExamId(examId: String): Float
+
+    @Query("SELECT * FROM exams WHERE examId = :examId")
+    fun examById(examId: String): Flow<ExamEntity>
 }

@@ -6,24 +6,91 @@
     android:layout_height="match_parent"
     tools:context=".ui.question.CreateQuestionFragment">
 
-
     <io.flaterlab.meshexam.uikit.view.MeshToolbar
         android:id="@+id/toolbar_create_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tv_questions_number_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_between"
+        android:lines="1"
+        android:text="@string/create_create_exam_questionsAmountTitle"
+        android:textAppearance="@style/TextAppearance.MeshExam.Large.Medium"
+        android:textColor="?attr/colorOnBackgroundLight"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_create_question" />
+
+    <TextView
+        android:id="@+id/tv_questions_number_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_extra_small"
+        android:lines="1"
+        android:textAppearance="@style/TextAppearance.MeshExam.Large.Medium"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_questions_number_title"
+        app:layout_constraintStart_toEndOf="@id/tv_questions_number_title"
+        tools:text="30" />
+
+    <View
+        android:id="@+id/divider_questions_number"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/margin_small"
+        android:background="?attr/colorOnBackground"
+        app:layout_constraintBottom_toBottomOf="@id/tv_questions_number_value"
+        app:layout_constraintStart_toEndOf="@id/tv_questions_number_value"
+        app:layout_constraintTop_toTopOf="@id/tv_questions_number_value" />
+
+    <TextView
+        android:id="@+id/tv_exam_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:drawablePadding="@dimen/margin_extra_small"
+        android:lines="1"
+        android:textAppearance="@style/TextAppearance.MeshExam.Large.Medium"
+        app:drawableLeftCompat="@drawable/ic_stopwatch"
+        app:drawableTint="?attr/colorOnBackgroundLight"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_questions_number_value"
+        app:layout_constraintEnd_toStartOf="@id/abt_edit_exam_info"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/divider_questions_number"
+        tools:text="15:00" />
+
+    <io.flaterlab.meshexam.uikit.view.ActionButton
+        android:id="@+id/abt_edit_exam_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:src="@drawable/ic_pencil"
+        app:layout_constraintBottom_toBottomOf="@id/tv_exam_duration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_exam_duration" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_general_info_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="tv_questions_number_title,abt_edit_exam_info" />
+
     <HorizontalScrollView
         android:id="@+id/question_numbers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="none"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_create_question">
+        app:layout_constraintTop_toBottomOf="@id/barrier_general_info_bottom">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
             <com.google.android.material.tabs.TabLayout

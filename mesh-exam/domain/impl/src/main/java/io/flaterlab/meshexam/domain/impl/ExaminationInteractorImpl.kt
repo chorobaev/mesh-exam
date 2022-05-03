@@ -9,7 +9,7 @@ import io.flaterlab.meshexam.domain.repository.DiscoveryRepository
 import io.flaterlab.meshexam.domain.repository.ExamRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ExaminationInteractorImpl @Inject constructor(
@@ -47,13 +47,9 @@ class ExaminationInteractorImpl @Inject constructor(
     }
 
     override fun questionIdsByExamId(examId: String): Flow<List<String>> {
-        return flow {
-            emit(
-                examRepository
-                    .getExamWithQuestionIdsByExamId(examId)
-                    .questionIds
-            )
-        }
+        return examRepository
+            .examWithQuestionIdsByExamId(examId)
+            .map { it.questionIds }
     }
 
     override fun questionById(questionId: String): Flow<QuestionModel> {
