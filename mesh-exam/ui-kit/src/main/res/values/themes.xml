@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.MeshExam" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.MeshExam" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/red_500</item>
         <item name="colorPrimaryVariant">@color/red_700</item>
         <item name="colorOnPrimary">@color/white</item>
