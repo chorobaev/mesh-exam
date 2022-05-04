@@ -38,16 +38,20 @@ internal class StudentListMonitorViewModel @Inject constructor(
                     id = studentModel.userId,
                     fullName = studentModel.fullName,
                     info = Text.from(studentModel.info),
-                    status = when (studentModel.status) {
-                        HostedStudentModel.Status.ATTEMPTING ->
-                            Text.from(R.string.monitor_studentList_statusAttempting)
-                        HostedStudentModel.Status.SUBMITTED ->
-                            Text.from(R.string.monitor_studentList_statusSubmitted)
-                    },
+                    status = Text.from(
+                        when (studentModel.status) {
+                            HostedStudentModel.Status.ATTEMPTING ->
+                                R.string.monitor_studentList_statusAttempting
+                            HostedStudentModel.Status.SUBMITTED ->
+                                R.string.monitor_studentList_statusSubmitted
+                            HostedStudentModel.Status.DISCONNECTED ->
+                                R.string.monitor_studentList_statusDisconnected
+                        }
+                    ),
                     statusColor = when (studentModel.status) {
                         HostedStudentModel.Status.ATTEMPTING -> R.color.purple_500
                         HostedStudentModel.Status.SUBMITTED -> R.color.gray_2
-
+                        HostedStudentModel.Status.DISCONNECTED -> R.color.red_800
                     }
                 )
             }

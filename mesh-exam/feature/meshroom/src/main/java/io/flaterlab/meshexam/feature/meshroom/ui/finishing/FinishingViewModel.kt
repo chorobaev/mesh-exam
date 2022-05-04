@@ -55,11 +55,14 @@ internal class FinishingViewModel @Inject constructor(
                                 R.string.monitor_finishing_statusSubmitting
                             HostedStudentModel.Status.SUBMITTED ->
                                 R.string.monitor_finishing_statusSubmitted
+                            HostedStudentModel.Status.DISCONNECTED ->
+                                R.string.monitor_finishing_statusError
                         }
                     ),
                     statusColorResId = when (studentModel.status) {
                         HostedStudentModel.Status.ATTEMPTING -> R.color.gray_2
                         HostedStudentModel.Status.SUBMITTED -> R.color.purple_500
+                        HostedStudentModel.Status.DISCONNECTED -> R.color.red_800
                     }
                 )
             }

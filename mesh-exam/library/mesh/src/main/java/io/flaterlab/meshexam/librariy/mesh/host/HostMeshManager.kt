@@ -19,6 +19,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.tasks.await
@@ -40,6 +42,9 @@ class HostMeshManager internal constructor(
     private val right = MeshList(isPositiveDirection = true)
 
     private val children = MeshHand()
+
+    private val _connectedClientsFlow = MutableStateFlow<List<ClientInfo>>(emptyList())
+    val connectedClientsFlow: StateFlow<List<ClientInfo>> = _connectedClientsFlow
 
     var onPayloadFromClientListener: ((FromClientPayload) -> Unit)? = null
 
@@ -162,9 +167,10 @@ class HostMeshManager internal constructor(
                 HostMesh(getConnectedClients())
             )
         )
+        _connectedClientsFlow.value = getConnectedClients()
     }
 
-    fun getConnectedClients(): List<ClientInfo> {
+    private fun getConnectedClients(): List<ClientInfo> {
         return left.mergeByClosest(right).also { Timber.d("Emitting: $it") }
     }
 

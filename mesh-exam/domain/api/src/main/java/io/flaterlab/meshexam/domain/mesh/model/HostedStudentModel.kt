@@ -8,6 +8,7 @@ data class HostedStudentModel(
 ) {
     enum class Status {
         ATTEMPTING,
+        DISCONNECTED,
         SUBMITTED,
         ;
     }

@@ -23,6 +23,7 @@ import io.flaterlab.meshexam.domain.mesh.model.MeshModel
 import io.flaterlab.meshexam.domain.mesh.model.StartExamResultModel
 import io.flaterlab.meshexam.domain.repository.MeshRepository
 import io.flaterlab.meshexam.librariy.mesh.common.dto.AdvertiserInfo
+import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
 import io.flaterlab.meshexam.librariy.mesh.common.dto.FromClientPayload
 import io.flaterlab.meshexam.librariy.mesh.common.dto.FromHostPayload
 import io.flaterlab.meshexam.librariy.mesh.host.HostMeshManager
@@ -104,7 +105,7 @@ internal class MeshRepositoryImpl @Inject constructor(
     private suspend fun saveUsers(examId: String, hostingId: String) {
         database.withTransaction {
             val userEntities = hostMeshManager
-                .getConnectedClients()
+                .connectedClientsFlow.value
                 .map { client ->
                     UserEntity(
                         userId = client.id,
@@ -214,23 +215,36 @@ internal class MeshRepositoryImpl @Inject constructor(
         hostingId: String,
         searchText: String?,
     ): Flow<List<HostedStudentModel>> {
-        return userDao.searchUsersByHostingId(hostingId, searchText.orEmpty())
-            .map { userList ->
-                Timber.d("Users for hosting id: $hostingId, $userList")
-                userList.map { user ->
-                    val attempt = attemptDao.getAttemptByUserAndHostingId(user.userId, hostingId)
-                    HostedStudentModel(
-                        userId = user.userId,
-                        fullName = user.fullName,
-                        info = user.info,
-                        status = if (attempt?.isFinished == true) {
-                            HostedStudentModel.Status.SUBMITTED
-                        } else {
-                            HostedStudentModel.Status.ATTEMPTING
-                        }
-                    )
-                }
+        return combine(
+            userDao.searchUsersByHostingId(hostingId, searchText.orEmpty()),
+            hostMeshManager.connectedClientsFlow,
+        ) { userList: List<UserEntity>, meshClientList: List<ClientInfo> ->
+            Timber.d("Users for hosting id: $hostingId, $userList")
+            userList.map { user ->
+                HostedStudentModel(
+                    userId = user.userId,
+                    fullName = user.fullName,
+                    info = user.info,
+                    status = provideHostedStudentStatus(user, hostingId, meshClientList)
+                )
             }
+        }
+    }
+
+    private suspend fun provideHostedStudentStatus(
+        user: UserEntity,
+        hostingId: String,
+        connectedUsers: List<ClientInfo>,
+    ): HostedStudentModel.Status {
+        val attempt = attemptDao.getAttemptByUserAndHostingId(user.userId, hostingId)
+        return when {
+            attempt?.isFinished == true ->
+                HostedStudentModel.Status.SUBMITTED
+            connectedUsers.all { it.id != user.userId } ->
+                HostedStudentModel.Status.DISCONNECTED
+            else ->
+                HostedStudentModel.Status.ATTEMPTING
+        }
     }
 
     override fun examEvents(hostingId: String): Flow<List<ExamEventModel>> {
