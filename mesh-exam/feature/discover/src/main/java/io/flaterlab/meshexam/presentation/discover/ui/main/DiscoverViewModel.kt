@@ -1,42 +1,72 @@
 package io.flaterlab.meshexam.presentation.discover.ui.main
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
 import io.flaterlab.meshexam.presentation.discover.dvo.AvailableExamDvo
 import io.flaterlab.meshexam.uikit.view.StateRecyclerView
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
 
 @HiltViewModel
 class DiscoverViewModel @Inject constructor(
-    examinationInteractor: ExaminationInteractor,
+    private val examinationInteractor: ExaminationInteractor,
 ) : BaseViewModel() {
 
-    val exams: Flow<List<AvailableExamDvo>> = examinationInteractor.discoverExams()
-        .map { list ->
-            list.map { exam ->
-                AvailableExamDvo(exam.id, exam.name, exam.host, exam.duration)
-            }
+    val exams = MutableLiveData<List<AvailableExamDvo>>()
+    val examListState = exams.map { list ->
+        when {
+            list.isEmpty() -> StateRecyclerView.State.EMPTY
+            else -> StateRecyclerView.State.NORMAL
         }
-        .onEach { list ->
-            examListState.value = when {
-                list.isEmpty() -> StateRecyclerView.State.EMPTY
-                else -> StateRecyclerView.State.NORMAL
-            }
-        }
-        .catch { it.showLocalizedMessage() }
-    val examListState = MutableLiveData(StateRecyclerView.State.LOADING)
+    }
+    val discovering = MutableLiveData(false)
     val permissionNeededState = MutableLiveData(false)
 
     val commandOpenExam = SingleLiveEvent<AvailableExamDvo>()
     val commandRequestPermission = SingleLiveEvent<Unit>()
     val commandObserveExams = SingleLiveEvent<Unit>()
+
+    private var discoverJob: Job? = null
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun discoverExams() {
+        discovering.value = true
+        discoverJob?.cancel()
+        exams.value = emptyList()
+        discoverJob = flow<Unit> {
+            emit(Unit)
+            delay(DISCOVERY_DURATION)
+            currentCoroutineContext().cancel()
+        }.flatMapLatest {
+            examinationInteractor.discoverExams()
+                .map { list ->
+                    list.map { exam ->
+                        AvailableExamDvo(exam.id, exam.name, exam.host, exam.duration)
+                    }
+                }
+                .onEach(exams::setValue)
+                .catch { it.showLocalizedMessage() }
+        }
+            .onCompletion {
+                discovering.value = false
+            }
+            .launchIn(viewModelScope)
+    }
+
+    fun onRefreshPressed() {
+        discoverExams()
+    }
+
+    fun onScreenShown() {
+        discoverExams()
+    }
 
     fun onPermissionsChanged(granted: Boolean, shouldRequest: Boolean = false) {
         if (granted) {
@@ -53,5 +83,9 @@ class DiscoverViewModel @Inject constructor(
 
     fun onExamClicked(dvo: AvailableExamDvo) {
         commandOpenExam.value = dvo
+    }
+
+    companion object {
+        private val DISCOVERY_DURATION = 15.seconds
     }
 }

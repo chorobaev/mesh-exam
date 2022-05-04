@@ -3,21 +3,19 @@ package io.flaterlab.meshexam.presentation.discover.ui.main
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.core.view.setPadding
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import io.flaterlab.meshexam.androidbase.ViewBindingFragment
 import io.flaterlab.meshexam.androidbase.ViewBindingProvider
 import io.flaterlab.meshexam.androidbase.common.adapter.ExamListAdapter
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
+import io.flaterlab.meshexam.androidbase.ext.dp
 import io.flaterlab.meshexam.permission.MeshPermissionDialogFragment
 import io.flaterlab.meshexam.presentation.discover.databinding.FragmentDiscoverBinding
 import io.flaterlab.meshexam.presentation.discover.dvo.AvailableExamDvo
 import io.flaterlab.meshexam.presentation.discover.ui.info.ExamInfoDialogFragment
 import io.flaterlab.meshexam.presentation.discover.ui.info.ExamInfoLauncher
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,6 +48,18 @@ class DiscoverFragment : ViewBindingFragment<FragmentDiscoverBinding>() {
         viewModel.commandRequestPermission.observe(viewLifecycleOwner) {
             MeshPermissionDialogFragment.show(childFragmentManager, viewModel::onPermissionsChanged)
         }
+        viewModel.discovering.observe(viewLifecycleOwner) { discovering ->
+            binding.progressExamDiscovery.isVisible =
+                viewModel.permissionNeededState.value == false && discovering
+            binding.btnRefresh.isVisible =
+                viewModel.permissionNeededState.value == false && !discovering
+
+            if (binding.btnRefresh.isVisible) {
+                binding.recyclerViewExams.recyclerView.setPadding(0, 0, 0, BOTTOM_PADDING.dp)
+            } else {
+                binding.recyclerViewExams.recyclerView.setPadding(0)
+            }
+        }
         viewModel.commandObserveExams.observe(viewLifecycleOwner) { observeExams() }
 
         viewModel.onPermissionsChanged(
@@ -60,21 +70,21 @@ class DiscoverFragment : ViewBindingFragment<FragmentDiscoverBinding>() {
     }
 
     private fun initRecyclerView() = with(binding.recyclerViewExams) {
+        recyclerView.setPadding(0, 0, 0, BOTTOM_PADDING.dp)
+        recyclerView.clipToPadding = false
         adapter = examsAdapter
         examsAdapter.onExamClickListener = { viewModel.onExamClicked(it as AvailableExamDvo) }
     }
 
     private fun showPermissionNeededState(enabled: Boolean) {
-        binding.recyclerViewExams.isVisible = !enabled
         binding.permissionNeededState.isVisible = enabled
+        binding.recyclerViewExams.isVisible = !enabled
+        binding.progressExamDiscovery.isVisible = !enabled
+        binding.btnRefresh.isVisible = !enabled
     }
 
     private fun observeExams() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.exams
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collectLatest(examsAdapter::submitList)
-        }
+        viewModel.exams.observe(viewLifecycleOwner, examsAdapter::submitList)
         viewModel.examListState.observe(viewLifecycleOwner, binding.recyclerViewExams::setState)
     }
 
@@ -82,5 +92,16 @@ class DiscoverFragment : ViewBindingFragment<FragmentDiscoverBinding>() {
         binding.permissionNeededState.clickWithDebounce(
             action = viewModel::onRequestPermissionsClicked
         )
+
+        binding.btnRefresh.clickWithDebounce(action = viewModel::onRefreshPressed)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.onScreenShown()
+    }
+
+    companion object {
+        private const val BOTTOM_PADDING = 80
     }
 }
