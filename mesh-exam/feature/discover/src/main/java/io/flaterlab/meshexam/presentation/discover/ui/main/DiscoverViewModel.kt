@@ -37,9 +37,9 @@ class DiscoverViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun discoverExams() {
-        discovering.value = true
         discoverJob?.cancel()
         exams.value = emptyList()
+        discovering.value = true
         discoverJob = flow<Unit> {
             emit(Unit)
             delay(DISCOVERY_DURATION)
@@ -66,6 +66,12 @@ class DiscoverViewModel @Inject constructor(
 
     fun onScreenShown() {
         discoverExams()
+    }
+
+    fun onScreenHidden() {
+        discoverJob?.cancel()
+        discoverJob = null
+        exams.value = emptyList()
     }
 
     fun onPermissionsChanged(granted: Boolean, shouldRequest: Boolean = false) {
