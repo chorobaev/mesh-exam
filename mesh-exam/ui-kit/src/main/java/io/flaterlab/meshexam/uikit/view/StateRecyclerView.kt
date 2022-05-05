@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import io.flaterlab.meshexam.uikit.databinding.ViewStateRecyclerViewBinding
@@ -40,6 +41,10 @@ class StateRecyclerView : FrameLayout {
         recyclerView.isVisible = state == State.NORMAL
         emptyStateLayout.isVisible = state == State.EMPTY
         loadingStateLayout.isVisible = state == State.LOADING
+    }
+
+    fun setEmptyStateText(@StringRes resId: Int) {
+        binding.tvEmptyText.setText(resId)
     }
 
     enum class State {

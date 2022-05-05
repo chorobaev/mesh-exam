@@ -12,6 +12,7 @@ import io.flaterlab.meshexam.androidbase.common.adapter.ExamListAdapter
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
 import io.flaterlab.meshexam.androidbase.ext.dp
 import io.flaterlab.meshexam.permission.MeshPermissionDialogFragment
+import io.flaterlab.meshexam.presentation.discover.R
 import io.flaterlab.meshexam.presentation.discover.databinding.FragmentDiscoverBinding
 import io.flaterlab.meshexam.presentation.discover.dvo.AvailableExamDvo
 import io.flaterlab.meshexam.presentation.discover.ui.info.ExamInfoDialogFragment
@@ -72,6 +73,7 @@ class DiscoverFragment : ViewBindingFragment<FragmentDiscoverBinding>() {
     private fun initRecyclerView() = with(binding.recyclerViewExams) {
         recyclerView.setPadding(0, 0, 0, BOTTOM_PADDING.dp)
         recyclerView.clipToPadding = false
+        setEmptyStateText(R.string.discover_main_emptyListHint)
         adapter = examsAdapter
         examsAdapter.onExamClickListener = { viewModel.onExamClicked(it as AvailableExamDvo) }
     }
@@ -99,6 +101,11 @@ class DiscoverFragment : ViewBindingFragment<FragmentDiscoverBinding>() {
     override fun onStart() {
         super.onStart()
         viewModel.onScreenShown()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.onScreenHidden()
     }
 
     companion object {

@@ -28,6 +28,7 @@
     <string name="discover_available_exams">Available examinations</string>
     <string name="discover_main_permissionsNeeded">Location permissions needed.\n Tap to open system settings.</string>
     <string name="discover_main_refresh">Refresh</string>
+    <string name="discover_main_emptyListHint">There is no available examination.\n Please, ask you teacher to start examination.</string>
     <string name="discover_examInfo_hostTitle">Host:</string>
     <string name="discover_examInfo_durationTitle">Duration:</string>
     <string name="discover_examInfo_clientTitle">Join as:</string>
