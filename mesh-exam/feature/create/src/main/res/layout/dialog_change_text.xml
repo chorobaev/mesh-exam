@@ -15,43 +15,47 @@
 
     <TextView
         android:id="@+id/tv_text_change_title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_medium"
         android:layout_marginTop="@dimen/margin_medium"
-        android:gravity="center"
         android:textAppearance="@style/TextAppearance.MeshExam.Headline2"
+        app:layout_constraintEnd_toStartOf="@id/tv_save_changes"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dialog_handler"
         tools:text="Edit question" />
+
+    <TextView
+        android:id="@+id/tv_save_changes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:padding="8dp"
+        android:text="@string/common_save"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.MeshExam.Large.Medium"
+        android:textColor="?attr/colorAccent"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_text_change_title"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/et_frame_text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/margin_medium"
         android:layout_marginTop="@dimen/margin_medium"
+        android:layout_marginBottom="@dimen/margin_medium"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_text_change_title">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:gravity="top|start"
             android:hint="@string/common_text"
             android:inputType="textMultiLine|textCapSentences"
             android:minHeight="200dp" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_medium"
-        android:layout_marginTop="@dimen/margin_medium"
-        android:layout_marginBottom="@dimen/margin_medium"
-        android:text="@string/common_save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_frame_text"
-        app:layout_constraintVertical_bias="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

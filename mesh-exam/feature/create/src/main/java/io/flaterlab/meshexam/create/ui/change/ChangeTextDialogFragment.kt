@@ -36,7 +36,7 @@ internal class ChangeTextDialogFragment :
         binding.tvTextChangeTitle.setText(launcher.titleResId)
         binding.etText.setText(launcher.text)
 
-        binding.btnSave.clickWithDebounce {
+        binding.tvSaveChanges.clickWithDebounce {
             setFragmentResult(
                 launcher.requestKey,
                 launcher.args.apply {
