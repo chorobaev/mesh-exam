@@ -2,4 +2,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.flaterlab.meshexam.examination">
 
+    <application android:theme="@style/Theme.MeshExam" />
 </manifest>

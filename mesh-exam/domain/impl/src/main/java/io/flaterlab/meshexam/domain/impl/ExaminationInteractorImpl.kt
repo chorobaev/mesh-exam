@@ -7,8 +7,10 @@ import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
 import io.flaterlab.meshexam.domain.repository.AttemptRepository
 import io.flaterlab.meshexam.domain.repository.DiscoveryRepository
 import io.flaterlab.meshexam.domain.repository.ExamRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -50,6 +52,26 @@ class ExaminationInteractorImpl @Inject constructor(
         return examRepository
             .examWithQuestionIdsByExamId(examId)
             .map { it.questionIds }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun questionInfoListByAttemptId(attemptId: String): Flow<List<QuestionInfoModel>> {
+        return attemptRepository.attemptMetaById(attemptId)
+            .flatMapLatest { attemptMeta ->
+                examRepository.examWithQuestionIdsByExamId(attemptMeta.examId)
+                    .map { it.questionIds }
+            }.flatMapLatest { questionIds ->
+                val questionInfoFlows = questionIds.map { id ->
+                    attemptRepository.selectedAnswerByAttemptAndQuestionId(attemptId, id)
+                        .map { selectedAnswer ->
+                            QuestionInfoModel(
+                                questionId = id,
+                                isSelected = selectedAnswer.answerId != null,
+                            )
+                        }
+                }
+                combine(*questionInfoFlows.toTypedArray()) { it.toList() }
+            }
     }
 
     override fun questionById(questionId: String): Flow<QuestionModel> {

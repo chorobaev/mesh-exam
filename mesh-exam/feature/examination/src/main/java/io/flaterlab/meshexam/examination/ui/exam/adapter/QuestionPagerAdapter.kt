@@ -12,6 +12,8 @@ internal class QuestionPagerAdapter(
 
     private val questionIds = ArrayList<String>()
 
+    fun getItemAt(position: Int): String = questionIds[position]
+
     fun submitList(ids: List<String>) {
         val itemCount = questionIds.size
         questionIds.clear()

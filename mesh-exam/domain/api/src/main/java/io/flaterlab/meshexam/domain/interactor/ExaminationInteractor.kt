@@ -23,6 +23,8 @@ interface ExaminationInteractor {
 
     fun questionIdsByExamId(examId: String): Flow<List<String>>
 
+    fun questionInfoListByAttemptId(attemptId: String): Flow<List<QuestionInfoModel>>
+
     fun questionById(questionId: String): Flow<QuestionModel>
 
     fun answersByAttemptAndQuestionId(

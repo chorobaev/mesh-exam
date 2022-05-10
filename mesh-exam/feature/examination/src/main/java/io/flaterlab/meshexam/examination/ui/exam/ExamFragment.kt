@@ -6,6 +6,9 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.activity.addCallback
 import androidx.core.view.children
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,6 +22,8 @@ import io.flaterlab.meshexam.examination.R
 import io.flaterlab.meshexam.examination.databinding.FragmentExamBinding
 import io.flaterlab.meshexam.examination.ui.exam.adapter.QuestionPagerAdapter
 import io.flaterlab.meshexam.examination.ui.result.ResultLauncher
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class ExamFragment : ViewBindingFragment<FragmentExamBinding>() {
@@ -26,6 +31,8 @@ internal class ExamFragment : ViewBindingFragment<FragmentExamBinding>() {
     private val pagerAdapter get() = binding.viewPagerQuestions.adapter as QuestionPagerAdapter
 
     private val viewModel: ExamViewModel by vm()
+
+    private var questionSelectionJobs: MutableList<Job> = ArrayList()
 
     override val viewBinder: ViewBindingProvider<FragmentExamBinding>
         get() = FragmentExamBinding::inflate
@@ -53,7 +60,11 @@ internal class ExamFragment : ViewBindingFragment<FragmentExamBinding>() {
             }
         }
         viewModel.timeLeft.observe(viewLifecycleOwner, binding.tvExamTimer::setText)
-        viewModel.questionIds.observe(viewLifecycleOwner, pagerAdapter::submitList)
+        viewModel.questionIds.observe(viewLifecycleOwner) { list ->
+            questionSelectionJobs.forEach { it.cancel() }
+            questionSelectionJobs.clear()
+            pagerAdapter.submitList(list)
+        }
 
         viewModel.commandShowFinishingConfirm.observe(viewLifecycleOwner) {
             showAlert(
@@ -76,6 +87,7 @@ internal class ExamFragment : ViewBindingFragment<FragmentExamBinding>() {
 
         TabLayoutMediator(binding.tabLayoutNumbers, binding.viewPagerQuestions) { tab, position ->
             tab.text = position.plus(1).toString()
+            tab.view.tag = pagerAdapter.getItemAt(position)
         }.attach()
     }
 
@@ -92,10 +104,29 @@ internal class ExamFragment : ViewBindingFragment<FragmentExamBinding>() {
                     marginStart = margin
                 }
                 binding.tabLayoutNumbers.requestLayout()
+                val questionId = child?.tag as? String ?: return
+                registerTabSelectionListener(questionId, child)
             }
 
             override fun onChildViewRemoved(parent: View?, child: View?) = Unit
         })
+    }
+
+    private fun registerTabSelectionListener(questionId: String, view: View) {
+        val job = viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.questionSelection(questionId).collect { isSelected ->
+                    view.setBackgroundResource(
+                        if (isSelected) {
+                            R.drawable.selector_tab_background_selected
+                        } else {
+                            R.drawable.selector_tab_background
+                        }
+                    )
+                }
+            }
+        }
+        questionSelectionJobs.add(job)
     }
 
     private fun initClickListeners() = with(binding) {

@@ -11,6 +11,7 @@ import io.flaterlab.meshexam.domain.exam.model.AttemptMetaModel
 import io.flaterlab.meshexam.domain.exam.model.ExamEvent
 import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
 import io.flaterlab.meshexam.examination.dvo.ExaminationDvo
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -61,6 +62,11 @@ internal class ExamViewModel @Inject constructor(
 
     private var isScreenFirstOpen: Boolean = true
     private var isScreenMonitorEnabled: Boolean = true
+
+    fun questionSelection(questionId: String): Flow<Boolean> {
+        return examInteractor.answersByAttemptAndQuestionId(launcher.attemptId, questionId)
+            .map { list -> list.any { it.isSelected } }
+    }
 
     fun onSubmitClicked() {
         commandShowFinishingConfirm.call()

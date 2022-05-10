@@ -66,6 +66,10 @@ class MockExaminationInteractor @Inject constructor(
             .map { it.questionIds }
     }
 
+    override fun questionInfoListByAttemptId(attemptId: String): Flow<List<QuestionInfoModel>> {
+        return emptyFlow()
+    }
+
     override fun questionById(questionId: String): Flow<QuestionModel> {
         return examRepository.questionById(questionId)
     }
