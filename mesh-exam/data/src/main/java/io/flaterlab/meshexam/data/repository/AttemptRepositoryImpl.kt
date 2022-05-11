@@ -12,6 +12,7 @@ import io.flaterlab.meshexam.data.database.entity.AttemptEntity
 import io.flaterlab.meshexam.data.database.entity.update.AttemptFinishing
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
+import io.flaterlab.meshexam.data.worker.WorkerScheduler
 import io.flaterlab.meshexam.domain.exam.model.*
 import io.flaterlab.meshexam.domain.repository.AttemptRepository
 import io.flaterlab.meshexam.librariy.mesh.client.ClientMeshManager
@@ -28,6 +29,7 @@ internal class AttemptRepositoryImpl @Inject constructor(
     private val userProfileDao: UserProfileDao,
     private val database: MeshDatabase,
     private val idGenerator: IdGeneratorStrategy,
+    private val attemptFinisher: WorkerScheduler,
     private val clientMeshManager: ClientMeshManager,
     private val clientMessageMapper: Mapper<Message, FromClientPayload>,
 ) : AttemptRepository {
@@ -53,6 +55,7 @@ internal class AttemptRepositoryImpl @Inject constructor(
                 submittedAt = null,
             )
             attemptDao.insert(attempt)
+            attemptFinisher.scheduleAttemptFinish(attempt.attemptId, exam.durationInMin)
             attempt.attemptId
         }
     }
@@ -73,10 +76,9 @@ internal class AttemptRepositoryImpl @Inject constructor(
     }
 
     private fun resolveAttemptMetaStatus(attempt: AttemptEntity) =
-        if (attempt.isFinished) {
-            AttemptMetaModel.ExamStatus.FINISHED
-        } else {
-            AttemptMetaModel.ExamStatus.STARTED
+        when (attempt.status) {
+            AttemptEntity.Status.STARTED -> AttemptMetaModel.ExamStatus.STARTED
+            AttemptEntity.Status.FINISHED -> AttemptMetaModel.ExamStatus.FINISHED
         }
 
     override suspend fun getActiveAttempts(): List<AttemptMetaModel> {
@@ -115,6 +117,7 @@ internal class AttemptRepositoryImpl @Inject constructor(
         val attemptFinishing = AttemptFinishing(
             attemptId = attemptId,
             score = 0,
+            status = AttemptEntity.Status.FINISHED,
             submittedAt = Date().time
         )
         attemptDao.updateToFinishAttempt(attemptFinishing)

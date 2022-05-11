@@ -11,7 +11,7 @@ import dagger.hilt.android.EntryPointAccessors
 import io.flaterlab.meshexam.data.database.entity.AnswerEntity
 import io.flaterlab.meshexam.data.database.entity.ExamEntity
 import io.flaterlab.meshexam.data.database.entity.QuestionEntity
-import io.flaterlab.meshexam.data.di.SeedDatabaseEntryPoint
+import io.flaterlab.meshexam.data.di.WorkerEntryPoint
 import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
 import io.flaterlab.meshexam.data.worker.entity.AnswerJson
 import io.flaterlab.meshexam.data.worker.entity.ExamJson
@@ -28,7 +28,7 @@ internal class SeedDatabaseWorker(
 ) : CoroutineWorker(context, workerParams) {
 
     private val entryPoint = EntryPointAccessors
-        .fromApplication(context.applicationContext, SeedDatabaseEntryPoint::class.java)
+        .fromApplication(context.applicationContext, WorkerEntryPoint::class.java)
     private val userProfileDao = entryPoint.userProfileDao
     private val database = entryPoint.meshDatabase
     private val examDao get() = database.examDao()

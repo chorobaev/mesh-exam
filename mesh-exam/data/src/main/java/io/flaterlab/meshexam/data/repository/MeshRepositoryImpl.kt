@@ -15,12 +15,10 @@ import io.flaterlab.meshexam.data.database.entity.UserEntity
 import io.flaterlab.meshexam.data.database.entity.host.HostingEntity
 import io.flaterlab.meshexam.data.datastore.dao.UserProfileDao
 import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
+import io.flaterlab.meshexam.data.worker.WorkerScheduler
 import io.flaterlab.meshexam.domain.exam.model.ExamEvent
 import io.flaterlab.meshexam.domain.exam.model.ExamEventModel
-import io.flaterlab.meshexam.domain.mesh.model.ClientModel
-import io.flaterlab.meshexam.domain.mesh.model.HostedStudentModel
-import io.flaterlab.meshexam.domain.mesh.model.MeshModel
-import io.flaterlab.meshexam.domain.mesh.model.StartExamResultModel
+import io.flaterlab.meshexam.domain.mesh.model.*
 import io.flaterlab.meshexam.domain.repository.MeshRepository
 import io.flaterlab.meshexam.librariy.mesh.common.dto.AdvertiserInfo
 import io.flaterlab.meshexam.librariy.mesh.common.dto.ClientInfo
@@ -41,6 +39,7 @@ internal class MeshRepositoryImpl @Inject constructor(
     private val profileDao: UserProfileDao,
     private val hostMeshManager: HostMeshManager,
     private val idGenerator: IdGeneratorStrategy,
+    private val workerScheduler: WorkerScheduler,
     private val userProfileDao: UserProfileDao,
     private val hostMessageMapper: Mapper<Message, FromHostPayload>,
     private val fromClientPayloadHandler: PayloadHandler<FromClientPayload>,
@@ -88,6 +87,7 @@ internal class MeshRepositoryImpl @Inject constructor(
     override suspend fun startExam(examId: String): StartExamResultModel {
         return withContext(Dispatchers.IO) {
             val user = userProfileDao.userProfile().first()
+            val exam = examDao.getExamById(examId)
             val hosting = HostingEntity(
                 hostingId = idGenerator.generate(),
                 userId = user.id,
@@ -98,6 +98,7 @@ internal class MeshRepositoryImpl @Inject constructor(
             hostingDao.insert(hosting)
             saveUsers(examId, hosting.hostingId)
             sendExamContent(examId, hosting.hostingId)
+            workerScheduler.scheduleHostingFinish(hosting.hostingId, exam.durationInMin)
             StartExamResultModel(examId, hosting.hostingId)
         }
     }
@@ -180,8 +181,8 @@ internal class MeshRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun finishExam(hostingId: String) {
-        sendFinishNotification(hostingId)
+    override suspend fun finishExam(hostingId: String, notifyClientsToFinish: Boolean) {
+        if (notifyClientsToFinish) sendFinishNotification(hostingId)
         database.withTransaction {
             val hosting = hostingDao.getHostingById(hostingId)
             hostingDao.update(hosting.copy(finishedAt = Date().time))
@@ -191,6 +192,19 @@ internal class MeshRepositoryImpl @Inject constructor(
     private suspend fun sendFinishNotification(hostingId: String) {
         val finishExamAction = FinishExamEventDto(hostingId)
         hostMeshManager.sendPayload(hostMessageMapper(finishExamAction))
+    }
+
+    override fun hostingMetaModel(hostingId: String): Flow<HostingMetaModel> {
+        return hostingDao.hostingById(hostingId)
+            .map { entity ->
+                HostingMetaModel(
+                    status = if (entity.finishedAt == null) {
+                        HostingMetaModel.HostingStatus.STARTED
+                    } else {
+                        HostingMetaModel.HostingStatus.FINISHED
+                    }
+                )
+            }
     }
 
     override fun hostingTimeLeftInSec(hostingId: String): Flow<Int> {

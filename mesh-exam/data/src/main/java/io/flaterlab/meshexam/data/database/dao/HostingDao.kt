@@ -2,6 +2,7 @@ package io.flaterlab.meshexam.data.database.dao
 
 import androidx.room.*
 import io.flaterlab.meshexam.data.database.entity.host.HostingEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 internal interface HostingDao {
@@ -11,6 +12,9 @@ internal interface HostingDao {
 
     @Query("SELECT * FROM hostings WHERE hostingId = :id")
     suspend fun getHostingById(id: String): HostingEntity
+
+    @Query("SELECT * FROM hostings WHERE hostingId = :id")
+    fun hostingById(id: String): Flow<HostingEntity>
 
     @Query(
         "SELECT * FROM hostings WHERE hostingId = " +

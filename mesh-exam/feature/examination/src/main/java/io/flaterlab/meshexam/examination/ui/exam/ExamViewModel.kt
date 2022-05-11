@@ -35,6 +35,7 @@ internal class ExamViewModel @Inject constructor(
         .onEach { attemptModel ->
             Timber.d("Attempt meta changed: $attemptModel")
             if (attemptModel.examStatus == AttemptMetaModel.ExamStatus.FINISHED) {
+                isScreenMonitorEnabled = false
                 commandFinishExam.value = launcher.attemptId
             }
         }
@@ -78,14 +79,12 @@ internal class ExamViewModel @Inject constructor(
 
     fun onFinishConfirmed() {
         viewModelScope.launch {
-            isScreenMonitorEnabled = false
             try {
                 examInteractor.finishAttempt(launcher.attemptId)
             } catch (ex: Exception) {
                 Timber.e(ex)
                 // TODO: handle mesh destroyed case
             }
-            commandFinishExam.value = launcher.attemptId
         }
     }
 

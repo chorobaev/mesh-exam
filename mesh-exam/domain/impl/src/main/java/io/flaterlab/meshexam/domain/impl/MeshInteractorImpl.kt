@@ -3,6 +3,7 @@ package io.flaterlab.meshexam.domain.impl
 import io.flaterlab.meshexam.domain.exam.model.ExamEventModel
 import io.flaterlab.meshexam.domain.interactor.MeshInteractor
 import io.flaterlab.meshexam.domain.mesh.model.HostedStudentModel
+import io.flaterlab.meshexam.domain.mesh.model.HostingMetaModel
 import io.flaterlab.meshexam.domain.mesh.model.MeshModel
 import io.flaterlab.meshexam.domain.mesh.model.StartExamResultModel
 import io.flaterlab.meshexam.domain.repository.ExamRepository
@@ -29,6 +30,10 @@ class MeshInteractorImpl @Inject constructor(
 
     override suspend fun startExam(examId: String): StartExamResultModel {
         return meshRepository.startExam(examId)
+    }
+
+    override fun hostingState(hostingId: String): Flow<HostingMetaModel> {
+        return meshRepository.hostingMetaModel(hostingId)
     }
 
     override fun hostingTimeLeftInSec(hostingId: String): Flow<Int> {
