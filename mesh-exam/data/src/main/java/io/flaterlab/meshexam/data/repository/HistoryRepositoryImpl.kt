@@ -82,7 +82,7 @@ internal class HistoryRepositoryImpl @Inject constructor(
         return ExamHistoryModel(
             id = attempt.attemptId,
             name = exam.name,
-            durationInMin = exam.durationInMin,
+            durationInMillis = attempt.durationInMillis,
             isHosting = false,
         )
     }
@@ -92,7 +92,11 @@ internal class HistoryRepositoryImpl @Inject constructor(
         return ExamHistoryModel(
             id = hosting.hostingId,
             name = exam.name,
-            durationInMin = exam.durationInMin,
+            durationInMillis = try {
+                hosting.durationInMillis
+            } catch (e: Exception) {
+                0
+            },
             isHosting = true,
         )
     }

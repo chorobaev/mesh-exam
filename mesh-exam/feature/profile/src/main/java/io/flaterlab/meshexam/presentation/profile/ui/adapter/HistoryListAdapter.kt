@@ -52,10 +52,7 @@ internal class HistoryListAdapter @Inject constructor(
 
         fun bind(item: HistoryDvo) = with(binding) {
             tvExamName.text = item.name
-            tvExamDuration.text = itemView.context.getString(
-                io.flaterlab.meshexam.android_base.R.string.common_string_min,
-                item.durationInMin.toString()
-            )
+            tvExamDuration.text = item.duration
             cvExamItem.setCardBackgroundColor(
                 itemView.context.getColorAttr(
                     if (item.isHosted) R.attr.colorSurface else android.R.attr.colorBackground

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
 import io.flaterlab.meshexam.androidbase.SingleLiveEvent
+import io.flaterlab.meshexam.core.DateUtils
 import io.flaterlab.meshexam.domain.interactor.ProfileInteractor
 import io.flaterlab.meshexam.domain.profile.usecase.GetUserProfileUseCase
 import io.flaterlab.meshexam.presentation.profile.dvo.HistoryDvo
@@ -36,7 +37,12 @@ internal class ProfileViewModel @Inject constructor(
     val historyItems: LiveData<List<HistoryDvo>> = profileInteractor.examHistory()
         .map { list ->
             list.map { model ->
-                HistoryDvo(model.id, model.name, model.durationInMin, model.isHosting)
+                HistoryDvo(
+                    model.id,
+                    model.name,
+                    DateUtils.formatTimeMmSs(model.durationInMillis),
+                    model.isHosting
+                )
             }
         }
         .onEach { list ->
