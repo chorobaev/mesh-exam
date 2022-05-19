@@ -2,7 +2,7 @@ package io.flaterlab.meshexam.data.communication.fromClient
 
 import com.google.gson.annotations.Expose
 import io.flaterlab.meshexam.data.communication.MeshMessageCompanion
-import io.flaterlab.meshexam.data.communication.Message
+import io.flaterlab.meshexam.data.communication.MeshMessage
 
 internal data class AttemptDto(
     @Expose val id: String,
@@ -12,7 +12,7 @@ internal data class AttemptDto(
     @Expose val startedAt: Long,
     @Expose val finishedAt: Long,
     @Expose val answers: List<AttemptAnswerDto>,
-) : Message {
+) : MeshMessage {
 
     override val companionObject: MeshMessageCompanion = Companion
 

@@ -2,7 +2,7 @@ package io.flaterlab.meshexam.data.repository
 
 import androidx.room.withTransaction
 import io.flaterlab.meshexam.core.Mapper
-import io.flaterlab.meshexam.data.communication.Message
+import io.flaterlab.meshexam.data.communication.MeshMessage
 import io.flaterlab.meshexam.data.communication.fromClient.AttemptAnswerDto
 import io.flaterlab.meshexam.data.communication.fromClient.AttemptDto
 import io.flaterlab.meshexam.data.communication.fromClient.ExamEventDto
@@ -31,7 +31,7 @@ internal class AttemptRepositoryImpl @Inject constructor(
     private val idGenerator: IdGeneratorStrategy,
     private val attemptFinisher: WorkerScheduler,
     private val clientMeshManager: ClientMeshManager,
-    private val clientMessageMapper: Mapper<Message, FromClientPayload>,
+    private val clientMessageMapper: Mapper<MeshMessage, FromClientPayload>,
 ) : AttemptRepository {
 
     private val examDao = database.examDao()

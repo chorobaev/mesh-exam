@@ -2,7 +2,7 @@ package io.flaterlab.meshexam.data.repository
 
 import androidx.room.withTransaction
 import io.flaterlab.meshexam.core.Mapper
-import io.flaterlab.meshexam.data.communication.Message
+import io.flaterlab.meshexam.data.communication.MeshMessage
 import io.flaterlab.meshexam.data.communication.PayloadHandler
 import io.flaterlab.meshexam.data.communication.fromClient.ExamEventDto
 import io.flaterlab.meshexam.data.communication.fromHost.AnswerDto
@@ -41,7 +41,7 @@ internal class MeshRepositoryImpl @Inject constructor(
     private val idGenerator: IdGeneratorStrategy,
     private val workerScheduler: WorkerScheduler,
     private val userProfileDao: UserProfileDao,
-    private val hostMessageMapper: Mapper<Message, FromHostPayload>,
+    private val hostMessageMapper: Mapper<MeshMessage, FromHostPayload>,
     private val fromClientPayloadHandler: PayloadHandler<FromClientPayload>,
 ) : MeshRepository {
 

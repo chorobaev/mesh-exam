@@ -2,11 +2,11 @@ package io.flaterlab.meshexam.data.communication.fromHost
 
 import com.google.gson.annotations.Expose
 import io.flaterlab.meshexam.data.communication.MeshMessageCompanion
-import io.flaterlab.meshexam.data.communication.Message
+import io.flaterlab.meshexam.data.communication.MeshMessage
 
 internal data class FinishExamEventDto(
     @Expose val hostingId: String,
-) : Message {
+) : MeshMessage {
 
     override val companionObject: MeshMessageCompanion = Companion
 

@@ -1,6 +1,6 @@
 package io.flaterlab.meshexam.data.communication
 
-interface Message {
+interface MeshMessage {
 
     val companionObject: MeshMessageCompanion
 

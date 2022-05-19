@@ -2,13 +2,13 @@ package io.flaterlab.meshexam.data.communication.fromClient
 
 import com.google.gson.annotations.Expose
 import io.flaterlab.meshexam.data.communication.MeshMessageCompanion
-import io.flaterlab.meshexam.data.communication.Message
+import io.flaterlab.meshexam.data.communication.MeshMessage
 
 internal data class ExamEventDto(
     @Expose override val clientId: String,
     @Expose val hostingId: String,
     @Expose val eventType: EventType,
-) : Message {
+) : MeshMessage {
 
     override val companionObject: MeshMessageCompanion = Companion
 

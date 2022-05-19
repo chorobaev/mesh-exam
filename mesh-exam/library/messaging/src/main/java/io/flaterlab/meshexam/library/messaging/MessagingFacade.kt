@@ -1,0 +1,56 @@
+package io.flaterlab.meshexam.library.messaging
+
+import android.content.Context
+import com.google.android.gms.nearby.Nearby
+import com.google.gson.Gson
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Provider
+
+interface MessagingFacade {
+
+    fun startReceiving(info: ReceiverInfo): Flow<Message>
+
+    suspend fun acceptMessage(request: Message.Request)
+
+    suspend fun rejectMessage(request: Message.Request)
+
+    suspend fun sendMessage(payload: Message.Payload)
+
+    companion object {
+        @Volatile
+        private var instance: MessagingFacade? = null
+
+        fun getInstance(context: Context): MessagingFacade =
+            instance ?: synchronized(this) {
+                instance ?: Pair(
+                    Nearby.getConnectionsClient(context.applicationContext),
+                    Gson()
+                ).let { (nearby, gson) ->
+                    val serviceId = context.packageName
+                    MessagingImpl(
+                        { Sender(serviceId, nearby, gson) },
+                        { Receiver(serviceId, nearby, gson) },
+                    )
+                }.also { instance = it }
+            }
+    }
+}
+
+internal class MessagingImpl(
+    private val senderProvider: Provider<Sender>,
+    private val receiverProvider: Provider<Receiver>,
+) : MessagingFacade {
+
+    override fun startReceiving(info: ReceiverInfo): Flow<Message> =
+        receiverProvider.get().startReceiving(info)
+
+    override suspend fun acceptMessage(request: Message.Request) =
+        receiverProvider.get().acceptMessage(request)
+
+    override suspend fun rejectMessage(request: Message.Request) {
+        receiverProvider.get().rejectMessage(request)
+    }
+
+    override suspend fun sendMessage(payload: Message.Payload) =
+        senderProvider.get().sendMessage(payload)
+}

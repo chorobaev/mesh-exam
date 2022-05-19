@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.flaterlab.meshexam.core.Mapper
-import io.flaterlab.meshexam.data.communication.Message
+import io.flaterlab.meshexam.data.communication.MeshMessage
 import io.flaterlab.meshexam.data.communication.fromClient.MessageToFromClientPayloadMapper
 import io.flaterlab.meshexam.data.communication.fromHost.MessageToFromHostPayloadMapper
 import io.flaterlab.meshexam.data.database.entity.ExamEntity
@@ -34,8 +34,8 @@ internal interface MapperBindingModule {
     fun bindUserProfileEntityToModelMapper(impl: UserProfileEntityToModelMapper): Mapper<UserProfileEntity, UserProfileModel>
 
     @Binds
-    fun bindMessageToFromHostPayloadMapper(impl: MessageToFromHostPayloadMapper): Mapper<Message, FromHostPayload>
+    fun bindMessageToFromHostPayloadMapper(impl: MessageToFromHostPayloadMapper): Mapper<MeshMessage, FromHostPayload>
 
     @Binds
-    fun bindMessageToFromClientPayloadMapper(impl: MessageToFromClientPayloadMapper): Mapper<Message, FromClientPayload>
+    fun bindMessageToFromClientPayloadMapper(impl: MessageToFromClientPayloadMapper): Mapper<MeshMessage, FromClientPayload>
 }
