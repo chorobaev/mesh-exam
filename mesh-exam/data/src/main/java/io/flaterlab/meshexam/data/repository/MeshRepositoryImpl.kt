@@ -181,12 +181,17 @@ internal class MeshRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun finishExam(hostingId: String, notifyClientsToFinish: Boolean) {
-        if (notifyClientsToFinish) sendFinishNotification(hostingId)
+    override suspend fun finishExamBySystem(hostingId: String) {
         database.withTransaction {
             val hosting = hostingDao.getHostingById(hostingId)
             hostingDao.update(hosting.copy(finishedAt = Date().time))
         }
+    }
+
+    override suspend fun finishExam(hostingId: String) {
+        workerScheduler.cancelAllHostingFinishers()
+        sendFinishNotification(hostingId)
+        finishExamBySystem(hostingId)
     }
 
     private suspend fun sendFinishNotification(hostingId: String) {

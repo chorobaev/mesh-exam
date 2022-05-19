@@ -18,7 +18,7 @@ internal class FinishHostingWorker(
     override suspend fun doWork(): Result {
         val hostingId = inputData.getString(HOSTING_ID_EXTRA) ?: return Result.success()
         try {
-            entryPoint.meshRepository.finishExam(hostingId, false)
+            entryPoint.meshRepository.finishExamBySystem(hostingId)
         } catch (ex: Exception) {
             Timber.e(ex)
             return Result.failure()

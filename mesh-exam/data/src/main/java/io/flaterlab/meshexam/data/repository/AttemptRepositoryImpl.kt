@@ -29,7 +29,7 @@ internal class AttemptRepositoryImpl @Inject constructor(
     private val userProfileDao: UserProfileDao,
     private val database: MeshDatabase,
     private val idGenerator: IdGeneratorStrategy,
-    private val attemptFinisher: WorkerScheduler,
+    private val workerScheduler: WorkerScheduler,
     private val clientMeshManager: ClientMeshManager,
     private val clientMessageMapper: Mapper<MeshMessage, FromClientPayload>,
 ) : AttemptRepository {
@@ -55,7 +55,7 @@ internal class AttemptRepositoryImpl @Inject constructor(
                 submittedAt = null,
             )
             attemptDao.insert(attempt)
-            attemptFinisher.scheduleAttemptFinish(attempt.attemptId, exam.durationInMin)
+            workerScheduler.scheduleAttemptFinish(attempt.attemptId, exam.durationInMin)
             attempt.attemptId
         }
     }
@@ -113,7 +113,7 @@ internal class AttemptRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun finishAttempt(attemptId: String) {
+    override suspend fun finishAttemptBySystem(attemptId: String) {
         val attemptFinishing = AttemptFinishing(
             attemptId = attemptId,
             score = 0,
@@ -122,6 +122,11 @@ internal class AttemptRepositoryImpl @Inject constructor(
         )
         attemptDao.updateToFinishAttempt(attemptFinishing)
         sendAttempt(attemptId)
+    }
+
+    override suspend fun finishAttempt(attemptId: String) {
+        workerScheduler.cancelAllAttemptFinishers()
+        finishAttemptBySystem(attemptId)
     }
 
     private suspend fun sendAttempt(attemptId: String) = withContext(Dispatchers.IO) {

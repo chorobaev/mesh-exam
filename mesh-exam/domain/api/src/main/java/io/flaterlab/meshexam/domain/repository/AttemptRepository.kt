@@ -13,6 +13,8 @@ interface AttemptRepository {
 
     suspend fun addAttemptAnswer(model: SelectAnswerModel)
 
+    suspend fun finishAttemptBySystem(attemptId: String)
+
     suspend fun finishAttempt(attemptId: String)
 
     fun selectedAnswerByAttemptAndQuestionId(

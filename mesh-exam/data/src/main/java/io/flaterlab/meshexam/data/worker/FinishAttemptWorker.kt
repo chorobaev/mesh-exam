@@ -18,7 +18,7 @@ internal class FinishAttemptWorker(
     override suspend fun doWork(): Result {
         val attemptId: String = inputData.getString(ATTEMPT_ID_EXTRA) ?: return Result.success()
         try {
-            entryPoint.attemptRepository.finishAttempt(attemptId)
+            entryPoint.attemptRepository.finishAttemptBySystem(attemptId)
         } catch (ex: Exception) {
             Timber.e(ex)
             return Result.failure()

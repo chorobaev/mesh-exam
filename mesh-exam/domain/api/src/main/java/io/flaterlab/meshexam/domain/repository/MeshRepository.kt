@@ -17,7 +17,9 @@ interface MeshRepository {
 
     suspend fun startExam(examId: String): StartExamResultModel
 
-    suspend fun finishExam(hostingId: String, notifyClientsToFinish: Boolean = true)
+    suspend fun finishExamBySystem(hostingId: String)
+
+    suspend fun finishExam(hostingId: String)
 
     fun hostingMetaModel(hostingId: String): Flow<HostingMetaModel>
 
