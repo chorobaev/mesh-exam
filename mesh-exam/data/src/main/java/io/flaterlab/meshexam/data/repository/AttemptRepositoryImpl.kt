@@ -3,8 +3,7 @@ package io.flaterlab.meshexam.data.repository
 import androidx.room.withTransaction
 import io.flaterlab.meshexam.core.Mapper
 import io.flaterlab.meshexam.data.communication.MeshMessage
-import io.flaterlab.meshexam.data.communication.fromClient.AttemptAnswerDto
-import io.flaterlab.meshexam.data.communication.fromClient.AttemptDto
+import io.flaterlab.meshexam.data.communication.fromClient.AttemptDtoProvider
 import io.flaterlab.meshexam.data.communication.fromClient.ExamEventDto
 import io.flaterlab.meshexam.data.database.MeshDatabase
 import io.flaterlab.meshexam.data.database.entity.AttemptAnswerEntity
@@ -32,6 +31,7 @@ internal class AttemptRepositoryImpl @Inject constructor(
     private val workerScheduler: WorkerScheduler,
     private val clientMeshManager: ClientMeshManager,
     private val clientMessageMapper: Mapper<MeshMessage, FromClientPayload>,
+    private val attemptDtoProvider: AttemptDtoProvider,
 ) : AttemptRepository {
 
     private val examDao = database.examDao()
@@ -130,28 +130,7 @@ internal class AttemptRepositoryImpl @Inject constructor(
     }
 
     private suspend fun sendAttempt(attemptId: String) = withContext(Dispatchers.IO) {
-        val attemptDto = database.withTransaction {
-            val attemptEntity = attemptDao.getAttemptById(attemptId)
-            val answersEntity = attemptAnswerDao.getAnswersByAttemptId(attemptId)
-            val hostingId = examDao.getHostingIdByExamId(attemptEntity.examId)
-            AttemptDto(
-                id = attemptEntity.attemptId,
-                userId = attemptEntity.userId,
-                examId = attemptEntity.examId,
-                hostingId = hostingId,
-                startedAt = attemptEntity.createdAt,
-                finishedAt = attemptEntity.submittedAt
-                    ?: throw IllegalArgumentException("Exam must be submitted before sending"),
-                answers = answersEntity.map { entity ->
-                    AttemptAnswerDto(
-                        id = entity.attemptAnswerId,
-                        questionId = entity.questionId,
-                        answerId = entity.answerId,
-                        createdAt = entity.createdAt,
-                    )
-                }
-            )
-        }
+        val attemptDto = attemptDtoProvider.provide(attemptId)
         clientMeshManager.sendPayloadToHost(clientMessageMapper(attemptDto))
     }
 
