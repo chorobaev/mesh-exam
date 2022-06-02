@@ -30,6 +30,9 @@ internal interface PayloadHandlerBinding {
     fun bindAttemptPayloadHandler(impl: AttemptPayloadHandler): PayloadHandler.Handler<FromClientPayload>
 
     @Binds
+    fun bindAttemptPayloadHandlerSingle(impl: AttemptPayloadHandler): PayloadHandler.Handler<FromClientPayload>
+
+    @Binds
     @IntoSet
     fun bindExamEventPayloadHandler(impl: ExamEventPayloadHandler): PayloadHandler.Handler<FromClientPayload>
 }

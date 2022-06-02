@@ -1,41 +1,42 @@
-package io.flaterlab.meshexam.result.ui.list
+package io.flaterlab.meshexam.result.ui.receive
 
 import android.os.Bundle
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import androidx.core.text.toSpannable
-import androidx.navigation.fragment.findNavController
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import io.flaterlab.meshexam.androidbase.*
+import io.flaterlab.meshexam.androidbase.ViewBindingFragment
+import io.flaterlab.meshexam.androidbase.ViewBindingProvider
 import io.flaterlab.meshexam.androidbase.common.adapter.ClientListAdapter
-import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
-import io.flaterlab.meshexam.result.ClientResultLauncher
 import io.flaterlab.meshexam.result.R
-import io.flaterlab.meshexam.result.databinding.FragmentResultListBinding
+import io.flaterlab.meshexam.result.databinding.FragmentReceiveResultBinding
 import io.flaterlab.meshexam.result.dvo.ResultItemDvo
-import io.flaterlab.meshexam.result.ui.receive.ReceiveResultLauncher
 import io.flaterlab.meshexam.uikit.ext.getColorAttr
 import javax.inject.Inject
 
 @AndroidEntryPoint
-internal class ResultListFragment : ViewBindingFragment<FragmentResultListBinding>() {
-
-    private val viewModel: ResultListViewModel by vm()
-    private val watcherManager = TextWatcherManager(this)
+internal class ReceiveResultFragment : ViewBindingFragment<FragmentReceiveResultBinding>() {
 
     @Inject
     lateinit var resultListAdapter: ClientListAdapter
 
-    override val viewBinder: ViewBindingProvider<FragmentResultListBinding>
-        get() = FragmentResultListBinding::inflate
+    private val viewModel: ReceiveResultViewModel by viewModels()
+
+    override val viewBinder: ViewBindingProvider<FragmentReceiveResultBinding>
+        get() = FragmentReceiveResultBinding::inflate
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initRecyclerView()
+        initObservers()
+    }
 
+    private fun initObservers() {
         viewModel.examInfo.observe(viewLifecycleOwner) { meta ->
             with(binding) {
                 toolbarHostResult.setTitle(meta.examName)
@@ -46,23 +47,6 @@ internal class ResultListFragment : ViewBindingFragment<FragmentResultListBindin
         }
         viewModel.resultListState.observe(viewLifecycleOwner, binding.recyclerViewResults::setState)
         viewModel.resultList.observe(viewLifecycleOwner, resultListAdapter::submitList)
-        viewModel.commandOpenResult.observe(viewLifecycleOwner) { attemptId ->
-            findNavController().navigate(
-                R.id.action_resultListFragment_to_individualResultFragment,
-                ClientResultLauncher(attemptId, showCorrectness = true).toBundleArgs()
-            )
-        }
-        viewModel.commandReceiveResults.observe(viewLifecycleOwner) { hostingId ->
-            findNavController().navigate(
-                R.id.action_resultListFragment_to_receiveResultFragment,
-                ReceiveResultLauncher(hostingId).toBundleArgs()
-            )
-        }
-
-        binding.etHostResultSearch.bindTextWatcher(watcherManager) { editable ->
-            viewModel.onSearchTextChanged(editable?.toString())
-        }
-        binding.ivReceiveResults.clickWithDebounce(action = viewModel::onReceiveResultsClicked)
     }
 
     private fun initRecyclerView() = with(binding.recyclerViewResults) {

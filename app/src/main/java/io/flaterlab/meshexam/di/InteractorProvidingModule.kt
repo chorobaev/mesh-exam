@@ -5,16 +5,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.flaterlab.meshexam.BuildConfig
-import io.flaterlab.meshexam.domain.impl.ExamContentInteractorImpl
-import io.flaterlab.meshexam.domain.impl.ExaminationInteractorImpl
-import io.flaterlab.meshexam.domain.impl.MeshInteractorImpl
-import io.flaterlab.meshexam.domain.impl.ProfileInteractorImpl
+import io.flaterlab.meshexam.domain.impl.*
 import io.flaterlab.meshexam.domain.impl.mock.MockExaminationInteractor
 import io.flaterlab.meshexam.domain.impl.mock.MockMeshInteractor
-import io.flaterlab.meshexam.domain.interactor.ExamContentInteractor
-import io.flaterlab.meshexam.domain.interactor.ExaminationInteractor
-import io.flaterlab.meshexam.domain.interactor.MeshInteractor
-import io.flaterlab.meshexam.domain.interactor.ProfileInteractor
+import io.flaterlab.meshexam.domain.interactor.*
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -43,6 +37,9 @@ class InteractorProvidingModule {
 
     @Provides
     fun provideContentInteractor(impl: ExamContentInteractorImpl): ExamContentInteractor = impl
+
+    @Provides
+    fun provideResultsInteractor(impl: ResultsInteractorImpl): ResultsInteractor = impl
 
     companion object {
         const val BUILD_TYPE_MOCK = "mock"

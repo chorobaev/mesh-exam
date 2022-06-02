@@ -10,11 +10,7 @@ interface MessagingFacade {
 
     fun startReceiving(info: ReceiverInfo): Flow<Message>
 
-    suspend fun acceptMessage(request: Message.Request)
-
-    suspend fun rejectMessage(request: Message.Request)
-
-    suspend fun sendMessage(payload: Message.Payload)
+    suspend fun sendMessage(message: Message)
 
     companion object {
         @Volatile
@@ -44,13 +40,6 @@ internal class MessagingImpl(
     override fun startReceiving(info: ReceiverInfo): Flow<Message> =
         receiverProvider.get().startReceiving(info)
 
-    override suspend fun acceptMessage(request: Message.Request) =
-        receiverProvider.get().acceptMessage(request)
-
-    override suspend fun rejectMessage(request: Message.Request) {
-        receiverProvider.get().rejectMessage(request)
-    }
-
-    override suspend fun sendMessage(payload: Message.Payload) =
-        senderProvider.get().sendMessage(payload)
+    override suspend fun sendMessage(message: Message) =
+        senderProvider.get().sendMessage(message)
 }

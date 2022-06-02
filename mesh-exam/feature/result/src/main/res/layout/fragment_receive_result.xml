@@ -4,27 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.list.ResultListFragment">
+    tools:context=".ui.receive.ReceiveResultFragment">
 
     <io.flaterlab.meshexam.uikit.view.MeshToolbar
         android:id="@+id/toolbar_host_result"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@id/iv_receive_results"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/iv_receive_results"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:layout_marginEnd="@dimen/margin_medium"
-        android:contentDescription="@string/result_list_receiveResultContentDesc"
-        android:padding="10dp"
-        android:src="@drawable/ic_receive"
-        app:layout_constraintBottom_toBottomOf="@id/toolbar_host_result"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/toolbar_host_result" />
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_host_result" />
 
     <TextView
         android:id="@+id/tv_host_result_time"
@@ -48,28 +39,12 @@
         app:layout_constraintTop_toBottomOf="@id/tv_host_result_time"
         tools:text="@string/result_list_submitted" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/et_frame_host_result_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_medium"
-        android:layout_marginTop="@dimen/margin_between"
-        app:layout_constraintTop_toBottomOf="@id/tv_host_result_submitted">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_host_result_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/mesh_search_hint" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
     <io.flaterlab.meshexam.uikit.view.StateRecyclerView
         android:id="@+id/recycler_view_results"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/margin_medium"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_frame_host_result_search" />
+        app:layout_constraintTop_toBottomOf="@id/tv_host_result_submitted" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

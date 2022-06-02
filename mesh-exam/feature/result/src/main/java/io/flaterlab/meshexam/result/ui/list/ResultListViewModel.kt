@@ -46,6 +46,7 @@ internal class ResultListViewModel @Inject constructor(
     val resultList: LiveData<List<ResultItemDvo>> = _resultList
 
     val commandOpenResult = SingleLiveEvent<String>()
+    val commandReceiveResults = SingleLiveEvent<String>()
 
     private var searchText: String? = null
     private var backingResultList: List<ResultItemDvo> = emptyList()
@@ -97,5 +98,9 @@ internal class ResultListViewModel @Inject constructor(
             else -> StateRecyclerView.State.NORMAL
         }
         _resultList.value = list
+    }
+
+    fun onReceiveResultsClicked() {
+        commandReceiveResults.value = launcher.id
     }
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.send.SendResultFragment">
+
+    <ImageView
+        android:id="@+id/iv_sending_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:contentDescription="@string/common_appIconContentDesc"
+        android:src="@drawable/ic_logo"
+        app:layout_constraintBottom_toTopOf="@id/tv_sending_exam"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tv_sending_exam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_between"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/margin_medium"
+        android:textAppearance="@style/TextAppearance.MeshExam.Headline2"
+        app:layout_constraintBottom_toTopOf="@id/tv_sending_progress"
+        app:layout_constraintTop_toBottomOf="@id/iv_sending_image"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Agile Manifesto" />
+
+    <TextView
+        android:id="@+id/tv_sending_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_between"
+        android:layout_marginEnd="24dp"
+        android:gravity="center"
+        android:text="@string/result_sending_sendingProgressMessage"
+        android:textAppearance="@style/TextAppearance.MeshExam.Large.Regular"
+        app:layout_constraintBottom_toTopOf="@id/tv_sending_explanation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_sending_exam"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/tv_sending_dots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.MeshExam.Large.Regular"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_sending_progress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/tv_sending_progress"
+        tools:text="..." />
+
+    <TextView
+        android:id="@+id/tv_sending_explanation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/margin_medium"
+        android:text="@string/result_sending_sendingExplanationMessage"
+        android:textAppearance="@style/TextAppearance.MeshExam.Large.Regular"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_sending_progress" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

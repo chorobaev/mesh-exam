@@ -11,6 +11,7 @@ import dagger.hilt.components.SingletonComponent
 import io.flaterlab.meshexam.data.strategy.IdGeneratorStrategy
 import io.flaterlab.meshexam.librariy.mesh.client.ClientMeshManager
 import io.flaterlab.meshexam.librariy.mesh.host.HostMeshManager
+import io.flaterlab.meshexam.library.messaging.MessagingFacade
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -35,5 +36,11 @@ internal class DataModule {
     fun provideClientMeshManager(
         @ApplicationContext context: Context,
     ): ClientMeshManager = ClientMeshManager
+        .getInstance(context)
+
+    @Provides
+    fun provideMessagingFacade(
+        @ApplicationContext context: Context,
+    ): MessagingFacade = MessagingFacade
         .getInstance(context)
 }

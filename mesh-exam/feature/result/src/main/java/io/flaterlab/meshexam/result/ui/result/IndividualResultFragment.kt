@@ -6,17 +6,21 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.children
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import io.flaterlab.meshexam.androidbase.ViewBindingFragment
 import io.flaterlab.meshexam.androidbase.ViewBindingProvider
 import io.flaterlab.meshexam.androidbase.ext.applyLayoutParams
+import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
 import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.androidbase.text.setText
+import io.flaterlab.meshexam.androidbase.toBundleArgs
 import io.flaterlab.meshexam.result.R
 import io.flaterlab.meshexam.result.databinding.FragmentIndividualResultBinding
 import io.flaterlab.meshexam.result.databinding.ItemGeneralInfoBinding
 import io.flaterlab.meshexam.result.ui.result.adapter.ResultQuestionPagerAdapter
+import io.flaterlab.meshexam.result.ui.send.SendResultLauncher
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -48,6 +52,15 @@ internal class IndividualResultFragment : ViewBindingFragment<FragmentIndividual
                 pagerAdapter.submitList(dvo.questionInfoList)
             }
         }
+        viewModel.sendingEnabled.observe(viewLifecycleOwner, binding.ivSendResult::isVisible::set)
+        viewModel.commandSendResult.observe(viewLifecycleOwner) { attemptId ->
+            findNavController().navigate(
+                R.id.action_individualResultFragment_to_sendResultFragment,
+                SendResultLauncher(attemptId).toBundleArgs(),
+            )
+        }
+
+        binding.ivSendResult.clickWithDebounce(action = viewModel::onSendResultClicked)
     }
 
     private fun onGeneralInfoReceived(infoList: List<Pair<Text, Text>>) =

@@ -12,6 +12,7 @@ dependencies {
     implementation localModules.domain
 
     implementation libraryModules.mesh
+    implementation libraryModules.messaging
 
     implementation libraries.work
     implementation libraries.hiltWork

@@ -3,10 +3,8 @@ package io.flaterlab.meshexam.library.messaging
 import com.google.android.gms.nearby.connection.*
 import com.google.gson.Gson
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
 internal class Receiver(
@@ -17,10 +15,11 @@ internal class Receiver(
 
     private val receiverConnectionLifecycle = ReceiverConnectionLifecycle()
     private val receiverPayloadCallback = ReceiverPayloadCallback()
+    private val connectedEndpointIds: MutableSet<String> = HashSet()
 
     private var onMessageReceiver: ((Result<Message>) -> Unit)? = null
 
-    fun startReceiving(info: ReceiverInfo): Flow<Message> = callbackFlow {
+    fun startReceiving(info: ReceiverInfo): Flow<Message> = callbackFlow<Message> {
         onMessageReceiver = { result: Result<Message> ->
             if (isActive) result.onSuccess(::trySend).onFailure(::close)
         }
@@ -28,13 +27,23 @@ internal class Receiver(
         awaitClose {
             onMessageReceiver = null
             stopAdvertising()
+            disconnect()
         }
+    }.also {
+        Timber.d("Starting receiving, receiver info = $info")
+    }.onStart {
+        Timber.d("Receiving started...")
+    }.onCompletion {
+        Timber.d("Receiving competed...")
+    }.onEach {
+        Timber.d("Received message = $it")
     }
 
     private fun advertise(receiverInfo: ReceiverInfo) {
+        Timber.d("Starting advertising")
         val infoBytes = gson.toJson(receiverInfo).toByteArray()
         val options = AdvertisingOptions.Builder()
-            .setStrategy(Strategy.P2P_STAR)
+            .setStrategy(Strategy.P2P_CLUSTER)
             .setLowPower(false)
             .setDisruptiveUpgrade(false)
             .build()
@@ -51,12 +60,9 @@ internal class Receiver(
         nearby.stopAdvertising()
     }
 
-    suspend fun acceptMessage(request: Message.Request) {
-        nearby.acceptConnection(request.endpointId, receiverPayloadCallback).await()
-    }
-
-    suspend fun rejectMessage(request: Message.Request) {
-        nearby.rejectConnection(request.endpointId).await()
+    private fun disconnect() {
+        connectedEndpointIds.forEach(nearby::disconnectFromEndpoint)
+        connectedEndpointIds.clear()
     }
 
     inner class ReceiverConnectionLifecycle : ConnectionLifecycleCallback() {
@@ -64,19 +70,25 @@ internal class Receiver(
         override fun onConnectionInitiated(endpointId: String, info: ConnectionInfo) {
             val result = runCatching {
                 val json = String(info.endpointInfo)
-                val senderInfo = gson.fromJson(json, SenderInfo::class.java)
-                Message.Request(
-                    uid = senderInfo.uid,
-                    endpointId = endpointId,
-                )
+                gson.fromJson(json, SenderInfo::class.java)
             }
-            onMessageReceiver?.invoke(result)
+            Timber.d("Connection requested, result = $result")
+            result
+                .onSuccess {
+                    nearby.acceptConnection(endpointId, receiverPayloadCallback)
+                        .addOnFailureListener { e ->
+                            onMessageReceiver?.invoke(Result.failure(e))
+                        }
+                }
+                .onFailure { e ->
+                    onMessageReceiver?.invoke(Result.failure(e))
+                }
         }
 
         override fun onConnectionResult(endpointId: String, resolution: ConnectionResolution) {
             when (resolution.status.statusCode) {
                 ConnectionsStatusCodes.STATUS_OK ->
-                    Timber.d("Connected: $endpointId")
+                    onConnected(endpointId)
                 ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED ->
                     Timber.d("Connection rejected: $endpointId")
                 ConnectionsStatusCodes.STATUS_ERROR ->
@@ -84,8 +96,14 @@ internal class Receiver(
             }
         }
 
+        private fun onConnected(endpointId: String) {
+            Timber.d("Connected: $endpointId")
+            connectedEndpointIds.add(endpointId)
+        }
+
         override fun onDisconnected(endpointId: String) {
             Timber.d("Disconnected: $endpointId")
+            connectedEndpointIds.remove(endpointId)
         }
     }
 
@@ -101,8 +119,9 @@ internal class Receiver(
             val message = runCatching {
                 String(bytes)
             }.mapCatching { json ->
-                gson.fromJson(json, Message.Payload::class.java)
+                gson.fromJson(json, Message::class.java)
             }
+            Timber.d("On message received, message = $message")
             onMessageReceiver?.invoke(message)
         }
 

@@ -1,10 +1,9 @@
 package io.flaterlab.meshexam.result.ui.result
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
+import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.core.DateUtils
@@ -66,4 +65,11 @@ internal class IndividualResultViewModel @Inject constructor(
         }
         .catch { e -> e.showLocalizedMessage() }
         .asLiveData(viewModelScope.coroutineContext)
+
+    val sendingEnabled: LiveData<Boolean> = MutableLiveData(!launcher.showCorrectness)
+    val commandSendResult = SingleLiveEvent<String>()
+
+    fun onSendResultClicked() {
+        commandSendResult.value = launcher.id
+    }
 }

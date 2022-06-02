@@ -16,10 +16,12 @@ internal class Sender(
     private val senderPayloadCallback = SenderPayloadCallback()
 
     private var onSendingResult: CompletableDeferred<Unit>? = null
-    private var payload: Message.Payload? = null
+    private var lastMessage: Message? = null
+    private var connectedEndpointId: String? = null
 
-    suspend fun sendMessage(payload: Message.Payload) {
-        this.payload = payload
+    suspend fun sendMessage(message: Message) {
+        Timber.d("Starting sending payload: $message")
+        this.lastMessage = message
         discover()
         try {
             CompletableDeferred<Unit>()
@@ -27,14 +29,16 @@ internal class Sender(
                 .await()
         } finally {
             onSendingResult = null
-            this.payload = null
+            this.lastMessage = null
             stopDiscovery()
+            disconnect()
         }
     }
 
     private fun discover() {
+        Timber.d("Starting discovering receivers...")
         val options = DiscoveryOptions.Builder()
-            .setStrategy(Strategy.P2P_STAR)
+            .setStrategy(Strategy.P2P_CLUSTER)
             .setLowPower(false)
             .build()
         nearby.startDiscovery(serviceId, receiverDiscoveryCallback, options)
@@ -44,7 +48,19 @@ internal class Sender(
     }
 
     private fun stopDiscovery() {
+        Timber.d("Stopping discovering endpoints...")
         nearby.stopDiscovery()
+    }
+
+    private fun disconnect() {
+        try {
+            connectedEndpointId?.let { endpointId ->
+                nearby.disconnectFromEndpoint(endpointId)
+                Timber.d("Disconnected from endpoint, endpointId = $endpointId")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     inner class ReceiverDiscoveryCallback : EndpointDiscoveryCallback() {
@@ -53,13 +69,19 @@ internal class Sender(
             Timber.d("Endpoint found: $endpointId")
             val json = String(info.endpointInfo)
             val receiverInfo = gson.fromJson(json, ReceiverInfo::class.java)
-            if (receiverInfo.uid == payload?.receiverId) connect(endpointId)
+            if (receiverInfo.uid == lastMessage?.receiverId) connect(endpointId)
         }
 
         private fun connect(endpointId: String) {
-            val senderInfo = gson.toJson(payload!!.senderInfo).toByteArray()
+            Timber.d("Connecting endpoint = $endpointId, sender info = ${lastMessage?.senderInfo}")
+            val senderInfo = gson.toJson(lastMessage!!.senderInfo).toByteArray()
             nearby.requestConnection(senderInfo, endpointId, senderConnectionLifecycle)
                 .addOnFailureListener { e ->
+                    Timber.e(
+                        e,
+                        "Connection failed, endpoint = $endpointId, sender info = ${lastMessage?.senderInfo}"
+                    )
+                    // TODO: do not compete if endpoint not found try again
                     onSendingResult?.completeExceptionally(e)
                 }
         }
@@ -72,8 +94,10 @@ internal class Sender(
     inner class SenderConnectionLifecycle : ConnectionLifecycleCallback() {
 
         override fun onConnectionInitiated(endpointId: String, info: ConnectionInfo) {
+            Timber.d("Accepting connection, endpointId = $endpointId")
             nearby.acceptConnection(endpointId, senderPayloadCallback)
                 .addOnFailureListener { e ->
+                    Timber.e(e, "Accepting connection failed, endpointId = $endpointId")
                     onSendingResult?.completeExceptionally(e)
                 }
         }
@@ -91,14 +115,22 @@ internal class Sender(
 
         private fun onConnected(endpointId: String) {
             Timber.d("Connected: $endpointId")
-            val bytes = gson.toJson(payload!!).toByteArray()
+            connectedEndpointId = endpointId
+            val message = lastMessage
+            if (message == null) {
+                onSendingResult?.completeExceptionally(IllegalStateException("Endpoint lost"))
+            }
+            val bytes = gson.toJson(message).toByteArray()
             nearby.sendPayload(endpointId, Payload.fromBytes(bytes))
                 .addOnSuccessListener {
+                    Timber.d("Payload sent...")
                     onSendingResult?.complete(Unit)
                 }
                 .addOnFailureListener { e ->
+                    Timber.e(e, "Payload sending error...")
                     onSendingResult?.completeExceptionally(e)
                 }
+
         }
 
         private fun onConnectionRejected(endpointId: String, cause: Throwable) {
@@ -111,6 +143,7 @@ internal class Sender(
 
         override fun onDisconnected(endpointId: String) {
             Timber.d("Disconnected: $endpointId")
+            connectedEndpointId = null
         }
     }
 

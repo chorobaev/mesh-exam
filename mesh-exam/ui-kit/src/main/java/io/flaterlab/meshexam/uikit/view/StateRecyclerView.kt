@@ -53,3 +53,7 @@ class StateRecyclerView : FrameLayout {
         LOADING
     }
 }
+
+fun <E> List<E>.toEmptinessListState(): StateRecyclerView.State {
+    return if (isEmpty()) StateRecyclerView.State.EMPTY else StateRecyclerView.State.NORMAL
+}
