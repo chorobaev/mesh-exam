@@ -49,17 +49,11 @@ class DiscoverFragment : ViewBindingFragment<FragmentDiscoverBinding>() {
         viewModel.commandRequestPermission.observe(viewLifecycleOwner) {
             MeshPermissionDialogFragment.show(childFragmentManager, viewModel::onPermissionsChanged)
         }
-        viewModel.discovering.observe(viewLifecycleOwner) { discovering ->
-            binding.progressExamDiscovery.isVisible =
-                viewModel.permissionNeededState.value == false && discovering
-            binding.btnRefresh.isVisible =
-                viewModel.permissionNeededState.value == false && !discovering
-
-            if (binding.btnRefresh.isVisible) {
-                binding.recyclerViewExams.recyclerView.setPadding(0, 0, 0, BOTTOM_PADDING.dp)
-            } else {
-                binding.recyclerViewExams.recyclerView.setPadding(0)
-            }
+        viewModel.discovering.observe(viewLifecycleOwner) {
+            updateDiscoveringState()
+        }
+        viewModel.permissionNeededState.observe(viewLifecycleOwner) {
+            updateDiscoveringState()
         }
         viewModel.commandObserveExams.observe(viewLifecycleOwner) { observeExams() }
 
@@ -68,6 +62,25 @@ class DiscoverFragment : ViewBindingFragment<FragmentDiscoverBinding>() {
             shouldRequest = true
         )
         initClickListeners()
+    }
+
+    private fun updateDiscoveringState() {
+        val isDiscovering = viewModel.discovering.value == true
+        val isPermissionNeeded = viewModel.permissionNeededState.value == true
+        binding.progressExamDiscovery.isVisible = !isPermissionNeeded && isDiscovering
+        binding.btnRefresh.isVisible = !isPermissionNeeded && !isDiscovering
+        binding.recyclerViewExams.setEmptyStateText(
+            if (isDiscovering) {
+                R.string.discover_main_emptyRefreshingHint
+            } else {
+                R.string.discover_main_emptyListHint
+            }
+        )
+        if (binding.btnRefresh.isVisible) {
+            binding.recyclerViewExams.recyclerView.setPadding(0, 0, 0, BOTTOM_PADDING.dp)
+        } else {
+            binding.recyclerViewExams.recyclerView.setPadding(0)
+        }
     }
 
     private fun initRecyclerView() = with(binding.recyclerViewExams) {

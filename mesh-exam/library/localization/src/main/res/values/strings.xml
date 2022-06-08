@@ -23,12 +23,13 @@
     <string name="common_dividerContentDesc">Content divider</string>
 
     <string name="exams_my_exams">My examinations</string>
-    <string name="exams_examDeletion_confirmationMessage">Do you really want to delete the exam \"%s\"? It cannot be undone!</string>
+    <string name="exams_examDeletion_confirmationMessage">Do you really want to delete this exam \"%s\"? It cannot be undone!</string>
 
     <string name="discover_available_exams">Available examinations</string>
     <string name="discover_main_permissionsNeeded">Permissions to the device location needed.\n Tap to open system settings.</string>
     <string name="discover_main_refresh">Refresh</string>
-    <string name="discover_main_emptyListHint">There is no available examinations.\n Please, ask you teacher to start an examination.</string>
+    <string name="discover_main_emptyListHint">There is no available examinations.\nPlease, ask your teacher to start an examination and try again.</string>
+    <string name="discover_main_emptyRefreshingHint"> Looking for nearby examinations…\nPlease, ask your teacher to start an examination.</string>
     <string name="discover_examInfo_hostTitle">Host:</string>
     <string name="discover_examInfo_durationTitle">Duration:</string>
     <string name="discover_examInfo_clientTitle">Join as:</string>
