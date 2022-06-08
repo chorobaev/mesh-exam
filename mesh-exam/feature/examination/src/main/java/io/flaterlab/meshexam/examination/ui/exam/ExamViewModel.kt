@@ -83,7 +83,7 @@ internal class ExamViewModel @Inject constructor(
                 examInteractor.finishAttempt(launcher.attemptId)
             } catch (ex: Exception) {
                 Timber.e(ex)
-                // TODO: handle mesh destroyed case
+                ex.showLocalizedMessage()
             }
         }
     }

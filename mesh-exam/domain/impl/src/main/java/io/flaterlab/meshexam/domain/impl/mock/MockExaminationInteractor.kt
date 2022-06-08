@@ -57,7 +57,7 @@ class MockExaminationInteractor @Inject constructor(
     }
 
     override fun attemptTimeLeftInSec(attemptId: String): Flow<Int> {
-        TODO("Implement according to need")
+        return emptyFlow()
     }
 
     override fun questionIdsByExamId(examId: String): Flow<List<String>> {

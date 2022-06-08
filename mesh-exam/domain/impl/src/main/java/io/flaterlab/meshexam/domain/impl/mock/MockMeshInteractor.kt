@@ -41,11 +41,11 @@ class MockMeshInteractor @Inject constructor(
     }
 
     override fun hostingState(hostingId: String): Flow<HostingMetaModel> {
-        TODO("Not yet implemented")
+        return emptyFlow()
     }
 
     override fun hostingTimeLeftInSec(hostingId: String): Flow<Int> {
-        TODO("Implement according to logic")
+        return emptyFlow()
     }
 
     override fun hostedStudentList(
