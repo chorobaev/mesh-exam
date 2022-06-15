@@ -10,16 +10,13 @@ import io.flaterlab.meshexam.library.messaging.Message
 import io.flaterlab.meshexam.library.messaging.MessagingFacade
 import io.flaterlab.meshexam.library.messaging.ReceiverInfo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 
 internal class ResultReceiverDataSourceImpl @Inject constructor(
+    database: MeshDatabase,
     private val messaging: MessagingFacade,
-    private val database: MeshDatabase,
     private val attemptDtoHandler: PayloadHandler.Handler<FromClientPayload>,
     private val gson: Gson,
 ) : ResultReceiverDataSource {
@@ -35,6 +32,7 @@ internal class ResultReceiverDataSourceImpl @Inject constructor(
             .onEach { message ->
                 onPayloadReceived(message, hostingId)
             }
+            .onCompletion { senders.value = emptyList() }
             .flatMapLatest { senders }
     }
 

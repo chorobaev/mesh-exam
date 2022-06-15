@@ -22,7 +22,7 @@ interface MessagingFacade {
                     Nearby.getConnectionsClient(context.applicationContext),
                     Gson()
                 ).let { (nearby, gson) ->
-                    val serviceId = context.packageName
+                    val serviceId = context.packageName + ".messaging"
                     MessagingImpl(
                         { Sender(serviceId, nearby, gson) },
                         { Receiver(serviceId, nearby, gson) },

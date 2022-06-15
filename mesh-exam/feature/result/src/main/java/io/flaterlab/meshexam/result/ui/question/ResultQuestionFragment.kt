@@ -39,7 +39,8 @@ internal class ResultQuestionFragment : ViewBindingFragment<FragmentResultQuesti
         }
     }
 
-    private fun onAnswersReceived(questions: List<ResultAnswerDvo>) =
+    private fun onAnswersReceived(questions: List<ResultAnswerDvo>) {
+        binding.containerAnswers.removeAllViews()
         questions.forEachIndexed { index, result ->
             ItemResultAnswerBinding.inflate(layoutInflater, binding.containerAnswers, true)
                 .apply {
@@ -62,4 +63,5 @@ internal class ResultQuestionFragment : ViewBindingFragment<FragmentResultQuesti
                     }
                 }
         }
+    }
 }

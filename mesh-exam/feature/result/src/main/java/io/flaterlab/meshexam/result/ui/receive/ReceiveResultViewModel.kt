@@ -25,7 +25,7 @@ import kotlin.math.roundToInt
 internal class ReceiveResultViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     profileInteractor: ProfileInteractor,
-    private val resultsInteractor: ResultsInteractor,
+    resultsInteractor: ResultsInteractor,
 ) : BaseViewModel() {
 
     private val launcher: ReceiveResultLauncher = savedStateHandle.getLauncher()
@@ -57,8 +57,8 @@ internal class ReceiveResultViewModel @Inject constructor(
                             .lowercase()
                             .replaceFirstChar { it.uppercase() }
                     ),
-                    grade = model.grade.roundToInt(),
-                    totalGrade = model.totalGrade,
+                    grade = ResultItemDvo.NO_GRADE,
+                    totalGrade = ResultItemDvo.NO_GRADE,
                 )
             }
         }
