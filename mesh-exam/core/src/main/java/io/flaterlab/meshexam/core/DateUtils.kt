@@ -12,4 +12,8 @@ object DateUtils {
     fun formatDateDdMmYyyy(millis: Long): String {
         return SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date(millis))
     }
+
+    fun formatDateDdMmYyyyAndHhMm(millis: Long): String {
+        return SimpleDateFormat("dd.MM.yyyy - hh:mm", Locale.getDefault()).format(Date(millis))
+    }
 }

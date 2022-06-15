@@ -43,6 +43,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_extra_small"
             android:textAppearance="@style/TextAppearance.MeshExam.Small.Regular"
             android:textColor="?attr/colorOnBackgroundLight"
             app:layout_constraintBottom_toBottomOf="parent"

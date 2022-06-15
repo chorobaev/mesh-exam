@@ -38,10 +38,10 @@ internal class ProfileViewModel @Inject constructor(
         .map { list ->
             list.map { model ->
                 HistoryDvo(
-                    model.id,
-                    model.name,
-                    DateUtils.formatTimeMmSs(model.durationInMillis),
-                    model.isHosting
+                    id = model.id,
+                    name = model.name,
+                    duration = DateUtils.formatDateDdMmYyyyAndHhMm(model.date),
+                    isHosted = model.isHosting
                 )
             }
         }
