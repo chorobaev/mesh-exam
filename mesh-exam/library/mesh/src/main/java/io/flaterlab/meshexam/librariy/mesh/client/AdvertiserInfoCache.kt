@@ -20,8 +20,7 @@ internal class AdvertiserInfoCache {
     }
 
     fun getEndpointByExamId(examId: String): String? {
-        // TODO: change to find
-        return map.entries.findLast { it.value.examId == examId }?.key
+        return map.entries.find { it.value.examId == examId }?.key
     }
 
     fun remove(endpointId: String): AdvertiserInfo? {

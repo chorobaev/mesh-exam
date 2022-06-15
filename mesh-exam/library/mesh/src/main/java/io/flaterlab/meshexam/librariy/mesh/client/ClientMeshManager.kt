@@ -52,8 +52,7 @@ class ClientMeshManager internal constructor(
                     onPayloadFromHostCallback?.invoke(payload)
                     advertisingMesh.forwardPayload(Payload.fromBytes(bytes))
                 } catch (ex: Exception) {
-                    Timber.e(ex, "FromHostPayload forwarding")
-                    // TODO: notify it is the last received one
+                    Timber.e(ex, "FromHostPayload forwarding (last child)")
                 }
             }
         }

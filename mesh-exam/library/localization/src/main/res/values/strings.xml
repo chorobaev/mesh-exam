@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Mesh Exam</string>
-    <string name="home_nav_exams">My exams</string>
+    <string name="home_nav_exams">My examinations</string>
     <string name="home_nav_discover">Discover</string>
     <string name="home_nav_profile">Profile</string>
 
@@ -25,12 +25,13 @@
     <string name="common_dividerContentDesc">Content divider</string>
 
     <string name="exams_my_exams">My examinations</string>
-    <string name="exams_examDeletion_confirmationMessage">Do you really want to delete the exam \"%s\"? It cannot be undone!</string>
+    <string name="exams_examDeletion_confirmationMessage">Do you really want to delete this exam \"%s\"? It cannot be undone!</string>
 
     <string name="discover_available_exams">Available examinations</string>
-    <string name="discover_main_permissionsNeeded">Location permissions needed.\n Tap to open system settings.</string>
+    <string name="discover_main_permissionsNeeded">Permissions to the device location needed.\n Tap to open system settings.</string>
     <string name="discover_main_refresh">Refresh</string>
-    <string name="discover_main_emptyListHint">There is no available examination.\n Please, ask you teacher to start examination.</string>
+    <string name="discover_main_emptyListHint">There is no available examinations.\nPlease, ask your teacher to start an examination and try again.</string>
+    <string name="discover_main_emptyRefreshingHint"> Looking for nearby examinations…\nPlease, ask your teacher to start an examination.</string>
     <string name="discover_examInfo_hostTitle">Host:</string>
     <string name="discover_examInfo_durationTitle">Duration:</string>
     <string name="discover_examInfo_clientTitle">Join as:</string>
@@ -101,12 +102,12 @@
 
 
     <string name="exam_join_connecting">Connecting</string>
-    <string name="exam_join_connectedTitle">Successfully connected!\nThe host will start the examination soon.</string>
+    <string name="exam_join_connectedTitle">Successfully connected!\nThe host will start the exam soon.</string>
     <string name="exam_join_leaveConfirmMessage">Do you really want to leave the exam?</string>
     <string name="exam_join_createProfile">Create profile before joining</string>
     <string name="exam_main_buttonSubmit">Submit</string>
     <string name="exam_main_timerPlaceholder">--:--</string>
-    <string name="exam_main_leaveConfirmMessage">Do you really want to leave the exam? You won\'t be resume the exam!</string>
+    <string name="exam_main_leaveConfirmMessage">Do you really want to leave the exam? You cannot resume the exam!</string>
     <string name="exam_result_successfullySubmitted">Successfully submitted!</string>
     <string name="exam_result_timeTitle">Time:</string>
 
@@ -124,7 +125,7 @@
     <string name="result_sending_sendingProgressMessage">Sending</string>
     <string name="result_sending_sendingExplanationMessage">Ensure, your teacher is receiving.</string>
 
-    <string name="permission_mesh_message">MeshExam uses the device\'s location to find nearby examinations. Please grand access to the camera in the application settings.</string>
+    <string name="permission_mesh_message">MeshExam uses the device\'s location to find nearby examinations. Please grand access to the device location in the application\'s settings.</string>
 
     <string name="onboarding_welcome_title">Welcome!</string>
     <string name="onboarding_welcome_message">Examinations without an Internet connection and payments!</string>

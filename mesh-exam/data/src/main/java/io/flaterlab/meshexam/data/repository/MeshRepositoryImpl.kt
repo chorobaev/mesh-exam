@@ -81,7 +81,7 @@ internal class MeshRepositoryImpl @Inject constructor(
     override suspend fun destroyMesh(examId: String) = hostMeshManager.stop()
 
     override suspend fun removeClient(clientId: String) {
-        TODO("implement removal when reconnect logic is ready")
+        // TODO: implement client removal
     }
 
     override suspend fun startExam(examId: String): StartExamResultModel {
