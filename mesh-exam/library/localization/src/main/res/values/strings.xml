@@ -115,6 +115,8 @@
     <string name="result_list_time">Time: %s</string>
     <string name="result_list_submitted">Submitted: %d in %d</string>
     <string name="result_list_item_grade">Grade: %d in %d</string>
+    <string name="result_list_item_status_submitted">submitted</string>
+    <string name="result_list_item_status_not_submitted">not submitted</string>
     <string name="result_list_receiveResultContentDesc">Receive results</string>
     <string name="result_details_generalInfo">General information</string>
     <string name="result_details_contentDesc_correctnessIcon">Correctness icon</string>

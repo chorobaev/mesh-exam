@@ -8,6 +8,8 @@ import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.core.DateUtils
 import io.flaterlab.meshexam.domain.interactor.ProfileInteractor
+import io.flaterlab.meshexam.domain.profile.model.HostingResultItemModel
+import io.flaterlab.meshexam.result.R
 import io.flaterlab.meshexam.result.ResultLauncher
 import io.flaterlab.meshexam.result.dvo.HostExamInfoDvo
 import io.flaterlab.meshexam.result.dvo.ResultItemDvo
@@ -60,9 +62,12 @@ internal class ResultListViewModel @Inject constructor(
                         fullName = model.studentFullName,
                         info = Text.from(model.studentInfo),
                         status = Text.from(
-                            model.status.toString()
-                                .lowercase()
-                                .replaceFirstChar { it.uppercase() }
+                            when (model.status) {
+                                HostingResultItemModel.Status.SUBMITTED ->
+                                    R.string.result_list_item_status_submitted
+                                HostingResultItemModel.Status.NOT_SUBMITTED ->
+                                    R.string.result_list_item_status_not_submitted
+                            }
                         ),
                         grade = model.grade.roundToInt(),
                         totalGrade = model.totalGrade,
