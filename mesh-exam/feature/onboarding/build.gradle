@@ -20,6 +20,7 @@ dependencies {
     implementation libraries.core
     implementation libraries.fragment
     implementation libraries.liveData
+    implementation libraries.lifecycleRuntime
     implementation libraries.viewModel
     implementation libraries.material
 

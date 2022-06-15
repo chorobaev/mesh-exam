@@ -42,19 +42,31 @@
         android:gravity="center_horizontal"
         android:paddingHorizontal="@dimen/margin_medium"
         android:text="@string/onboarding_welcome_message"
-        app:layout_constraintBottom_toTopOf="@id/btn_finish_onboarding"
+        app:layout_constraintBottom_toTopOf="@id/btn_setup_profile"
         app:layout_constraintTop_toBottomOf="@id/tv_onboarding_welcome_title"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
-        android:id="@+id/btn_finish_onboarding"
+        android:id="@+id/btn_setup_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_medium"
-        android:layout_marginTop="70dp"
-        android:text="@string/onboarding_getStarted"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="44dp"
+        android:text="@string/onboarding_getSetUp"
+        app:layout_constraintBottom_toTopOf="@id/btn_skip_setup"
         app:layout_constraintTop_toBottomOf="@id/tv_onboarding_welcome_message"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <Button
+        android:id="@+id/btn_skip_setup"
+        style="@style/Widget.MeshExam.Button.Secondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:text="@string/onboarding_getSetUpLater"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_setup_profile"
         app:layout_constraintVertical_chainStyle="packed" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

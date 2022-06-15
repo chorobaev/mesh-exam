@@ -130,6 +130,8 @@
     <string name="permission_mesh_message">MeshExam uses the device\'s location to find nearby examinations. Please grand access to the device location in the application\'s settings.</string>
 
     <string name="onboarding_welcome_title">Welcome!</string>
-    <string name="onboarding_welcome_message">Examinations without an Internet connection and payments!</string>
-    <string name="onboarding_getStarted">Let\'s start</string>
+    <string name="onboarding_welcome_message">Examinations without an internet connection and payments!\nSet up your profile, and start using the app!</string>
+    <string name="onboarding_getSetUp">Set up</string>
+    <string name="onboarding_getSetUpLater">Set up later</string>
+    <string name="onboarding_getSetUpProfile">Set up profile</string>
 </resources>

@@ -8,6 +8,7 @@ import io.flaterlab.meshexam.androidbase.GlobalNavControllerProvider
 import io.flaterlab.meshexam.create.router.CreateExamRouter
 import io.flaterlab.meshexam.create.router.CreateQuestionRouter
 import io.flaterlab.meshexam.feature.meshroom.router.MeshroomRouter
+import io.flaterlab.meshexam.onboarding.ui.OnboardingRouter
 import io.flaterlab.meshexam.presentation.discover.router.DiscoverRouter
 import io.flaterlab.meshexam.presentation.exams.router.ExamsRouter
 import io.flaterlab.meshexam.presentation.profile.router.ProfileRouter
@@ -37,4 +38,7 @@ internal interface RouterBindingModule {
 
     @Binds
     fun bindCreateQuestionRouter(impl: CreateQuestionRouterImpl): CreateQuestionRouter
+
+    @Binds
+    fun bindOnboardingRouter(impl: OnboardingRouterImpl): OnboardingRouter
 }
