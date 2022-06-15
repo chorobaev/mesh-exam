@@ -56,6 +56,7 @@
     <string name="create_create_exam_questionsAmountTitle">Questions:</string>
 
     <string name="mesh_create_mesh">Create mesh</string>
+    <string name="mesh_create_mesh_leave_prompt">Do you really want do destroy the mesh?</string>
     <string name="mesh_students_amount_title">Students in the mesh: %d</string>
     <string name="mesh_exam_name_title">Exam: %s</string>
     <string name="mesh_search_hint">Search here</string>

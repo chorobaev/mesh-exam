@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.flaterlab.meshexam.androidbase.*
 import io.flaterlab.meshexam.androidbase.common.adapter.ClientListAdapter
 import io.flaterlab.meshexam.androidbase.ext.clickWithDebounce
+import io.flaterlab.meshexam.androidbase.ext.showAlert
 import io.flaterlab.meshexam.feature.meshroom.R
 import io.flaterlab.meshexam.feature.meshroom.databinding.FragmentMeshRoomBinding
 import io.flaterlab.meshexam.feature.meshroom.dvo.ClientDvo
@@ -32,11 +33,7 @@ internal class MeshRoomFragment : ViewBindingFragment<FragmentMeshRoomBinding>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            if (isEnabled) {
-                isEnabled = false
-                viewModel.onBackPressed()
-                requireActivity().onBackPressed()
-            }
+            viewModel.onBackPressed()
         }
 
         initRecyclerView()
@@ -56,6 +53,17 @@ internal class MeshRoomFragment : ViewBindingFragment<FragmentMeshRoomBinding>()
                 R.id.action_meshRoomFragment_to_monitorFragment,
                 launcher.toBundleArgs(),
             )
+        }
+        viewModel.commandShowLeavePrompt.observe(viewLifecycleOwner) {
+            showAlert(
+                message = getString(R.string.mesh_create_mesh_leave_prompt),
+                positive = getString(R.string.common_yes),
+                negative = getString(R.string.common_no),
+                positiveCallback = { viewModel.onLeaveClicked() }
+            )
+        }
+        viewModel.commandLeaveMeshroom.observe(viewLifecycleOwner) {
+            findNavController().popBackStack()
         }
 
         binding.btnStartExam.clickWithDebounce(action = viewModel::onStartClicked)

@@ -45,6 +45,9 @@ internal class MeshRoomViewModel @Inject constructor(
     val clientsListState = MutableLiveData(StateRecyclerView.State.EMPTY)
 
     val commandStartExam = SingleLiveEvent<MonitorLauncher>()
+    val commandShowLeavePrompt = SingleLiveEvent<Unit>()
+    val commandLeaveMeshroom = SingleLiveEvent<Unit>()
+
 
     private var _clients: List<ClientDvo> = emptyList()
     private var searchText: String? = null
@@ -104,9 +107,14 @@ internal class MeshRoomViewModel @Inject constructor(
     }
 
     fun onBackPressed() {
+        commandShowLeavePrompt.call()
+    }
+
+    fun onLeaveClicked() {
         viewModelScope.launch {
             try {
                 meshInteractor.destroyMesh(launcher.examId)
+                commandLeaveMeshroom.call()
             } catch (ex: Exception) {
                 ex.showLocalizedMessage()
             }
