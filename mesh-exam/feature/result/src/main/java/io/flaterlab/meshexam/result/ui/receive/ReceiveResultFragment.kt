@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import androidx.activity.addCallback
 import androidx.core.text.toSpannable
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import io.flaterlab.meshexam.androidbase.ViewBindingFragment
 import io.flaterlab.meshexam.androidbase.ViewBindingProvider
 import io.flaterlab.meshexam.androidbase.common.adapter.ClientListAdapter
+import io.flaterlab.meshexam.androidbase.ext.showAlert
 import io.flaterlab.meshexam.result.R
 import io.flaterlab.meshexam.result.databinding.FragmentReceiveResultBinding
 import io.flaterlab.meshexam.result.dvo.ResultItemDvo
@@ -31,6 +34,9 @@ internal class ReceiveResultFragment : ViewBindingFragment<FragmentReceiveResult
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            viewModel.onBackPressed()
+        }
 
         initRecyclerView()
         initObservers()
@@ -47,6 +53,17 @@ internal class ReceiveResultFragment : ViewBindingFragment<FragmentReceiveResult
         }
         viewModel.resultListState.observe(viewLifecycleOwner, binding.recyclerViewResults::setState)
         viewModel.resultList.observe(viewLifecycleOwner, resultListAdapter::submitList)
+        viewModel.commandShowLeavePrompt.observe(viewLifecycleOwner) {
+            showAlert(
+                message = getString(R.string.result_receiving_leavePrompt),
+                positive = getString(R.string.common_yes),
+                negative = getString(R.string.common_no),
+                positiveCallback = { viewModel.onLeaveClicked() }
+            )
+        }
+        viewModel.commandLeaveReceiving.observe(viewLifecycleOwner) {
+            findNavController().popBackStack()
+        }
     }
 
     private fun initRecyclerView() = with(binding.recyclerViewResults) {

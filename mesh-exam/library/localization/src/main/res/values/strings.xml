@@ -125,6 +125,7 @@
     <string name="result_details_totalQuestionsTitle">Total questions:</string>
     <string name="result_details_correctAnswersTitle">Correct answers:</string>
     <string name="result_receiving_requestMessage">%s wants to send results of the exam \"%s\" written in %s at %s.</string>
+    <string name="result_receiving_leavePrompt">Do you really want to stop receiving?\nSomeone may be sending a result.</string>
     <string name="result_sending_sendingProgressMessage">Sending</string>
     <string name="result_sending_sendingExplanationMessage">Ensure, your teacher is receiving.</string>
 

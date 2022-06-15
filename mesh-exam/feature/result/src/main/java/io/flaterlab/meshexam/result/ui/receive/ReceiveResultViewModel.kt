@@ -6,6 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.flaterlab.meshexam.androidbase.BaseViewModel
+import io.flaterlab.meshexam.androidbase.SingleLiveEvent
 import io.flaterlab.meshexam.androidbase.getLauncher
 import io.flaterlab.meshexam.androidbase.text.Text
 import io.flaterlab.meshexam.core.DateUtils
@@ -65,5 +66,16 @@ internal class ReceiveResultViewModel @Inject constructor(
         .catch { it.showLocalizedMessage() }
         .asLiveData(viewModelScope.coroutineContext)
 
+    val commandShowLeavePrompt = SingleLiveEvent<Unit>()
+    val commandLeaveReceiving = SingleLiveEvent<Unit>()
+
     fun onResultClicked(dvo: ResultItemDvo) = Unit
+
+    fun onBackPressed() {
+        commandShowLeavePrompt.call()
+    }
+
+    fun onLeaveClicked() {
+        commandLeaveReceiving.call()
+    }
 }
